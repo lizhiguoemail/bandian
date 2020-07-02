@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.sys.mapper.LoginLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.sys.entity.LoginLog">
+        <id column="log_id" property="logId" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="login_name" property="loginName" />
+        <result column="ip_address" property="ipAddress" />
+        <result column="login_location" property="loginLocation" />
+        <result column="operating_system" property="operatingSystem" />
+        <result column="status" property="status" />
+        <result column="prompt_msg" property="promptMsg" />
+        <result column="login_time" property="loginTime" />
+        <result column="browser" property="browser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        log_id, login_name, ip_address, login_location, operating_system, status, prompt_msg, login_time, browser
+    </sql>
+
+</mapper>

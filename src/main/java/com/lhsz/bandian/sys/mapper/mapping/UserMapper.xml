@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.sys.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.sys.entity.User">
+        <id column="user_id" property="userId" />
+    <result column="remark" property="remark" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="user_type" property="userType" />
+        <result column="nick_name" property="nickName" />
+        <result column="user_name" property="userName" />
+        <result column="normalized_user_name" property="normalizedUserName" />
+        <result column="email" property="email" />
+        <result column="normalized_email" property="normalizedEmail" />
+        <result column="email_confirmed" property="emailConfirmed" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="phone_number_confirmed" property="phoneNumberConfirmed" />
+        <result column="password" property="password" />
+        <result column="password_hash" property="passwordHash" />
+        <result column="safe_password" property="safePassword" />
+        <result column="safe_password_hash" property="safePasswordHash" />
+        <result column="two_factor_enabled" property="twoFactorEnabled" />
+        <result column="enabled" property="enabled" />
+        <result column="disabled_time" property="disabledTime" />
+        <result column="lockout_enabled" property="lockoutEnabled" />
+        <result column="lockout_end" property="lockoutEnd" />
+        <result column="access_failed_count" property="accessFailedCount" />
+        <result column="login_count" property="loginCount" />
+        <result column="register_ip" property="registerIp" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="last_login_ip" property="lastLoginIp" />
+        <result column="current_login_time" property="currentLoginTime" />
+        <result column="current_login_ip" property="currentLoginIp" />
+        <result column="security_stamp" property="securityStamp" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        user_id, user_type, nick_name, user_name, normalized_user_name, email, normalized_email, email_confirmed, phone_number, phone_number_confirmed, password, password_hash, safe_password, safe_password_hash, two_factor_enabled, enabled, disabled_time, lockout_enabled, lockout_end, access_failed_count, login_count, register_ip, last_login_time, last_login_ip, current_login_time, current_login_ip, security_stamp
+    </sql>
+
+</mapper>

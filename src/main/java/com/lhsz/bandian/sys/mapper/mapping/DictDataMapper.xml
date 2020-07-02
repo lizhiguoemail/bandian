@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.sys.mapper.DictDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.sys.entity.DictData">
+        <id column="dict_id" property="dictId" />
+    <result column="remark" property="remark" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="dict_code" property="dictCode" />
+        <result column="dict_sort" property="dictSort" />
+        <result column="dict_label" property="dictLabel" />
+        <result column="dict_value" property="dictValue" />
+        <result column="dict_type" property="dictType" />
+        <result column="is_default" property="isDefault" />
+        <result column="enabled" property="enabled" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        dict_id, dict_code, dict_sort, dict_label, dict_value, dict_type, is_default, enabled
+    </sql>
+
+</mapper>

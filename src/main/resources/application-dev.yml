@@ -1,0 +1,17 @@
+# Mysql数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.0.62:3306/smart_mfg?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password:
+#mybatis-plus:
+#  Configuration:
+#    mapUnderscoreToCamelCase: true #是否开启自动驼峰命名规则
+#    callSettersOnNulls: true # 默认值：false 指定当结果集中值为 null 的时候是否调用映射对象的 Setter（Map 对象时为 put）方法，通常运用于有 Map.keySet() 依赖或 null 值初始化的情况。
+#  DbConfig:
+#    idType: ID_WORKER
+    #logicDeleteValue: 1 #逻辑已删除值  类型string 默认值1
+    #logicNotDeleteValue #逻辑未删除值 默认值 0
+server:
+  port: 8081
