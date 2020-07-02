@@ -11,11 +11,9 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import javafx.scene.input.DataFormat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class CodeGenerator {
@@ -52,10 +50,10 @@ public class CodeGenerator {
 
         gc.setSwagger2(true); //实体属性 Swagger2 注解
         gc.setIdType(IdType.ID_WORKER);//生成主键注释
-//        gc.setBaseColumnList(true);//是否在xml中生成通用查询结果列  <sql id="Base_Column_List">
-//        gc.setBaseResultMap(true);
-        gc.setServiceName("%sService");
-        gc.setServiceImplName("%sServiceImpl");
+        gc.setBaseColumnList(true);//是否在xml中生成通用查询结果列  <sql id="Base_Column_List">
+        gc.setBaseResultMap(true);
+//        gc.setServiceName("%sService");
+//        gc.setServiceImplName("%sServiceImpl");
         mpg.setGlobalConfig(gc);
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
@@ -145,7 +143,7 @@ public class CodeGenerator {
 
         strategy.setRestControllerStyle(true);// controller类是否直接返回json
         // 公共父类
-//        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
+        strategy.setSuperControllerClass("com.lhsz.bandian.controller.BaseController");
         // 写于父类中的公共字段
 //        strategy.setSuperEntityColumns("id");
 //
