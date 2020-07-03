@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //登录身份认证组件
 //        上面说到登录认证是通过调用 AuthenticationManager 的 authenticate(token) 方法实现的，
 //        而 AuthenticationManager 又是通过调用 AuthenticationProvider 的 authenticate(Authentication authentication) 来完成认证的，
-//        所以通过定制 AuthenticationProvider 也可以完成各种自定义的需求，我们这里只是简单的继承 DaoAuthenticationProvider 展示如何自定义，
+//        所以通过定制 AuthenticationProvider 也可以完成各种自定义的需求，这里只是简单的继承 DaoAuthenticationProvider 展示如何自定义，
 //        具体的大家可以根据各自的需求按需定制。
 public class JwtAuthenticationProvider extends DaoAuthenticationProvider {
     public JwtAuthenticationProvider(UserDetailsService userDetailsService) {

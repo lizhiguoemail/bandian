@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lhsz.bandian.security.GrantedAuthorityImpl;
 import com.lhsz.bandian.security.JwtAuthenticatioToken;
+import com.lhsz.bandian.security.LoginUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -59,6 +60,21 @@ public class JwtTokenUtils implements Serializable {
         claims.put(USERNAME, SecurityUtils.getUsername(authentication));
         claims.put(CREATED, new Date());
         claims.put(AUTHORITIES, authentication.getAuthorities());
+        return generateToken(claims);
+    }
+    /**
+     * 生成令牌
+     *
+     * @param loginUser 用户
+     * @return 令牌
+     */
+    public static String createToken(Authentication authentication) {
+        Map<String, Object> claims = new HashMap<>(3);
+        LoginUser loginUser=(LoginUser) authentication.getPrincipal();
+        claims.put("loginuser",loginUser);
+        claims.put(USERNAME, loginUser.getUsername());
+        claims.put(CREATED, new Date());
+        claims.put(AUTHORITIES, loginUser.getAuthorities());
         return generateToken(claims);
     }
 

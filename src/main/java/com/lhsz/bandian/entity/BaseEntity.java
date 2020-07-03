@@ -35,7 +35,7 @@ public class BaseEntity {
     /**
      * 是否删除
      */
-    @TableLogic(value = "true",delval = "false")
+    @TableLogic(value = "0",delval = "1")
     private Boolean isDeleted;
 
     /**

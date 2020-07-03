@@ -1,26 +1,23 @@
 package com.lhsz.bandian.security;
 
 import java.util.Collection;
+import java.util.Set;
 
+import com.lhsz.bandian.sys.entity.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 /**
  * 安全用户模型
  * @author lizhiguo
  * @date 2020-7-2 16:20:44
  */
-public class JwtUserDetails extends User {
+//public class JwtUserDetails extends User {
+public class JwtUserDetails extends LoginUser {
 
     private static final long serialVersionUID = 1L;
 
-    public JwtUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this(username, password, true, true, true, true, authorities);
-    }
 
-    public JwtUserDetails(String username, String password, boolean enabled, boolean accountNonExpired,
-                          boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+    public JwtUserDetails(User user, Set<String> permissions) {
+        super(user, permissions);
     }
-
 }

@@ -15,3 +15,7 @@ spring:
     #logicNotDeleteValue #逻辑未删除值 默认值 0
 server:
   port: 8081
+#mybatis-plus配置控制台打印完整带参数SQL语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

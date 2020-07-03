@@ -1,9 +1,14 @@
 package com.lhsz.bandian.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lhsz.bandian.sys.entity.User;
 import com.lhsz.bandian.sys.mapper.UserMapper;
 import com.lhsz.bandian.sys.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sun.org.glassfish.gmbal.ManagedAttribute;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +25,28 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+
+    @Autowired
+    UserServiceImpl userService;
     @Override
     public User findByUsername(String username) {
-        User user = new User();
-//        user.setId(1L);
+        User user=null;
+        try {
+             user = userService.getOne(new QueryWrapper<User>().eq("user_name",username));
+            if(user!=null){
+                String password = new BCryptPasswordEncoder().encode(user.getPassword());
+                user.setPassword(password);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+       /* User user = new User();
         user.setUserId(1L);
         user.setUserName(username);
-        String password = new BCryptPasswordEncoder().encode("123");
-        user.setPassword(password);
+        String password = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(password);*/
         return user;
     }
 

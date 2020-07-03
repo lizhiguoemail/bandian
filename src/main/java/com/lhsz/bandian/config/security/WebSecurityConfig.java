@@ -2,7 +2,7 @@ package com.lhsz.bandian.config.security;
 
 import com.lhsz.bandian.filters.JwtAuthenticationFilter;
 import com.lhsz.bandian.security.JwtAuthenticationProvider;
-import com.lhsz.bandian.filters.JwtLoginFilter;
+//import com.lhsz.bandian.filters.JwtLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +47,10 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
                 // 其他所有请求需要身份认证
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                // 配置登录认证 ,我试了下可以用，登录成功又跳到登录页了，应该有一个地方可以配置登录成功跳转路径，你也可以试试
+//                .and().formLogin().loginProcessingUrl("/login")//使用内置的登录验证过滤器，默认实现为 UsernamePasswordAuthenticationFilter
+        ;
         // 退出登录处理器
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
         // 开启登录认证流程过滤器

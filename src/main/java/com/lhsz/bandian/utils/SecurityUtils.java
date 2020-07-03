@@ -33,7 +33,8 @@ public class SecurityUtils {
         // 认证成功存储认证信息到上下文
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌并返回给客户端
-        token.setToken(JwtTokenUtils.generateToken(authentication));
+//        token.setToken(JwtTokenUtils.generateToken(authentication));
+        token.setToken(JwtTokenUtils.createToken(authentication));
         return token;
     }
 
