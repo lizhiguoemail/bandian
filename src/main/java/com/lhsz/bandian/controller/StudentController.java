@@ -1,11 +1,8 @@
 package com.lhsz.bandian.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lhsz.bandian.entity.Student;
-import com.lhsz.bandian.model.params.StudentParam;
-import com.lhsz.bandian.pojo.page.LayuiPageInfo;
+import com.lhsz.bandian.pojo.page.Result;
 import com.lhsz.bandian.service.Impl.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +28,17 @@ public class StudentController {
         studentService.removeById(id);
    }
    @GetMapping(value = "/list")
-    public LayuiPageInfo list(){
+    public Result list(){
        List<Student> list = studentService.list();
-       LayuiPageInfo layuiPageInfo=new LayuiPageInfo();
+       Result layuiPageInfo=new Result();
        layuiPageInfo.setData(list);
        return layuiPageInfo;
    }
     @PostMapping(value = "/listQuery")
-    public LayuiPageInfo listQuery(Student student){
+    public Result listQuery(Student student){
 
         List<Student> list = studentService.list(new QueryWrapper<Student>().like("name",student.getName()));
-        LayuiPageInfo layuiPageInfo=new LayuiPageInfo();
+        Result layuiPageInfo=new Result();
         layuiPageInfo.setData(list);
         return layuiPageInfo;
     }
