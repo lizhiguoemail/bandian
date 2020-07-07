@@ -5,6 +5,7 @@ import com.lhsz.bandian.entity.Student;
 import com.lhsz.bandian.pojo.page.Result;
 import com.lhsz.bandian.service.Impl.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
     @GetMapping("/findStu")
+    @PreAuthorize("hasAuthority('sys:user:view')")
    public String findStu(){
      Student student= studentService.getById(1);
      return student.getName();

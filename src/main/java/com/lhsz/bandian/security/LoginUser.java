@@ -6,9 +6,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+/**
+ * 安全用户模型
+ */
 public class LoginUser implements UserDetails {
+    private static final long serialVersionUID = 1L;
     /**
      * 用户唯一标识
      */
@@ -56,7 +62,8 @@ public class LoginUser implements UserDetails {
 
    
     public LoginUser(User user,Set<String> permissions) {
-
+        this.user = user;
+        this.permissions = permissions;
     }
 
 
@@ -65,21 +72,22 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> grantedAuthorities = permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
+        return grantedAuthorities;
     }
     /**
      * UserDetails接口方法
      */
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
     /**
      * UserDetails接口方法
      */
     @Override
     public String getUsername() {
-        return null;
+        return user.getUserName();
     }
     /**
      * UserDetails接口方法
@@ -87,7 +95,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
     /**
      * 指定用户是否解锁,锁定的用户无法进行身份验证
@@ -96,7 +104,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
     /**
      * 指示是否已过期的用户的凭据(密码),过期的凭据防止认证
@@ -105,7 +113,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
     /**
      * 是否可用 ,禁用的用户不能身份验证
@@ -114,7 +122,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     public String getToken() {

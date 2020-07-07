@@ -7,8 +7,10 @@ import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.LoginBean;
 import com.lhsz.bandian.pojo.page.ResponseResult;
 import com.lhsz.bandian.security.JwtAuthenticatioToken;
-import com.lhsz.bandian.utils.SecurityUtils;
+import com.lhsz.bandian.security.LoginService;
+import com.lhsz.bandian.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController extends BaseController{
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private RedisCache redisCache;
     @Autowired
-    private AuthenticationManager authenticationManager;
-
+    private LoginService loginService;
     /**
      * 登录接口
      * 其实 Spring Security 的登录认证过程只需调用 AuthenticationManager 的 authenticate(Authentication authentication) 方法，
@@ -34,9 +39,9 @@ public class LoginController extends BaseController{
     public HttpResult login(@RequestBody LoginBean loginBean, HttpServletRequest request) throws IOException {
         String username = loginBean.getUsername();
         String password = loginBean.getPassword();
-
         // 系统登录认证
-        JwtAuthenticatioToken token = SecurityUtils.login(request, username, password, authenticationManager);
+//        JwtAuthenticatioToken token = SecurityUtils.login(request, username, password, authenticationManager,redisCache);
+        JwtAuthenticatioToken token = loginService.login(request, username, password);
 
         return HttpResult.ok(token);
     }

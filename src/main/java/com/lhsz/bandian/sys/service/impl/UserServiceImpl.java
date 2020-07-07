@@ -56,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         permissions.add("sys:user:view");
         permissions.add("sys:user:add");
         permissions.add("sys:user:edit");
-        permissions.add("sys:user:delete");
+//        permissions.add("sys:user:delete");
         return permissions;
     }
 }

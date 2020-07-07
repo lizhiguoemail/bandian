@@ -1,4 +1,3 @@
-///*
 //package com.lhsz.bandian.filters;
 //import java.io.BufferedReader;
 //import java.io.IOException;
@@ -27,7 +26,7 @@
 //import com.alibaba.fastjson.JSON;
 //import com.alibaba.fastjson.JSONObject;
 //
-//*/
+//
 ///**
 // * 启动登录认证流程过滤器
 // *  登录认证触发过滤器
@@ -38,7 +37,7 @@
 // *  * 2. 覆写认证成功后的操作，移除后台跳转，添加生成令牌并返回给客户端
 // * @author lizhiguo
 // * @date 2020-7-3 09:29:02
-// *//*
+// */
 //
 //public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 //
@@ -103,12 +102,12 @@
 //
 //    }
 //
-//    */
+//
 ///**
 //     * 获取请求Body
 //     * @param request
 //     * @return
-//     *//*
+//     */
 //
 //    public String getBody(HttpServletRequest request) {
 //        StringBuilder sb = new StringBuilder();
@@ -141,4 +140,4 @@
 //        }
 //        return sb.toString();
 //    }
-//}*/
+//}

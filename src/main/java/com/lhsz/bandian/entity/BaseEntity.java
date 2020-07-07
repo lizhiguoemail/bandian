@@ -6,10 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class BaseEntity {
+public class BaseEntity implements Serializable {
     /**
      * 创建时间
      */

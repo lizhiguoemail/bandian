@@ -1,6 +1,7 @@
 package com.lhsz.bandian.sys.controller;
 
 
+import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.page.ResponseResult;
 import com.lhsz.bandian.sys.entity.User;
 import com.lhsz.bandian.sys.service.impl.UserServiceImpl;
@@ -39,14 +40,14 @@ public class UserController extends BaseController {
 
     @PreAuthorize("hasAuthority('sys:user:edit')")
     @GetMapping(value="/edit")
-    public ResponseResult edit() {
-        return ResponseResult.ok().render("the edit service is called success.");
+    public HttpResult edit() {
+        return HttpResult.ok("the edit service is called success.");
     }
 
     @PreAuthorize("hasAuthority('sys:user:delete')")
     @GetMapping(value="/delete")
-    public ResponseResult delete() {
-        return ResponseResult.ok().render("the delete service is called success.");
+    public HttpResult delete() {
+        return HttpResult.ok("the delete service is called success.");
     }
     @PutMapping("/add")
     public ResponseResult add(User user){
