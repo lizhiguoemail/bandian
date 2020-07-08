@@ -40,7 +40,6 @@ public class LoginController extends BaseController{
         String username = loginBean.getUsername();
         String password = loginBean.getPassword();
         // 系统登录认证
-//        JwtAuthenticatioToken token = SecurityUtils.login(request, username, password, authenticationManager,redisCache);
         JwtAuthenticatioToken token = loginService.login(request, username, password);
 
         return HttpResult.ok(token);

@@ -33,20 +33,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user=null;
         try {
              user = userService.getOne(new QueryWrapper<User>().eq("user_name",username));
-            if(user!=null){
-                String password = new BCryptPasswordEncoder().encode(user.getPassword());
-                user.setPassword(password);
-            }
         }catch (Exception e){
             e.printStackTrace();
         }
 
-
-       /* User user = new User();
-        user.setUserId(1L);
-        user.setUserName(username);
-        String password = new BCryptPasswordEncoder().encode(user.getPassword());
-        user.setPassword(password);*/
         return user;
     }
 

@@ -20,6 +20,7 @@ public class BaseEntity implements Serializable {
     /**
      * 创建人编号
      */
+    @TableField(value = "creator_id", fill = FieldFill.INSERT)
     private Long creatorId;
 
     /**
@@ -31,6 +32,7 @@ public class BaseEntity implements Serializable {
     /**
      * 最后修改人编号
      */
+    @TableField(value = "last_modifier_id", fill = FieldFill.INSERT_UPDATE)
     private Long lastModifierId;
 
     /**

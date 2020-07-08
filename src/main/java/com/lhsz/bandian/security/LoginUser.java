@@ -80,7 +80,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user.getPasswordHash();
     }
     /**
      * UserDetails接口方法

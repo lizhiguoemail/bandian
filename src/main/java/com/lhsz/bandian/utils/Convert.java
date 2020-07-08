@@ -994,4 +994,30 @@ public class Convert {
         }
         return head + s.replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
     }
+
+    /**
+     * 全部转为大写
+     * @param str
+     * @return
+     */
+    public static String toUpperCase(String str){
+        if(StringUtils.isNotEmpty(str)){
+            return str.toUpperCase();
+        }else{
+            return "";
+        }
+    }
+
+    /**
+     * 转为小写
+     * @param str
+     * @return
+     */
+    public static String toLowerCase(String str){
+        if(StringUtils.isNotEmpty(str)){
+            return str.toLowerCase();
+        }else{
+            return "";
+        }
+    }
 }
