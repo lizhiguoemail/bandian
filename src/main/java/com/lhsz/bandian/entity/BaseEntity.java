@@ -39,10 +39,19 @@ public class BaseEntity implements Serializable {
      * 是否删除
      */
     @TableLogic(value = "0",delval = "1")
+    @TableField(select = false)
     private Boolean isDeleted;
 
     /**
+     *
      * 版本号
+     * 特别说明:
+     *
+     * 支持的数据类型只有:int,Integer,long,Long,Date,Timestamp,LocalDateTime
+     * 整数类型下 newVersion = oldVersion + 1
+     * newVersion 会回写到 entity 中
+     * 仅支持 updateById(id) 与 update(entity, wrapper) 方法
+     * 在 update(entity, wrapper) 方法下, wrapper 不能复用!!!
      */
     @Version
     private Integer version;

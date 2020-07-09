@@ -1,6 +1,7 @@
 package com.lhsz.bandian.sys.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.HttpStatus;
 import com.lhsz.bandian.pojo.page.ResponseResult;
@@ -9,13 +10,19 @@ import com.lhsz.bandian.sys.service.impl.UserServiceImpl;
 import com.lhsz.bandian.utils.Convert;
 import com.lhsz.bandian.utils.SecurityUtils;
 import com.lhsz.bandian.utils.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.cglib.core.Converter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.lhsz.bandian.controller.BaseController;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,20 +42,33 @@ public class UserController extends BaseController {
     @GetMapping(value="/findAll")
     public ResponseResult findAll() {
 //        return HttpResult.ok("the findAll service is called success.");
-      List<User> userlist= userService.list();
+        List<User> userlist= userService.list();
         return ResponseResult.ok().render(userlist);
+    }
+
+    @PostMapping(value="/list")
+    public HttpResult list(){
+
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name","bandian");
+        Collection<User> list = userService.listByMap(columnMap);
+
+        return HttpResult.ok(list);
     }
 
     @PreAuthorize("hasAuthority('sys:user:edit')")
     @PutMapping(value="/edit")
     public HttpResult edit(User user) {
-        convert(user);
+        if(user==null||"".equals(user.getVersion())||user.getVersion()==null){
+            return HttpResult.error("请传入version");
+        }
         if(userService.updateById(user)){
-            return HttpResult.ok();
+            return HttpResult.succeed();
         }
         else{
             return HttpResult.error();
         }
+
     }
 
     @PreAuthorize("hasAuthority('sys:user:delete')")

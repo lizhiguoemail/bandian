@@ -42,6 +42,11 @@ public class HttpResult {
     public static HttpResult ok() {
         return new HttpResult();
     }
+    public static HttpResult succeed() {
+        HttpResult r = new HttpResult();
+        r.setMsg("操作成功");
+        return r;
+    }
 
     public int getCode() {
         return code;

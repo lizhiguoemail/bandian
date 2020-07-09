@@ -2,14 +2,18 @@ package com.lhsz.bandian.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lhsz.bandian.entity.Student;
+import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.page.Result;
 import com.lhsz.bandian.service.Impl.StudentService;
+import com.lhsz.bandian.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //@CrossOrigin(origins = "http://domain2.com", maxAge = 3600)
 @RestController
@@ -39,19 +43,24 @@ public class StudentController {
        return layuiPageInfo;
    }
     @PostMapping(value = "/listQuery")
-    public Result listQuery(Student student ){
+    public HttpResult listQuery(Student student ){
 
         List<Student> list = studentService.list(new QueryWrapper<Student>().like("name",student.getName()));
-        Result layuiPageInfo=new Result();
-        layuiPageInfo.setData(list);
-        return layuiPageInfo;
+
+        return HttpResult.ok(list);
     }
     @GetMapping(value = "/listQuery2")
-    public Result listQuery2(String name){
+    public HttpResult listQuery2(String name){
+        QueryWrapper qe=new QueryWrapper();
+//        Map aa=new HashMap();
+//        if(StringUtils.isNotEmpty(name))
+//        aa.put("name",name);
+//        aa.put("age",50);
+        if(StringUtils.isNotEmpty(name))
+        qe.like("name",name);
+        qe.like("age",50);
 
-        List<Student> list = studentService.list(new QueryWrapper<Student>().like("name",name));
-        Result layuiPageInfo=new Result();
-        layuiPageInfo.setData(list);
-        return layuiPageInfo;
+        List<Student> list = studentService.list(qe);
+        return HttpResult.ok(list);
     }
 }
