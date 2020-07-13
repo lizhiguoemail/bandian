@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Role extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "角色标识")
-    @TableId(value = "role_id", type = IdType.ID_WORKER)
-    private Long roleId;
+    @TableId(value = "role_id", type = IdType.UUID)
+    private String roleId;
 
     @ApiModelProperty(value = "角色编码")
     private String code;
@@ -47,7 +47,7 @@ public class Role extends BaseEntity {
     private Boolean isAdmin;
 
     @ApiModelProperty(value = "父标识")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "路径")
     private String path;

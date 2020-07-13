@@ -49,7 +49,7 @@ public class CodeGenerator {
         gc.setFileOverride(true);//覆盖test
 
         gc.setSwagger2(true); //实体属性 Swagger2 注解
-        gc.setIdType(IdType.ID_WORKER);//生成主键注释
+        gc.setIdType(IdType.UUID);//生成主键注释
         gc.setBaseColumnList(true);//是否在xml中生成通用查询结果列  <sql id="Base_Column_List">
         gc.setBaseResultMap(true);
 //        gc.setServiceName("%sService");
@@ -78,7 +78,7 @@ public class CodeGenerator {
             public void initMap() {
                 // to do nothing
 //                com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig dbConfig=new com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig();
-//                dbConfig.setIdType(IdType.ID_WORKER);
+//                dbConfig.setIdType(IdType.UUID);
             }
         };
 
@@ -146,6 +146,10 @@ public class CodeGenerator {
         strategy.setSuperControllerClass("com.lhsz.bandian.controller.BaseController");
         // 写于父类中的公共字段
 //        strategy.setSuperEntityColumns("id");
+        strategy.setSuperMapperClass("com.lhsz.bandian.mapper.MyBaseMapper");
+//      这个没搞定
+//        strategy.setSuperServiceClass("com.lhsz.bandian.service.IBaseServcie");
+//        strategy.setSuperServiceImplClass("com.lhsz.bandian.service.Impl.BaseServcieImpl");
 //
         strategy.setSuperEntityColumns("remark","creation_time","creator_id","last_modification_time","last_modifier_id","is_deleted","version");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Application extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "应用程序标识")
-    @TableId(value = "application_id", type = IdType.ID_WORKER)
-    private Long applicationId;
+    @TableId(value = "application_id", type = IdType.UUID)
+    private String applicationId;
 
     @ApiModelProperty(value = "应用程序编码")
     private String code;

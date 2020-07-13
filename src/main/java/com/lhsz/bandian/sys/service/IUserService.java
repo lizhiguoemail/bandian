@@ -1,5 +1,6 @@
 package com.lhsz.bandian.sys.service;
 
+import com.lhsz.bandian.sys.DTO.AppData;
 import com.lhsz.bandian.sys.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -27,4 +28,7 @@ public interface IUserService extends IService<User> {
      * @return
      */
     Set<String> findPermissions(String userName);
+    public int del(String id);
+
+    AppData getApp_data();
 }

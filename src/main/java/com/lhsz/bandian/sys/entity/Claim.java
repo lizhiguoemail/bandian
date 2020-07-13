@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Claim extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "声明标识")
-    @TableId(value = "claim_id", type = IdType.ID_WORKER)
-    private Long claimId;
+    @TableId(value = "claim_id", type = IdType.UUID)
+    private String claimId;
 
     @ApiModelProperty(value = "声明名称")
     private String name;

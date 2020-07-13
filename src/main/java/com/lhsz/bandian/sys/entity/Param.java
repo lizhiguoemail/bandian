@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Param extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "参数标识")
-    @TableId(value = "param_id", type = IdType.ID_WORKER)
-    private Long paramId;
+    @TableId(value = "param_id", type = IdType.UUID)
+    private String paramId;
 
     @ApiModelProperty(value = "参数名称")
     private String paramName;

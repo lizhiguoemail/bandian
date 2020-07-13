@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,11 +28,11 @@ public class Attach extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "附件标识")
-    @TableId(value = "attach_id", type = IdType.ID_WORKER)
-    private Long attachId;
+    @TableId(value = "attach_id", type = IdType.UUID)
+    private String attachId;
 
     @ApiModelProperty(value = "关联对象标识")
-    private Long objectId;
+    private String objectId;
 
     @ApiModelProperty(value = "关联对象类型")
     private String objectType;

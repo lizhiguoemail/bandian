@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Dept extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "部门标识")
-    @TableId(value = "dept_id", type = IdType.ID_WORKER)
-    private Long deptId;
+    @TableId(value = "dept_id", type = IdType.UUID)
+    private String deptId;
 
     @ApiModelProperty(value = "部门编码")
     private String code;
@@ -38,7 +38,7 @@ public class Dept extends BaseEntity {
     private String name;
 
     @ApiModelProperty(value = "父编号")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "路径")
     private String path;

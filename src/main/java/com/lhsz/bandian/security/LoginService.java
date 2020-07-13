@@ -28,7 +28,7 @@ public class LoginService {
      * @param password
      * @return
      */
-    public  JwtAuthenticatioToken login(HttpServletRequest request, String username, String password) {
+    public  JwtAuthenticatioToken login(HttpServletRequest request, String username, String password,String clientId) {
         JwtAuthenticatioToken token = new JwtAuthenticatioToken(username, password);
         token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         // 执行登录认证过程
@@ -37,7 +37,9 @@ public class LoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌并返回给客户端
 //        token.setToken(JwtTokenUtils.generateToken(authentication));
-        token.setToken(tokenService.createToken(authentication));
+        token.setToken(tokenService.createToken(authentication,clientId));
+        token.setAccess_token(token.getToken());
+        token.setClientId(clientId);
         return token;
     }
 

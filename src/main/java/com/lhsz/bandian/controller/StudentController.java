@@ -1,6 +1,7 @@
 package com.lhsz.bandian.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lhsz.bandian.entity.Student;
 import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.page.Result;
@@ -51,6 +52,7 @@ public class StudentController {
     }
     @GetMapping(value = "/listQuery2")
     public HttpResult listQuery2(String name){
+
         QueryWrapper qe=new QueryWrapper();
 //        Map aa=new HashMap();
 //        if(StringUtils.isNotEmpty(name))
@@ -59,8 +61,8 @@ public class StudentController {
         if(StringUtils.isNotEmpty(name))
         qe.like("name",name);
         qe.like("age",50);
-
         List<Student> list = studentService.list(qe);
         return HttpResult.ok(list);
     }
+
 }

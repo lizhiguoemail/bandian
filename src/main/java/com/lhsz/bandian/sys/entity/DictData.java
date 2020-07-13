@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class DictData extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "字典标识")
-    @TableId(value = "dict_id", type = IdType.ID_WORKER)
-    private Long dictId;
+    @TableId(value = "dict_id", type = IdType.UUID)
+    private String dictId;
 
     @ApiModelProperty(value = "字典编码")
     private String dictCode;

@@ -24,8 +24,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        int code = HttpStatus.SC_UNAUTHORIZED;
-        String msg = "请求访问：{}，认证失败，无法访问系统资源"+httpServletRequest.getRequestURI();
-        HttpUtils.write(httpServletResponse, HttpResult.error(code,msg));
+        String msg = "请求访问：{"+httpServletRequest.getRequestURI()+"}，认证失败，无法访问系统资源"+e.getMessage();
+        HttpUtils.write(httpServletResponse, HttpResult.fail(msg));
     }
 }

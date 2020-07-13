@@ -1,19 +1,20 @@
 package com.lhsz.bandian.sys.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lhsz.bandian.pojo.HttpResult;
-import com.lhsz.bandian.pojo.HttpStatus;
 import com.lhsz.bandian.pojo.page.ResponseResult;
+import com.lhsz.bandian.security.TokenService;
+import com.lhsz.bandian.sys.entity.Application;
+import com.lhsz.bandian.sys.entity.Resource;
 import com.lhsz.bandian.sys.entity.User;
-import com.lhsz.bandian.sys.service.impl.UserServiceImpl;
+import com.lhsz.bandian.sys.DTO.AppData;
+import com.lhsz.bandian.sys.service.IApplicationService;
+import com.lhsz.bandian.sys.service.IResourceService;
+import com.lhsz.bandian.sys.service.IUserService;
 import com.lhsz.bandian.utils.Convert;
 import com.lhsz.bandian.utils.SecurityUtils;
 import com.lhsz.bandian.utils.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.cglib.core.Converter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,14 +34,16 @@ import java.util.Map;
  * @since 2020-07-02
  */
 @RestController
-@RequestMapping("/sys/user")
+@RequestMapping("/systems/user")
 public class UserController extends BaseController {
     @Autowired
-    private UserServiceImpl userService;
+    private IUserService userService;
+
 
     @PreAuthorize("hasAuthority('sys:user:view')")
     @GetMapping(value="/findAll")
     public ResponseResult findAll() {
+        startPage();
 //        return HttpResult.ok("the findAll service is called success.");
         List<User> userlist= userService.list();
         return ResponseResult.ok().render(userlist);
@@ -63,7 +66,7 @@ public class UserController extends BaseController {
             return HttpResult.error("请传入version");
         }
         if(userService.updateById(user)){
-            return HttpResult.succeed();
+            return HttpResult.succee();
         }
         else{
             return HttpResult.error();
@@ -72,14 +75,19 @@ public class UserController extends BaseController {
     }
 
     @PreAuthorize("hasAuthority('sys:user:delete')")
-    @GetMapping(value="/delete")
-    public HttpResult delete() {
-        return HttpResult.ok("the delete service is called success.");
+    @DeleteMapping(value="/delete")
+    public HttpResult delete(String uid) {
+        if(userService.del(uid)==1) {
+            return HttpResult.succee();
+        }else{
+            return HttpResult.fail();
+        }
+
     }
 
     /**
      * 添加用户
-      * @param user
+     * @param user
      * @return
      */
     @PreAuthorize("hasAuthority('sys:user:add')")
@@ -94,6 +102,14 @@ public class UserController extends BaseController {
             return HttpResult.error();
         }
     }
+    @GetMapping("/app-data")
+    public HttpResult app_data(){
+
+        AppData appData=userService.getApp_data();//返回数据封装
+
+        return HttpResult.ok(appData);
+    }
+
 
     private void check(User user) {
         //判断用户名是否存在

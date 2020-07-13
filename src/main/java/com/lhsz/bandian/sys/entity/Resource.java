@@ -10,13 +10,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * <p>
  * 资源
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,11 +30,11 @@ public class Resource extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "资源标识")
-    @TableId(value = "resource_id", type = IdType.ID_WORKER)
-    private Long resourceId;
+    @TableId(value = "resource_id", type = IdType.UUID)
+    private String resourceId;
 
     @ApiModelProperty(value = "应用程序标识")
-    private Long applicationId;
+    private String applicationId;
 
     @ApiModelProperty(value = "资源标识")
     private String uri;
@@ -44,7 +46,7 @@ public class Resource extends BaseEntity {
     private Integer type;
 
     @ApiModelProperty(value = "父编号")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "路径")
     private String path;
@@ -63,6 +65,5 @@ public class Resource extends BaseEntity {
 
     @ApiModelProperty(value = "扩展")
     private String extend;
-
 
 }

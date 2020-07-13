@@ -12,6 +12,9 @@ package com.lhsz.bandian.pojo;
  */
 public interface HttpStatus {
 
+    //--成功1，失败0
+    public static final int SUCCEE=1;
+    public static final int FAIL=0;
     // --- 1xx Informational ---
 
     /** {@code 100 Continue} (HTTP/1.1 - RFC 2616) */

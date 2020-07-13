@@ -39,8 +39,10 @@ public class LoginController extends BaseController{
     public HttpResult login(@RequestBody LoginBean loginBean, HttpServletRequest request) throws IOException {
         String username = loginBean.getUsername();
         String password = loginBean.getPassword();
+        String clientId = loginBean.getClientId();
+
         // 系统登录认证
-        JwtAuthenticatioToken token = loginService.login(request, username, password);
+        JwtAuthenticatioToken token = loginService.login(request, username, password,clientId);
 
         return HttpResult.ok(token);
     }

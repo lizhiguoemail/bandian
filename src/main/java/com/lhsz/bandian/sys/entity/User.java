@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -29,8 +29,8 @@ public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户标识")
-    @TableId(value = "user_id", type = IdType.ID_WORKER)
-    private Long userId;
+    @TableId(value = "user_id", type = IdType.UUID)
+    private String userId;
 
     @ApiModelProperty(value = "用户类型(1办公用户，2企业用户，3车辆用户)")
     private Integer userType;

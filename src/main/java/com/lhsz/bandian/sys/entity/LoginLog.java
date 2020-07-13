@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -29,8 +29,8 @@ public class LoginLog extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "日志标识")
-    @TableId(value = "log_id", type = IdType.ID_WORKER)
-    private Long logId;
+    @TableId(value = "log_id", type = IdType.UUID)
+    private String logId;
 
     @ApiModelProperty(value = "登录账号")
     private String loginName;

@@ -1,6 +1,7 @@
 package com.lhsz.bandian.security;
 
 
+import com.lhsz.bandian.sys.entity.Application;
 import com.lhsz.bandian.sys.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,6 +60,10 @@ public class LoginUser implements UserDetails {
      * 用户信息
      */
     private User user;
+    /**
+     * 当前登录人所属系统
+     */
+    private Application application;
 
    
     public LoginUser(User user,Set<String> permissions) {
@@ -195,5 +200,13 @@ public class LoginUser implements UserDetails {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 }

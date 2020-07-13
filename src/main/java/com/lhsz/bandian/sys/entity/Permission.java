@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,14 +28,14 @@ public class Permission extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "权限标识")
-    @TableId(value = "permission_id", type = IdType.ID_WORKER)
-    private Long permissionId;
+    @TableId(value = "permission_id", type = IdType.UUID)
+    private String permissionId;
 
     @ApiModelProperty(value = "角色标识")
-    private Long roleId;
+    private String roleId;
 
     @ApiModelProperty(value = "资源标识")
-    private Long resourceId;
+    private String resourceId;
 
     @ApiModelProperty(value = "拒绝")
     private Boolean isDeny;

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @TableName("Student")
 public class Student {
-    @TableId(value = "id",type = IdType.ID_WORKER)
+    @TableId(value = "id",type = IdType.UUID)
     private Long id;
 
 

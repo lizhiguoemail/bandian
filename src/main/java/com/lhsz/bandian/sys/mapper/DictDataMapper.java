@@ -1,7 +1,7 @@
 package com.lhsz.bandian.sys.mapper;
 
 import com.lhsz.bandian.sys.entity.DictData;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lhsz.bandian.mapper.MyBaseMapper;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
-public interface DictDataMapper extends BaseMapper<DictData> {
+public interface DictDataMapper extends MyBaseMapper<DictData> {
 
 }

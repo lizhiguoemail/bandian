@@ -56,8 +56,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         }
         return bool;
     }
-    private Long getLoginUserId(){
-        Long uId=0L;
+    private String getLoginUserId(){
+        String uId=null;
         try {
             LoginUser loginUser=tokenService.getLoginUser(ServletUtils.getRequest());
             uId=loginUser.getUser().getUserId();

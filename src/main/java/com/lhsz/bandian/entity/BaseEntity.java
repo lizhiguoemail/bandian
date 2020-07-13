@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class BaseEntity implements Serializable {
+    private static final long serialVersionUID=1L;
+
+    private String remark;
     /**
      * 创建时间
      */
@@ -21,7 +24,7 @@ public class BaseEntity implements Serializable {
      * 创建人编号
      */
     @TableField(value = "creator_id", fill = FieldFill.INSERT)
-    private Long creatorId;
+    private String creatorId;
 
     /**
      * 最后修改时间
@@ -33,14 +36,13 @@ public class BaseEntity implements Serializable {
      * 最后修改人编号
      */
     @TableField(value = "last_modifier_id", fill = FieldFill.INSERT_UPDATE)
-    private Long lastModifierId;
+    private String lastModifierId;
 
     /**
      * 是否删除
      */
-    @TableLogic(value = "0",delval = "1")
-    @TableField(select = false)
-    private Boolean isDeleted;
+    @TableLogic
+    private Integer isDeleted;
 
     /**
      *

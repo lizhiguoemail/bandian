@@ -8,9 +8,10 @@ package com.lhsz.bandian.pojo;
  */
 public class HttpResult {
 
-    private int code = 200;
+    private int code = 1;
     private String msg;
     private Object data;
+
 
     public static HttpResult error() {
         return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, "未知异常，请联系管理员");
@@ -42,9 +43,28 @@ public class HttpResult {
     public static HttpResult ok() {
         return new HttpResult();
     }
-    public static HttpResult succeed() {
+    public static HttpResult succee() {
         HttpResult r = new HttpResult();
         r.setMsg("操作成功");
+        r.setCode(HttpStatus.SUCCEE);
+        return r;
+    }
+    public static HttpResult fail() {
+        HttpResult r = new HttpResult();
+        r.setMsg("操作失败");
+        r.setCode(HttpStatus.FAIL);
+        return r;
+    }
+    public static HttpResult succee(String msg) {
+        HttpResult r = new HttpResult();
+        r.setMsg(msg);
+        r.setCode(HttpStatus.SUCCEE);
+        return r;
+    }
+    public static HttpResult fail(String msg) {
+        HttpResult r = new HttpResult();
+        r.setMsg(msg);
+        r.setCode(HttpStatus.FAIL);
         return r;
     }
 

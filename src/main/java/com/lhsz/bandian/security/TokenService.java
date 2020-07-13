@@ -1,6 +1,10 @@
 package com.lhsz.bandian.security;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.lhsz.bandian.sys.entity.Application;
+import com.lhsz.bandian.sys.entity.User;
+import com.lhsz.bandian.sys.service.IApplicationService;
 import com.lhsz.bandian.utils.*;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +58,8 @@ public class TokenService {
 
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private IApplicationService applicationService;
     /**
      * 获取用户身份信息
      *
@@ -72,6 +79,42 @@ public class TokenService {
             Long createtime = (Long) claims.get(CREATED);
             LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
             return user;
+        }
+        return null;
+    }
+    /**
+     * 获取登录用户实体
+     *
+     * @return 用户信息
+     */
+    public User getLoginUserToUser()
+    {
+        String token = getToken(HttpUtils.getHttpServletRequest());
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims =  getClaimsFromToken(token);
+            String username = (String) claims.get(USERNAME);
+            Long createtime = (Long) claims.get(CREATED);
+            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
+            return user.getUser();
+        }
+        return null;
+    }
+    /**
+     * 获取登录用户实体
+     *
+     * @return 用户信息
+     */
+    public Application getLoginUserToApp()
+    {
+        String token = getToken(HttpUtils.getHttpServletRequest());
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims =  getClaimsFromToken(token);
+            String username = (String) claims.get(USERNAME);
+            Long createtime = (Long) claims.get(CREATED);
+            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
+            return user.getApplication();
         }
         return null;
     }
@@ -156,6 +199,37 @@ public class TokenService {
         loginUser.setExpireTime(createtime+expireTime);
         String token=generateToken(claims);//生成token
         loginUser.setToken(token);
+
+        addRadisForLoginUser(setRedisTokenId(loginUser.getUsername(),createtime), loginUser);
+        return token;
+    }
+    /**
+     * 生成令牌
+     *
+     * @param authentication 用户
+     * @return 令牌
+     */
+    public  String createToken(Authentication authentication,String clientId) {
+        Map<String, Object> claims = new HashMap<>(3);
+        LoginUser loginUser=(LoginUser) authentication.getPrincipal();
+        Long createtime=System.currentTimeMillis();
+        claims.put(USERNAME, loginUser.getUsername());
+        claims.put(CREATED, createtime);
+        claims.put(AUTHORITIES, loginUser.getAuthorities());
+        setUserAgent(loginUser);
+        loginUser.setLoginTime(createtime);
+        loginUser.setExpireTime(createtime+expireTime);
+        String token=generateToken(claims);//生成token
+        loginUser.setToken(token);
+        HttpServletRequest request = HttpUtils.getHttpServletRequest();
+        if(clientId==null || "".equals(clientId.trim())){
+            throw new UsernameNotFoundException("ClientId 不能为空");
+        }
+        Application application = applicationService.getOne(new QueryWrapper<Application>().eq("code",clientId));
+        if(application==null){
+            throw new UsernameNotFoundException("ClientId 错误");
+        }
+        loginUser.setApplication(application);
         addRadisForLoginUser(setRedisTokenId(loginUser.getUsername(),createtime), loginUser);
         return token;
     }

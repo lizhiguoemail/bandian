@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author lizhiguo
- * @since 2020-07-02
+ * @since 2020-07-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,8 +28,8 @@ public class Msg extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "消息标识")
-    @TableId(value = "msg_id", type = IdType.ID_WORKER)
-    private Long msgId;
+    @TableId(value = "msg_id", type = IdType.UUID)
+    private String msgId;
 
     @ApiModelProperty(value = "消息名称")
     private String msgName;
