@@ -2,7 +2,6 @@ package com.lhsz.bandian.sys.controller;
 
 
 import com.lhsz.bandian.pojo.HttpResult;
-import com.lhsz.bandian.pojo.page.ResponseResult;
 import com.lhsz.bandian.sys.DTO.query.QueryUserDTO;
 import com.lhsz.bandian.sys.DTO.result.UserDTO;
 import com.lhsz.bandian.sys.entity.User;
@@ -12,7 +11,6 @@ import com.lhsz.bandian.utils.Convert;
 import com.lhsz.bandian.utils.SecurityUtils;
 import com.lhsz.bandian.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.lhsz.bandian.controller.BaseController;
 import java.util.List;

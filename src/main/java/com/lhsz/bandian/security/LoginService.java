@@ -36,9 +36,9 @@ public class LoginService {
         // 认证成功存储认证信息到上下文
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌并返回给客户端
-//        token.setToken(JwtTokenUtils.generateToken(authentication));
-        token.setToken(tokenService.createToken(authentication,clientId));
-        token.setAccess_token(token.getToken());
+//        token.setToken(tokenService.createToken(authentication,clientId));
+//        token.setAccess_token(token.getToken());
+        token.setAccess_token(tokenService.createToken(authentication,clientId));
         token.setClientId(clientId);
         return token;
     }
