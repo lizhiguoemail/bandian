@@ -360,7 +360,15 @@ public class TokenService {
                     authentication = securityService.getAuthentication();
                 }
             }
+            if(authentication !=null){
+                LoginUser loginUser=getLoginUser(token);
+                if(loginUser==null){
+                    authentication=null;
+                }
+            }
+
         }
+
         return authentication;
     }
 

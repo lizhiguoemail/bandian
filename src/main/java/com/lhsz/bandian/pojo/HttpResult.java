@@ -37,11 +37,14 @@ public class HttpResult {
     public static HttpResult ok(Object data) {
         HttpResult r = new HttpResult();
         r.setData(data);
+        r.setMsg("操作成功");
         return r;
     }
 
     public static HttpResult ok() {
-        return new HttpResult();
+        HttpResult r = new HttpResult();
+        r.setMsg("操作成功");
+        return r;
     }
     public static HttpResult succee() {
         HttpResult r = new HttpResult();
@@ -63,6 +66,7 @@ public class HttpResult {
     }
     public static HttpResult fail(String msg) {
         HttpResult r = new HttpResult();
+        r.code=0;
         r.setMsg(msg);
         r.setCode(HttpStatus.FAIL);
         return r;

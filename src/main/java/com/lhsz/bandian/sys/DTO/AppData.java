@@ -1,8 +1,5 @@
 package com.lhsz.bandian.sys.DTO;
 
-import com.lhsz.bandian.sys.entity.Application;
-import com.lhsz.bandian.sys.entity.Resource;
-import com.lhsz.bandian.sys.entity.User;
 
 import java.util.List;
 
@@ -11,31 +8,31 @@ import java.util.List;
  * 2020/7/10 17:45
  */
 public class AppData {
-    public Application app;
-    public User user;
-    public List<ResourceDTO> menu;
+    public AppApplicationDTO app;
+    public AppUserDTO user;
+    public List<AppResourceDTO> menu;
 
-    public Application getApp() {
+    public AppApplicationDTO getApp() {
         return app;
     }
 
-    public void setApp(Application app) {
+    public void setApp(AppApplicationDTO app) {
         this.app = app;
     }
 
-    public User getUser() {
+    public AppUserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AppUserDTO user) {
         this.user = user;
     }
 
-    public List<ResourceDTO> getMenu() {
+    public List<AppResourceDTO> getMenu() {
         return menu;
     }
 
-    public void setMenu(List<ResourceDTO> menu) {
+    public void setMenu(List<AppResourceDTO> menu) {
         this.menu = menu;
     }
 }

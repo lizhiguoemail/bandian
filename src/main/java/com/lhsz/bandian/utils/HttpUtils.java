@@ -52,6 +52,34 @@ public class HttpUtils {
         response.getWriter().close();
     }
     /**
+     * 输出信息到浏览器
+     * @param response
+     * @param message
+     * @throws IOException
+     */
+    public static void writeSuccee(HttpServletResponse response, String data) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        HttpResult result = HttpResult.succee(data);
+        String json = JSONObject.toJSONString(result);
+        response.getWriter().print(json);
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+    /**
+     * 输出信息到浏览器
+     * @param response
+     * @param message
+     * @throws IOException
+     */
+    public static void writeFail(HttpServletResponse response, String data) throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        HttpResult result = HttpResult.fail(data);
+        String json = JSONObject.toJSONString(result);
+        response.getWriter().print(json);
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+    /**
      * 向指定 URL 发送GET方法的请求
      *
      * @param url 发送请求的 URL

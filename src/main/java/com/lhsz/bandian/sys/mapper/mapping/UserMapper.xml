@@ -42,6 +42,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
+        user_id AS id,
         remark,
         creation_time,
         creator_id,
@@ -49,7 +50,12 @@
         last_modifier_id,
         is_deleted,
         version,
-        user_id, user_type, nick_name, user_name, normalized_user_name, email, normalized_email, email_confirmed, phone_number, phone_number_confirmed, password, password_hash, safe_password, safe_password_hash, two_factor_enabled, enabled, disabled_time, lockout_enabled, lockout_end, access_failed_count, login_count, register_ip, last_login_time, last_login_ip, current_login_time, current_login_ip, security_stamp
+         user_type, nick_name, user_name, normalized_user_name, email, normalized_email, email_confirmed, phone_number, phone_number_confirmed, password, password_hash, safe_password, safe_password_hash, two_factor_enabled, enabled, disabled_time, lockout_enabled, lockout_end, access_failed_count, login_count, register_ip, last_login_time, last_login_ip, current_login_time, current_login_ip, security_stamp
     </sql>
-
+    <select id="selectPageDTO" resultType="com.lhsz.bandian.sys.DTO.result.UserDTO">
+        <include refid="Base_Column_List"></include>
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>

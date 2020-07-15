@@ -8,12 +8,12 @@ import java.io.Serializable;
  * @author lizhiguo
  * 2020/7/13 9:16
  */
-public class ApplicationDTO implements Serializable {
+public class AppApplicationDTO implements Serializable {
     private static final long serialVersionUID=1L;
     private String name;
     private String description;
 
-    public ApplicationDTO(Application application){
+    public AppApplicationDTO(Application application){
         this.name=application.getName();
         this.description=application.getRemark();
     }

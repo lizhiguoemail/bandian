@@ -23,7 +23,8 @@ public class PageDomain {
         {
             return "";
         }
-        return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+        return StringUtils.toUnderScoreCase(orderByColumn);
+//        return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
     public Integer getPageNum()

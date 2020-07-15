@@ -1,7 +1,5 @@
 package com.lhsz.bandian.sys.DTO;
 
-import com.lhsz.bandian.sys.entity.Resource;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,7 +7,7 @@ import java.util.List;
  * @author lizhiguo
  * 2020/7/13 9:18
  */
-public class ResourceDTO implements Serializable {
+public class AppResourceDTO implements Serializable {
     private static final long serialVersionUID=1L;
     private String id;
     private String parentId;
@@ -21,7 +19,7 @@ public class ResourceDTO implements Serializable {
     private String i18n;
     private boolean group;
     private boolean hideInBreadcrumb;
-    private List<ResourceDTO> children;
+    private List<AppResourceDTO> children;
 
     public String getParentId() {
         return parentId;
@@ -103,11 +101,11 @@ public class ResourceDTO implements Serializable {
         this.hideInBreadcrumb = hideInBreadcrumb;
     }
 
-    public List<ResourceDTO> getChildren() {
+    public List<AppResourceDTO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<ResourceDTO> children) {
+    public void setChildren(List<AppResourceDTO> children) {
         this.children = children;
     }
 }

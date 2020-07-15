@@ -2,6 +2,7 @@ package com.lhsz.bandian.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.lhsz.bandian.pojo.HttpResult;
 import com.lhsz.bandian.pojo.LoginBean;
@@ -12,11 +13,10 @@ import com.lhsz.bandian.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
+//@RequestMapping("/systems/auth")
 public class LoginController extends BaseController{
 //    @Autowired
 //    private AuthenticationManager authenticationManager;
@@ -46,4 +46,8 @@ public class LoginController extends BaseController{
 
         return HttpResult.ok(token);
     }
+//    @GetMapping(value = "/logout")
+//    public void  login(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("logout");
+//    }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author lizhiguo
  * 2020/7/10 17:48
  */
-public class UserDTO implements Serializable {
+public class AppUserDTO implements Serializable {
     private static final long serialVersionUID=1L;
     public String userId;
     public String name;

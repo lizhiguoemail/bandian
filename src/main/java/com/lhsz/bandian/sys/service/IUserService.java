@@ -1,9 +1,12 @@
 package com.lhsz.bandian.sys.service;
 
 import com.lhsz.bandian.sys.DTO.AppData;
+import com.lhsz.bandian.sys.DTO.query.QueryUserDTO;
+import com.lhsz.bandian.sys.DTO.result.UserDTO;
 import com.lhsz.bandian.sys.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,4 +34,8 @@ public interface IUserService extends IService<User> {
     public int del(String id);
 
     AppData getApp_data();
+
+    List<UserDTO> listQueryUserDTO(QueryUserDTO user);
+
+    UserDTO getUserDTO(String id);
 }

@@ -63,7 +63,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             uId=loginUser.getUser().getUserId();
         }catch (Exception e){
             try {
-                HttpUtils.write(ServletUtils.getResponse(), e.getMessage());
+                HttpUtils.writeFail(ServletUtils.getResponse(), e.getMessage());
             }catch (Exception e1){
                 e1.printStackTrace();
             }
