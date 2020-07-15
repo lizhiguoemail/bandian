@@ -1,8 +1,8 @@
 package com.lhsz.bandian.controller;
 
 import com.github.pagehelper.PageHelper;
-import com.lhsz.bandian.pojo.page.PageDomain;
-import com.lhsz.bandian.pojo.page.TableSupport;
+import com.lhsz.bandian.DTO.page.PageDomain;
+import com.lhsz.bandian.DTO.page.TableSupport;
 import com.lhsz.bandian.utils.SqlUtil;
 import com.lhsz.bandian.utils.StringUtils;
 

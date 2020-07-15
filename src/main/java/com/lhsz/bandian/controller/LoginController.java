@@ -2,17 +2,12 @@ package com.lhsz.bandian.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import com.lhsz.bandian.pojo.HttpResult;
-import com.lhsz.bandian.pojo.LoginBean;
-import com.lhsz.bandian.pojo.page.ResponseResult;
+import com.lhsz.bandian.DTO.HttpResult;
+import com.lhsz.bandian.DTO.LoginBean;
 import com.lhsz.bandian.security.JwtAuthenticatioToken;
 import com.lhsz.bandian.security.LoginService;
-import com.lhsz.bandian.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

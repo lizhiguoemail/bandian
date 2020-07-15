@@ -12,7 +12,7 @@ import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lhsz.bandian.pojo.HttpResult;
+import com.lhsz.bandian.DTO.HttpResult;
 import com.lhsz.bandian.security.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

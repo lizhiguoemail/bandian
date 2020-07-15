@@ -1,4 +1,4 @@
-package com.lhsz.bandian.pojo.page;
+package com.lhsz.bandian.DTO.page;
 
 import com.lhsz.bandian.utils.ServletUtils;
 

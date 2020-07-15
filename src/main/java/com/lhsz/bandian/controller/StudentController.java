@@ -1,20 +1,16 @@
 package com.lhsz.bandian.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lhsz.bandian.entity.Student;
-import com.lhsz.bandian.pojo.HttpResult;
-import com.lhsz.bandian.pojo.page.Result;
+import com.lhsz.bandian.DTO.HttpResult;
+import com.lhsz.bandian.DTO.page.Result;
 import com.lhsz.bandian.service.Impl.StudentService;
 import com.lhsz.bandian.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //@CrossOrigin(origins = "http://domain2.com", maxAge = 3600)
 @RestController

@@ -1,8 +1,7 @@
 package com.lhsz.bandian.sys.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lhsz.bandian.pojo.HttpResult;
+import com.lhsz.bandian.DTO.HttpResult;
 import com.lhsz.bandian.sys.DTO.query.QueryRoleDTO;
 import com.lhsz.bandian.sys.DTO.result.RoleDTO;
 import com.lhsz.bandian.sys.entity.Role;
@@ -10,8 +9,6 @@ import com.lhsz.bandian.sys.service.IRoleService;
 import com.lhsz.bandian.utils.Convert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.lhsz.bandian.controller.BaseController;

@@ -1,8 +1,5 @@
 package com.lhsz.bandian.security;
 
-import com.alibaba.fastjson.JSON;
-import com.lhsz.bandian.pojo.HttpResult;
-import com.lhsz.bandian.pojo.HttpStatus;
 import com.lhsz.bandian.utils.HttpUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

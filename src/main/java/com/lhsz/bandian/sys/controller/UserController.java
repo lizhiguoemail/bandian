@@ -1,7 +1,7 @@
 package com.lhsz.bandian.sys.controller;
 
 
-import com.lhsz.bandian.pojo.HttpResult;
+import com.lhsz.bandian.DTO.HttpResult;
 import com.lhsz.bandian.sys.DTO.query.QueryUserDTO;
 import com.lhsz.bandian.sys.DTO.result.UserDTO;
 import com.lhsz.bandian.sys.entity.User;

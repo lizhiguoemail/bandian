@@ -1,4 +1,4 @@
-package com.lhsz.bandian.pojo.page;
+package com.lhsz.bandian.DTO.page;
 
 public class OtherMessage {
     private  String ex;

@@ -1,4 +1,4 @@
-package com.lhsz.bandian.pojo;
+package com.lhsz.bandian.DTO;
 
 
 /**
