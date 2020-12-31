@@ -30,6 +30,9 @@ public class TableSupport {
     public static String IS_ASC = "isAsc";
     /**
      * 封装分页对象
+     * page: 2
+     * pageSize: 10
+     * order: CreationTime%20desc
      */
     public static PageDomain getPageDomain()
     {

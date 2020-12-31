@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.PartyTeachTeamWorkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.PartyTeachTeamWork">
+        <id column="teach_id" property="teachId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="category" property="category" />
+        <result column="content" property="content" />
+        <result column="ranking_effect" property="rankingEffect" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        teach_id, user_id, begin_date, end_date, category, content, ranking_effect, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.JuryDeclareSubjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.JuryDeclareSubject">
+        <id column="subject_id" property="subjectId"/>
+        <result column="remark" property="remark"/>
+        <result column="creation_time" property="creationTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="last_modification_time" property="lastModificationTime"/>
+        <result column="last_modifier_id" property="lastModifierId"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="version" property="version"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="declare_category" property="declareCategory"/>
+        <result column="declare_specialty" property="declareSpecialty"/>
+        <result column="declare_title" property="declareTitle"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        subject_id,
+        dept_id,
+        declare_category,
+        declare_specialty,
+        declare_title
+    </sql>
+
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.JuryDeclareSubject" resultType="com.lhsz.bandian.jt.DTO.response.JuryDeclareSubjectDTO">
+        SELECT
+        jjds.subject_id as id,
+        jjds.dept_id,
+        jjds.declare_category,
+        jjds.declare_specialty,
+        jjds.declare_title,
+        jdc1.name declare_category_name,
+        jdc2.name declare_specialty_name,
+        jdt.name declare_title_name,
+        jjds.remark,
+        jjds.creation_time,
+        jjds.creator_id,
+        jjds.last_modification_time,
+        jjds.last_modifier_id,
+        jjds.is_deleted,
+        jjds.version
+        FROM
+        jt_jury_declare_subject jjds
+        LEFT JOIN jt_declare_category jdc1 on jjds.declare_category = jdc1.CODE
+        LEFT JOIN jt_declare_category jdc2 on jjds.declare_specialty = jdc2.CODE
+        LEFT JOIN jt_declare_title jdt on jjds.declare_title = jdt.CODE
+        WHERE
+        jjds.is_deleted = 0
+        <if test="deptId != null and deptId != ''">
+            AND jjds.dept_id = '${deptId}'
+        </if>
+        <if test="subjectId != null and subjectId != ''">
+            AND jjds.subject_id = '${subjectId}'
+        </if>
+        <if test="declareTitle != null and declareTitle != ''">
+            AND jjds.declare_title like '%${declareTitle}%'
+        </if>
+    </select>
+
+    <select id="search" parameterType="com.lhsz.bandian.jt.entity.JuryDeclareSubject" resultType="com.lhsz.bandian.jt.DTO.response.JuryDeptDTO">
+        select b.remark,
+        b.creation_time,
+        b.creator_id,
+        b.last_modification_time,
+        b.last_modifier_id,
+        b.is_deleted,
+        b.version,
+        b.dept_id, b.dept_type, b.dept_name, b.organ_code, b.leader_name, b.leader_telephone, b.contact_name, b.contact_telephone,
+        b.jury_level, b.highter_dept, b.form_dept, b.office_addr, b.jury_range, b.manage_rule,b.province,b.city,b.county
+        from jt_jury_declare_subject a
+        LEFT JOIN jt_jury_dept b
+        on a.dept_id=b.dept_id
+        <where>
+            <if test="declareCategory!=null and  declareCategory!=''">
+                a.declare_category=#{declareCategory}
+            </if>
+            <if test="declareSpecialty!=null and  declareSpecialty!=''">
+                And a.declare_specialty=#{declareSpecialty}
+            </if>
+            <if test="declareTitle!=null and  declareTitle!=''">
+                And a.declare_title=#{declareTitle}
+            </if>
+            <if test="province!=null and  province!=''">
+                And b.province=#{province}
+            </if>
+            <if test="city!=null and  city!=''">
+                And b.city=#{city}
+            </if>
+            <if test="county!=null and  county!=''">
+                And b.county=#{county}
+            </if>
+        </where>
+    </select>
+</mapper>

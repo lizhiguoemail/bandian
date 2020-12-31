@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.ResultUsedMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.ResultUsed">
+        <id column="result_id" property="resultId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="result_name" property="resultName" />
+        <result column="project_date" property="projectDate" />
+        <result column="corp_name" property="corpName" />
+        <result column="research_investment" property="researchInvestment" />
+        <result column="economic_benefits" property="economicBenefits" />
+        <result column="social_benefits" property="socialBenefits" />
+        <result column="tech_innovation" property="techInnovation" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        result_id, user_id, result_name, project_date, corp_name, research_investment, economic_benefits, social_benefits, tech_innovation, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+
+</mapper>

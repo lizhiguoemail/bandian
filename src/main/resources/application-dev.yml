@@ -1,23 +1,64 @@
-# Mysql数据库
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.62:3306/smart_mfg?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
-    username: root
-    password:
-#mybatis-plus:
-#  Configuration:
-#    mapUnderscoreToCamelCase: true #是否开启自动驼峰命名规则
-#    callSettersOnNulls: true # 默认值：false 指定当结果集中值为 null 的时候是否调用映射对象的 Setter（Map 对象时为 put）方法，通常运用于有 Map.keySet() 依赖或 null 值初始化的情况。
-#  DbConfig:
-#    idType: ID_WORKER
-    #logicDeleteValue: 1 #逻辑已删除值  类型string 默认值1
-    #logicNotDeleteValue #逻辑未删除值 默认值 0
+bandian:
+  # 文件路径 示例（ Windows配置D:\\jtreview，Linux配置 /home/jtreview nginx中指定到jtreview文件夹）
+  uploadPath: D:\\jtreview
 server:
   port: 8081
   servlet:
     context-path: /api
+    tomcat:
+      # tomcat的URI编码
+      uri-encoding: UTF-8
+      # tomcat最大线程数，默认为200
+      max-threads: 800
+      # Tomcat启动初始化的线程数，默认值25
+      min-spare-threads: 30
+# Mysql数据库
+spring:
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.0.62:3306/smart_mfg?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&allowMultiQueries=true
+#     慢SQL记录，正式上线不要使用
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://192.168.0.62:3306/smart_mfg?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&allowMultiQueries=true
+    username: mpw:9R3dxlbxfBt3AJuO6i3XBQ==
+    password: mpw:AYfKoeYFhbSrmoZCjGnMXg==
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    # 配置druid
+    druid:
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      min-idle: 5
+      initial-size: 5
+
+  redis:
+    database: 1  # Redis数据库索引（默认为0）
+    host: 192.168.0.62 # Redis服务器地址 192.168.0.62
+    port: 6379  # Redis服务器连接端口
+    password:   # Redis服务器连接密码（默认为空）
+    lettuce:
+      pool:
+        max-active: -1  # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-wait: -1   # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-idle: 500    # 连接池中的最大空闲连接 默认 8
+        min-idle: 50    # 连接池中的最小空闲连接 默认 0
+
 #mybatis-plus配置控制台打印完整带参数SQL语句
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  mapper-locations: com/lhsz/bandian/*/mapper/**/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  打印SQL语句 用了SQL性能验证插件会提示SQL代替这个
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 请求前缀
+  pathMapping: /

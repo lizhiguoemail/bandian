@@ -1,25 +1,19 @@
 package com.lhsz.bandian.security;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lhsz.bandian.sys.entity.Application;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.lhsz.bandian.Exception.NoticeException;
+import com.lhsz.bandian.jt.utils.JtString;
 import com.lhsz.bandian.sys.entity.User;
-import com.lhsz.bandian.sys.service.IApplicationService;
 import com.lhsz.bandian.sys.service.IUserService;
-import com.lhsz.bandian.sys.service.impl.UserServiceImpl;
-import com.lhsz.bandian.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
+
 
 
 /**
@@ -38,25 +32,36 @@ import javax.servlet.http.HttpServletRequest;
  * @author Louis
  * @date Jun 29, 2019
  */
+@Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private IUserService userService;
-    @Autowired
-    private IApplicationService applicationService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
+//        User user = userService.findByNameAndType(username, JtString.USERTYPE_PORTAL);
         if (user == null) {
             throw new UsernameNotFoundException("该用户不存在");
+        }else{
+           //
+            if(user!=null){
+                if(!user.getEnabled()){
+                    throw new NoticeException("该用户未启用");
+                }
+                UpdateWrapper<User> userWrapper = new UpdateWrapper<>();
+                userWrapper.set("login_count",user.getLoginCount()+1);
+                userWrapper.eq("user_id",user.getUserId());
+                userService.update(userWrapper);
+                log.info(user.getUserName()+"登录次数+1");
+            }
         }
-        // 用户权限列表，根据用户拥有的权限标识与如 @PreAuthorize("hasAuthority('sys:menu:view')") 标注的接口对比，决定是否可以调用接口
-        Set<String> permissions = userService.findPermissions(username);
-//        List<GrantedAuthority> grantedAuthorities = permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
 
-        return  new LoginUser(user, permissions);
+        // 用户权限列表，根据用户拥有的权限标识与如 @PreAuthorize("hasAuthority('sys:menu:view')") 标注的接口对比，决定是否可以调用接口
+        Set<String> permissions = userService.findPermissions(user.getUserId());
+        return new LoginUser(user, permissions);
 
     }
 }

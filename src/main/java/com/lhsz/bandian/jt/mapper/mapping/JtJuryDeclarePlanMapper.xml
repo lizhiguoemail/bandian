@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.JuryDeclarePlanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.JuryDeclarePlan">
+        <id column="plan_id" property="planId"/>
+        <result column="remark" property="remark"/>
+        <result column="creation_time" property="creationTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="last_modification_time" property="lastModificationTime"/>
+        <result column="last_modifier_id" property="lastModifierId"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="version" property="version"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="declare_category" property="declareCategory"/>
+        <result column="declare_specialty" property="declareSpecialty"/>
+        <result column="declare_title" property="declareTitle"/>
+        <result column="declare_year" property="declareYear"/>
+        <result column="plan_name" property="planName"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="contact_name" property="contactName"/>
+        <result column="contact_telephone" property="contactTelephone"/>
+        <result column="review_result" property="reviewResult"/>
+        <result column="review_range" property="reviewRange"/>
+        <result column="review_plan_attach" property="reviewPlanAttach"/>
+        <result column="relevant_attach" property="relevantAttach"/>
+        <result column="plan_description" property="planDescription"/>
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        plan_id, dept_id, declare_category, declare_specialty, declare_title, declare_year, plan_name, begin_date, end_date, contact_name, contact_telephone, review_result, review_range, review_plan_attach, relevant_attach, plan_description
+    </sql>
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.JuryDeclarePlan"
+            resultType="com.lhsz.bandian.jt.DTO.response.JuryDeclarePlanDTO">
+        SELECT
+            jt_jury_declare_plan.plan_id as id,
+            jt_jury_declare_plan.plan_id,
+            jt_jury_declare_plan.dept_id,
+            jt_jury_declare_plan.declare_category,
+            jt_jury_declare_plan.declare_specialty,
+            jt_jury_declare_plan.declare_title,
+            jt_jury_declare_plan.declare_year,
+            jt_jury_declare_plan.plan_name,
+            jt_jury_declare_plan.begin_date,
+            jt_jury_declare_plan.end_date,
+            jt_jury_declare_plan.contact_name,
+            jt_jury_declare_plan.contact_telephone,
+            jt_jury_declare_plan.review_result,
+            jt_jury_declare_plan.review_range,
+            jt_jury_declare_plan.review_plan_attach,
+            jt_jury_declare_plan.relevant_attach,
+            jt_jury_declare_plan.plan_description,
+            jt_jury_declare_plan.remark,
+            jt_jury_declare_plan.creation_time,
+            jt_jury_declare_plan.creator_id,
+            jt_jury_declare_plan.last_modification_time,
+            jt_jury_declare_plan.last_modifier_id,
+            jt_jury_declare_plan.is_deleted,
+            c1.`name` AS declare_category_name,
+            c2.`name` AS declare_specialty_name,
+            jt_declare_specialty.`name` AS declare_title_name
+        FROM
+            jt_jury_declare_plan
+            left join jt_declare_category AS c1 on c1.`code` = jt_jury_declare_plan.declare_category
+            left join jt_declare_category AS c2 on c2.`code` = jt_jury_declare_plan.declare_specialty
+            left join jt_declare_specialty on c2.`code` = jt_jury_declare_plan.declare_specialty
+        WHERE
+            c2.`code` = jt_jury_declare_plan.declare_specialty
+            AND jt_declare_specialty.`code` = jt_jury_declare_plan.declare_title
+            AND jt_jury_declare_plan.is_deleted = 0
+            <if test="planName != null and planName != ''">
+                AND jt_jury_declare_plan.plan_name like '%${planName}%'
+            </if>
+            <if test="declareYear != null and declareYear != ''">
+                AND jt_jury_declare_plan.declare_year = #{declareYear}
+            </if>
+            <if test="declareCategory != null and declareCategory != ''">
+                AND jt_jury_declare_plan.declare_category = #{declareCategory}
+            </if>
+            <if test="declareSpecialty != null and declareSpecialty != ''">
+                AND jt_jury_declare_plan.declare_specialty = #{declareSpecialty}
+            </if>
+            <if test="declareTitle != null and declareTitle != ''">
+                AND jt_jury_declare_plan.declare_title = #{declareTitle}
+            </if>
+    </select>
+
+    <select id="selectDTO" parameterType="java.lang.String"
+            resultType="com.lhsz.bandian.jt.DTO.response.JuryDeclarePlanDTO">
+        SELECT
+            jt_jury_declare_plan.plan_id as id,
+            jt_jury_declare_plan.plan_id,
+            jt_jury_declare_plan.dept_id,
+            jt_jury_declare_plan.declare_category,
+            jt_jury_declare_plan.declare_specialty,
+            jt_jury_declare_plan.declare_title,
+            jt_jury_declare_plan.declare_year,
+            jt_jury_declare_plan.plan_name,
+            jt_jury_declare_plan.begin_date,
+            jt_jury_declare_plan.end_date,
+            jt_jury_declare_plan.contact_name,
+            jt_jury_declare_plan.contact_telephone,
+            jt_jury_declare_plan.review_result,
+            jt_jury_declare_plan.review_range,
+            jt_jury_declare_plan.review_plan_attach,
+            jt_jury_declare_plan.relevant_attach,
+            jt_jury_declare_plan.plan_description,
+            jt_jury_declare_plan.remark,
+            jt_jury_declare_plan.creation_time,
+            jt_jury_declare_plan.creator_id,
+            jt_jury_declare_plan.last_modification_time,
+            jt_jury_declare_plan.last_modifier_id,
+            jt_jury_declare_plan.is_deleted,
+            c1.`name` AS declare_category_name,
+            c2.`name` AS declare_specialty_name,
+            jt_declare_specialty.`name` AS declare_title_name
+        FROM
+            jt_jury_declare_plan
+            left join jt_declare_category AS c1 on c1.`code` = jt_jury_declare_plan.declare_category
+            left join jt_declare_category AS c2 on c2.`code` = jt_jury_declare_plan.declare_specialty
+            left join jt_declare_specialty on jt_declare_specialty.`code` = jt_jury_declare_plan.declare_title
+        WHERE
+            jt_jury_declare_plan.is_deleted = 0 AND
+            jt_jury_declare_plan.plan_id = #{id}
+    </select>
+</mapper>

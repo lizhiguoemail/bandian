@@ -6,6 +6,7 @@ import com.lhsz.bandian.sys.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -18,4 +19,11 @@ import java.util.List;
 public interface IRoleService extends IService<Role> {
 
     List<RoleDTO> listQuery(QueryRoleDTO queryRoleDTO);
+
+    List<Map<String, String>> listAllRole();
+    boolean removeAllByRoleId(String id);
+
+    boolean addRole(RoleDTO roleDTO);
+
+    boolean updateRole(RoleDTO roleDTO);
 }

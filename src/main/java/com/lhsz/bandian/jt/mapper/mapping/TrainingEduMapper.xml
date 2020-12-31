@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.TrainingEduMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.TrainingEdu">
+        <id column="edu_id" property="eduId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="training_item" property="trainingItem" />
+        <result column="training_school" property="trainingSchool" />
+        <result column="organ_corp" property="organCorp" />
+        <result column="learn_description" property="learnDescription" />
+        <result column="course_type" property="courseType" />
+        <result column="training_hours" property="trainingHours" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        edu_id, user_id, begin_date, end_date, training_item, training_school, organ_corp, learn_description, course_type, training_hours, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.TrainingEduDTO">
+     SELECT
+        jt_training_edu.edu_id AS id,
+        jt_training_edu.edu_id,
+        jt_training_edu.user_id,
+        jt_training_edu.end_date,
+        jt_training_edu.begin_date,
+        jt_training_edu.training_item,
+        jt_training_edu.training_school,
+        jt_training_edu.organ_corp,
+        jt_training_edu.learn_description,
+        jt_training_edu.course_type,
+        jt_training_edu.training_hours,
+        jt_training_edu.chk_office_id,
+        jt_training_edu.chk_office_name,
+        jt_training_edu.chk_user_id,
+        jt_training_edu.chk_user_name,
+        jt_training_edu.chk_status,
+        jt_training_edu.chk_reason,
+        jt_training_edu.chk_time,
+        jt_training_edu.remark,
+        jt_training_edu.creation_time,
+        jt_training_edu.creator_id,
+        jt_training_edu.last_modification_time,
+        jt_training_edu.last_modifier_id,
+        jt_training_edu.is_deleted,
+        jt_training_edu.version,
+        s1.dict_label AS course_type_name
+    FROM
+        jt_training_edu
+        LEFT JOIN
+        sys_dict_data AS s1
+        ON
+            jt_training_edu.course_type = s1.dict_value
+    WHERE
+        s1.is_deleted = 0 AND
+        s1.dict_type = 'course-type'
+        <if test="trainingItem != null and trainingItem != ''">
+            AND jt_training_edu.training_item like '%${trainingItem}%'
+        </if>
+        <if test="trainingSchool != null and trainingSchool != ''">
+            AND jt_training_edu.training_school like '%${trainingSchool}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_training_edu.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.TrainingEduDTO">
+     SELECT
+        jt_training_edu.edu_id AS id,
+        jt_training_edu.edu_id,
+        jt_training_edu.user_id,
+        jt_training_edu.end_date,
+        jt_training_edu.begin_date,
+        jt_training_edu.training_item,
+        jt_training_edu.training_school,
+        jt_training_edu.organ_corp,
+        jt_training_edu.learn_description,
+        jt_training_edu.course_type,
+        jt_training_edu.training_hours,
+        jt_training_edu.chk_office_id,
+        jt_training_edu.chk_office_name,
+        jt_training_edu.chk_user_id,
+        jt_training_edu.chk_user_name,
+        jt_training_edu.chk_status,
+        jt_training_edu.chk_reason,
+        jt_training_edu.chk_time,
+        jt_training_edu.remark,
+        jt_training_edu.creation_time,
+        jt_training_edu.creator_id,
+        jt_training_edu.last_modification_time,
+        jt_training_edu.last_modifier_id,
+        jt_training_edu.is_deleted,
+        jt_training_edu.version,
+        s1.dict_label AS course_type_name
+    FROM
+        jt_training_edu
+        LEFT JOIN
+        sys_dict_data AS s1
+        ON
+            jt_training_edu.course_type = s1.dict_value
+    WHERE
+        s1.is_deleted = 0
+        AND s1.dict_type = 'course-type'
+        AND jt_training_edu.edu_id = #{id}
+    </select>
+</mapper>

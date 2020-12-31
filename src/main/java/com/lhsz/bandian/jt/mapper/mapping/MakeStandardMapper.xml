@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.MakeStandardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.MakeStandard">
+        <id column="standard_id" property="standardId" />
+    <result column="remark" property="remark" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="standard_name" property="standardName" />
+        <result column="standard_no" property="standardNo" />
+        <result column="standard_type" property="standardType" />
+        <result column="published_date" property="publishedDate" />
+        <result column="part_type" property="partType" />
+        <result column="standard_summary" property="standardSummary" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        standard_id, user_id, standard_name, standard_no, standard_type, published_date, part_type, standard_summary, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.MakeStandard" resultType="com.lhsz.bandian.jt.DTO.response.MakeStandardDTO">
+        SELECT
+            jt_make_standard.standard_id as id,
+            jt_make_standard.standard_id,
+            jt_make_standard.user_id,
+            jt_make_standard.standard_name,
+            jt_make_standard.standard_no,
+            jt_make_standard.standard_type,
+            jt_make_standard.published_date,
+            jt_make_standard.part_type,
+            jt_make_standard.standard_summary,
+            jt_make_standard.chk_office_id,
+            jt_make_standard.chk_office_name,
+            jt_make_standard.chk_user_id,
+            jt_make_standard.chk_user_name,
+            jt_make_standard.chk_status,
+            jt_make_standard.chk_reason,
+            jt_make_standard.chk_time,
+            jt_make_standard.remark,
+            jt_make_standard.creation_time,
+            jt_make_standard.creator_id,
+            jt_make_standard.last_modification_time,
+            jt_make_standard.last_modifier_id,
+            jt_make_standard.is_deleted,
+            jt_make_standard.version,
+            s1.dict_label as part_type_name,
+            s2.dict_label as standard_type_name
+        FROM
+            jt_make_standard,
+            sys_dict_data s1,
+            sys_dict_data s2
+        WHERE
+            jt_make_standard.part_type = s1.dict_value AND
+            s1.dict_type = 'participate-type' AND
+            jt_make_standard.standard_type = s2.dict_value AND
+            s2.dict_type = 'standardt-type' AND
+            jt_make_standard.is_deleted = 0
+        <if test="standardName != null and standardName != ''">
+            AND jt_make_standard.standard_name like '%${standardName}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_make_standard.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" parameterType="java.lang.String" resultType="com.lhsz.bandian.jt.DTO.response.MakeStandardDTO">
+        SELECT
+            jt_make_standard.standard_id as id,
+            jt_make_standard.standard_id,
+            jt_make_standard.user_id,
+            jt_make_standard.standard_name,
+            jt_make_standard.standard_no,
+            jt_make_standard.standard_type,
+            jt_make_standard.published_date,
+            jt_make_standard.part_type,
+            jt_make_standard.standard_summary,
+            jt_make_standard.chk_office_id,
+            jt_make_standard.chk_office_name,
+            jt_make_standard.chk_user_id,
+            jt_make_standard.chk_user_name,
+            jt_make_standard.chk_status,
+            jt_make_standard.chk_reason,
+            jt_make_standard.chk_time,
+            jt_make_standard.remark,
+            jt_make_standard.creation_time,
+            jt_make_standard.creator_id,
+            jt_make_standard.last_modification_time,
+            jt_make_standard.last_modifier_id,
+            jt_make_standard.is_deleted,
+            jt_make_standard.version,
+            s1.dict_label as part_type_name,
+            s2.dict_label as standard_type_name
+        FROM
+            jt_make_standard,
+            sys_dict_data s1,
+            sys_dict_data s2
+        WHERE
+            jt_make_standard.part_type = s1.dict_value AND
+            s1.dict_type = 'participate-type' AND
+            jt_make_standard.standard_type = s2.dict_value AND
+            s2.dict_type = 'standardt-type' AND
+            jt_make_standard.is_deleted = 0 AND
+            jt_make_standard.standard_id =  #{id}
+    </select>
+</mapper>

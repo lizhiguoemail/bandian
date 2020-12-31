@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.WorkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Work">
+        <id column="work_id" property="workId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="work_corp" property="workCorp" />
+        <result column="declare_specialty1" property="declareSpecialty1" />
+        <result column="declare_specialty2" property="declareSpecialty2" />
+        <result column="declare_specialty3" property="declareSpecialty3" />
+        <result column="job_title" property="jobTitle" />
+        <result column="job_description" property="jobDescription" />
+        <result column="is_supper_external" property="isSupperExternal" />
+        <result column="is_postdoctoral_work" property="isPostdoctoralWork" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        work_id, user_id, begin_date, end_date, work_corp, declare_specialty1, declare_specialty2, declare_specialty3, job_title, job_description, is_supper_external, is_postdoctoral_work, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select  id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.WorkDTO" parameterType="com.lhsz.bandian.jt.entity.Work">
+        SELECT
+        jt_work.work_id AS id,
+        jt_work.work_id,
+        jt_work.user_id,
+        jt_work.begin_date,
+        jt_work.end_date,
+        jt_work.work_corp,
+        jt_work.declare_specialty1,
+        jt_work.declare_specialty2,
+        jt_work.declare_specialty3,
+        jt_work.job_title,
+        jt_work.job_description,
+        jt_work.is_supper_external,
+        jt_work.is_postdoctoral_work,
+        jt_work.chk_office_id,
+        jt_work.chk_office_name,
+        jt_work.chk_user_id,
+        jt_work.chk_user_name,
+        jt_work.chk_status,
+        jt_work.chk_reason,
+        jt_work.chk_time,
+        jt_work.remark,
+        jt_work.creation_time,
+        jt_work.creator_id,
+        jt_work.last_modification_time,
+        jt_work.last_modifier_id,
+        jt_work.is_deleted,
+        jt_work.version,
+        d1.name AS declare_specialty1_name,
+        d2.name AS declare_specialty2_name,
+        d3.name AS declare_specialty3_name,
+        s1.dict_label as is_supper_external_name,
+      s2.dict_label as is_postdoctoral_work_name
+    FROM
+        jt_work,
+        jt_declare_category AS d1,
+        jt_declare_category AS d2,
+        jt_declare_specialty AS d3,
+        sys_dict_data s1,
+        sys_dict_data s2
+        WHERE
+            jt_work.declare_specialty1 = d1.code
+            AND jt_work.declare_specialty2 = d2.code
+            AND jt_work.declare_specialty3 = d3.code
+            AND d2.category_id = d3.category_id
+            AND jt_work.is_supper_external = s1.dict_value
+            AND jt_work.is_postdoctoral_work = s2.dict_value
+            AND s1.dict_type = 'supper-external'
+            AND s2.dict_type = 'sys-yesno'
+            AND jt_work.is_deleted = 0
+            <if test="workCorp != null and workCorp != ''">
+                AND jt_work.work_corp like '%${workCorp}%'
+            </if>
+            <if test="userId != null and userId != ''">
+                AND jt_work.user_id = #{userId}
+            </if>
+
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.WorkDTO" parameterType="java.lang.String">
+                SELECT
+        jt_work.work_id AS id,
+        jt_work.work_id,
+        jt_work.user_id,
+        jt_work.begin_date,
+        jt_work.end_date,
+        jt_work.work_corp,
+        jt_work.declare_specialty1,
+        jt_work.declare_specialty2,
+        jt_work.declare_specialty3,
+        jt_work.job_title,
+        jt_work.job_description,
+        jt_work.is_supper_external,
+        jt_work.is_postdoctoral_work,
+        jt_work.chk_office_id,
+        jt_work.chk_office_name,
+        jt_work.chk_user_id,
+        jt_work.chk_user_name,
+        jt_work.chk_status,
+        jt_work.chk_reason,
+        jt_work.chk_time,
+        jt_work.remark,
+        jt_work.creation_time,
+        jt_work.creator_id,
+        jt_work.last_modification_time,
+        jt_work.last_modifier_id,
+        jt_work.is_deleted,
+        jt_work.version,
+        d1.name AS declare_specialty1_name,
+        d2.name AS declare_specialty2_name,
+        d3.name AS declare_specialty3_name,
+        s1.dict_label as is_supper_external_name,
+      s2.dict_label as is_postdoctoral_work_name
+    FROM
+        jt_work,
+        jt_declare_category AS d1,
+        jt_declare_category AS d2,
+        jt_declare_specialty AS d3,
+        sys_dict_data s1,
+        sys_dict_data s2
+        WHERE
+            jt_work.declare_specialty1 = d1.code
+            AND jt_work.declare_specialty2 = d2.code
+            AND jt_work.declare_specialty3 = d3.code
+            AND d2.category_id = d3.category_id
+            AND jt_work.is_supper_external = s1.dict_value
+            AND jt_work.is_postdoctoral_work = s2.dict_value
+            AND s1.dict_type = 'supper-external'
+            AND s2.dict_type = 'sys-yesno'
+            AND jt_work.is_deleted = 0
+            AND jt_work.work_id = #{id}
+    </select>
+</mapper>

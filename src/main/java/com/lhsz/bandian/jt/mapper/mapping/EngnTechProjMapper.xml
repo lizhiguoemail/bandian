@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.EngnTechProjMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.EngnTechProj">
+        <id column="project_id" property="projectId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="project_name" property="projectName" />
+        <result column="project_type" property="projectType" />
+        <result column="part_type" property="partType" />
+        <result column="amount" property="amount" />
+        <result column="project_size" property="projectSize" />
+        <result column="project_intro" property="projectIntro" />
+        <result column="job_description" property="jobDescription" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        project_id, user_id, begin_date, end_date, project_name, project_type, part_type, amount, project_size, project_intro, job_description, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+
+
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.EngnTechProj" resultType="com.lhsz.bandian.jt.DTO.response.EngnTechProjDTO">
+        SELECT
+            jt_engn_tech_proj.project_id as id,
+            jt_engn_tech_proj.project_id,
+            jt_engn_tech_proj.user_id,
+            jt_engn_tech_proj.begin_date,
+            jt_engn_tech_proj.end_date,
+            jt_engn_tech_proj.project_name,
+            jt_engn_tech_proj.project_type,
+            jt_engn_tech_proj.part_type,
+            jt_engn_tech_proj.amount,
+            jt_engn_tech_proj.project_size,
+            jt_engn_tech_proj.project_intro,
+            jt_engn_tech_proj.job_description,
+            jt_engn_tech_proj.chk_office_id,
+            jt_engn_tech_proj.chk_office_name,
+            jt_engn_tech_proj.chk_user_id,
+            jt_engn_tech_proj.chk_user_name,
+            jt_engn_tech_proj.chk_status,
+            jt_engn_tech_proj.chk_reason,
+            jt_engn_tech_proj.chk_time,
+            jt_engn_tech_proj.remark,
+            jt_engn_tech_proj.creation_time,
+            jt_engn_tech_proj.creator_id,
+            jt_engn_tech_proj.last_modification_time,
+            jt_engn_tech_proj.last_modifier_id,
+            jt_engn_tech_proj.is_deleted,
+            jt_engn_tech_proj.version,
+            sys_dict_data.dict_label as part_type_name
+        FROM
+            jt_engn_tech_proj
+            left join sys_dict_data on jt_engn_tech_proj.part_type = sys_dict_data.dict_value
+        WHERE
+            sys_dict_data.dict_type = 'participate-type' AND
+            jt_engn_tech_proj.is_deleted = 0
+            <if test="projectType != null and projectType != ''">
+                AND jt_engn_tech_proj.project_type like '%${projectType}%'
+            </if>
+            <if test="projectName != null and projectName != ''">
+                AND jt_engn_tech_proj.project_name like '%${projectName}%'
+            </if>
+            <if test="userId != null and userId != ''">
+                AND jt_engn_tech_proj.user_id = #{userId}
+            </if>
+    </select>
+    <select id="selectDTO" parameterType="java.lang.String" resultType="com.lhsz.bandian.jt.DTO.response.EngnTechProjDTO">
+        SELECT
+            jt_engn_tech_proj.project_id as id,
+            jt_engn_tech_proj.project_id,
+            jt_engn_tech_proj.user_id,
+            jt_engn_tech_proj.begin_date,
+            jt_engn_tech_proj.end_date,
+            jt_engn_tech_proj.project_name,
+            jt_engn_tech_proj.project_type,
+            jt_engn_tech_proj.part_type,
+            jt_engn_tech_proj.amount,
+            jt_engn_tech_proj.project_size,
+            jt_engn_tech_proj.project_intro,
+            jt_engn_tech_proj.job_description,
+            jt_engn_tech_proj.chk_office_id,
+            jt_engn_tech_proj.chk_office_name,
+            jt_engn_tech_proj.chk_user_id,
+            jt_engn_tech_proj.chk_user_name,
+            jt_engn_tech_proj.chk_status,
+            jt_engn_tech_proj.chk_reason,
+            jt_engn_tech_proj.chk_time,
+            jt_engn_tech_proj.remark,
+            jt_engn_tech_proj.creation_time,
+            jt_engn_tech_proj.creator_id,
+            jt_engn_tech_proj.last_modification_time,
+            jt_engn_tech_proj.last_modifier_id,
+            jt_engn_tech_proj.is_deleted,
+            jt_engn_tech_proj.version,
+            sys_dict_data.dict_label as part_type_name
+        FROM
+            jt_engn_tech_proj
+            left join sys_dict_data on jt_engn_tech_proj.part_type = sys_dict_data.dict_value
+        WHERE
+            sys_dict_data.dict_type = 'participate-type' AND
+            jt_engn_tech_proj.is_deleted = 0 AND
+            jt_engn_tech_proj.project_id = #{id}
+    </select>
+
+</mapper>

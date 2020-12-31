@@ -1,11 +1,13 @@
 package com.lhsz.bandian.sys.DTO.result;
 
 
+import com.lhsz.bandian.utils.excel.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -24,21 +26,26 @@ import java.util.Set;
 @ApiModel(value="User对象", description="用户")
 public class UserDTO extends BaseDTO {
 
-    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户类型(1办公用户，2企业用户，3车辆用户)")
+
+    private String userId;
+    @ApiModelProperty(value = "用户类型(1管理员，2会员，3评委会)")
+    @Excel(name = "用户类型",readConverterExp = "1=管理员,2=会员,3=委会")
     private Integer userType;
 
     @ApiModelProperty(value = "昵称")
+    @Excel(name = "姓名")
     private String nickName;
 
     @ApiModelProperty(value = "用户名")
+    @Excel(name = "用户名")
     private String userName;
 
     @ApiModelProperty(value = "标准化用户名")
     private String normalizedUserName;
 
     @ApiModelProperty(value = "安全邮箱")
+    @Excel(name = "邮箱")
     private String email;
 
     @ApiModelProperty(value = "标准化邮箱")
@@ -48,6 +55,7 @@ public class UserDTO extends BaseDTO {
     private Boolean emailConfirmed;
 
     @ApiModelProperty(value = "安全手机")
+    @Excel(name = "手机")
     private String phoneNumber;
 
     @ApiModelProperty(value = "手机已确认")
@@ -61,7 +69,6 @@ public class UserDTO extends BaseDTO {
 
     @ApiModelProperty(value = "安全码")
     private String safePassword;
-
     @ApiModelProperty(value = "安全码散列")
     private String safePasswordHash;
 
@@ -69,6 +76,7 @@ public class UserDTO extends BaseDTO {
     private Boolean twoFactorEnabled;
 
     @ApiModelProperty(value = "启用")
+    @Excel(name = "启用")
     private Boolean enabled;
 
     @ApiModelProperty(value = "冻结时间")
@@ -103,6 +111,16 @@ public class UserDTO extends BaseDTO {
 
     @ApiModelProperty(value = "安全戳")
     private String securityStamp;
+
+    @ApiModelProperty(value = "身份证号")
+    private String certNo;
+
+    @ApiModelProperty(value = "头像")
+    private String avatar;
+
+    @ApiModelProperty(value = "客户端标识")
+    @Excel(name = "客户端标识")
+    private String clientId;
 
     private Set<String> roles;
     private Set<String> rolesDisplay;

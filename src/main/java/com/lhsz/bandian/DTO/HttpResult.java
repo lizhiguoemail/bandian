@@ -1,15 +1,22 @@
 package com.lhsz.bandian.DTO;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * HTTP结果封装
- * @author Louis
- * @date Jun 29, 2019
+ * @author lizhiguo
+ * @date 2020-7-16
  */
+@ApiModel("接口返回对象")
 public class HttpResult {
 
+    @ApiModelProperty(value = "代码")
     private int code = 1;
-    private String msg;
+    @ApiModelProperty(value = "描述")
+    private String message;
+    @ApiModelProperty(value = "数据对象")
     private Object data;
 
 
@@ -18,56 +25,57 @@ public class HttpResult {
     }
 
     public static HttpResult error(String msg) {
-        return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, msg);
+        return error(HttpStatus.FAIL, msg);
     }
 
     public static HttpResult error(int code, String msg) {
         HttpResult r = new HttpResult();
         r.setCode(code);
-        r.setMsg(msg);
+        r.setMessage(msg);
         return r;
     }
 
     public static HttpResult ok(String msg) {
         HttpResult r = new HttpResult();
-        r.setMsg(msg);
+        r.setMessage(msg);
+        r.setData(msg);
         return r;
     }
 
     public static HttpResult ok(Object data) {
         HttpResult r = new HttpResult();
         r.setData(data);
-        r.setMsg("操作成功");
+        r.setMessage("操作成功");
         return r;
     }
 
     public static HttpResult ok() {
         HttpResult r = new HttpResult();
-        r.setMsg("操作成功");
+        r.setMessage("操作成功");
         return r;
     }
     public static HttpResult succee() {
         HttpResult r = new HttpResult();
-        r.setMsg("操作成功");
+        r.setMessage("操作成功");
         r.setCode(HttpStatus.SUCCEE);
         return r;
     }
     public static HttpResult fail() {
         HttpResult r = new HttpResult();
-        r.setMsg("操作失败");
+        r.setMessage("操作失败");
         r.setCode(HttpStatus.FAIL);
         return r;
     }
     public static HttpResult succee(String msg) {
         HttpResult r = new HttpResult();
-        r.setMsg(msg);
+        r.setMessage(msg);
         r.setCode(HttpStatus.SUCCEE);
         return r;
     }
     public static HttpResult fail(String msg) {
         HttpResult r = new HttpResult();
         r.code=0;
-        r.setMsg(msg);
+        r.setMessage(msg);
         r.setCode(HttpStatus.FAIL);
         return r;
     }
@@ -80,12 +88,12 @@ public class HttpResult {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Object getData() {

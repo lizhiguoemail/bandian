@@ -29,7 +29,7 @@ public class LoginLog extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "日志标识")
-    @TableId(value = "log_id", type = IdType.UUID)
+    @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
     private String logId;
 
     @ApiModelProperty(value = "登录账号")

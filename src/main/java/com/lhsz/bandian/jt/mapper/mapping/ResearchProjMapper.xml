@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.ResearchProjMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.ResearchProj">
+        <id column="project_id" property="projectId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="project_name" property="projectName" />
+        <result column="requester" property="requester" />
+        <result column="project_type" property="projectType" />
+        <result column="amount" property="amount" />
+        <result column="part_count" property="partCount" />
+        <result column="rank" property="rank" />
+        <result column="main_task" property="mainTask" />
+        <result column="project_intro" property="projectIntro" />
+        <result column="is_finshed" property="isFinshed" />
+        <result column="is_primary" property="isPrimary" />
+        <result column="research_level" property="researchLevel" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        project_id, user_id, begin_date, end_date, project_name, requester, project_type, amount, part_count, rank, main_task, project_intro, is_finshed, is_primary, research_level, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.ResearchProjDTO" parameterType="com.lhsz.bandian.jt.entity.ResearchProj">
+            SELECT
+                jt_research_proj.project_id AS id,
+                jt_research_proj.project_id,
+                jt_research_proj.user_id,
+                jt_research_proj.begin_date,
+                jt_research_proj.end_date,
+                jt_research_proj.project_name,
+                jt_research_proj.requester,
+                jt_research_proj.project_type,
+                jt_research_proj.amount,
+                jt_research_proj.part_count,
+                jt_research_proj.rank,
+                jt_research_proj.main_task,
+                jt_research_proj.project_intro,
+                jt_research_proj.is_finshed,
+                jt_research_proj.is_primary,
+                jt_research_proj.research_level,
+                jt_research_proj.chk_office_id,
+                jt_research_proj.chk_office_name,
+                jt_research_proj.chk_user_id,
+                jt_research_proj.chk_status,
+                jt_research_proj.chk_user_name,
+                jt_research_proj.chk_reason,
+                jt_research_proj.chk_time,
+                jt_research_proj.remark,
+                jt_research_proj.creation_time,
+                jt_research_proj.creator_id,
+                jt_research_proj.last_modification_time,
+                jt_research_proj.last_modifier_id,
+                jt_research_proj.is_deleted,
+                jt_research_proj.version,
+                s1.dict_label AS project_type_name,
+                s2.dict_label AS is_finshed_name,
+                s3.dict_label AS is_primary_name,
+                jt_awards_type.`name` AS research_level_name
+            FROM
+                jt_research_proj
+                left join sys_dict_data AS s1 on jt_research_proj.research_level = s1.dict_value
+                left join sys_dict_data AS s2 on jt_research_proj.is_finshed = s2.dict_value
+                left join sys_dict_data AS s3 on jt_research_proj.is_primary = s3.dict_value
+                left join jt_awards_type on jt_research_proj.research_level = jt_awards_type.`code`
+            WHERE
+                jt_research_proj.is_deleted = 0
+                AND s1.dict_type = 'research-project-type'
+                AND s2.dict_type = 'sys-yesno'
+                AND s3.dict_type = 'sys-yesno'
+                <if test="projectName != null and projectName != ''">
+                    AND jt_research_proj.project_name like '%${projectName}%'
+                </if>
+                <if test="requester != null and requester != ''">
+                    AND jt_research_proj.requester like '%${requester}%'
+                </if>
+                <if test="userId != null and userId != ''">
+                    AND jt_research_proj.user_id = #{userId}
+                </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.ResearchProjDTO" parameterType="java.lang.String">
+        SELECT
+            jt_research_proj.project_id AS id,
+            jt_research_proj.project_id,
+            jt_research_proj.user_id,
+            jt_research_proj.begin_date,
+            jt_research_proj.end_date,
+            jt_research_proj.project_name,
+            jt_research_proj.requester,
+            jt_research_proj.project_type,
+            jt_research_proj.amount,
+            jt_research_proj.part_count,
+            jt_research_proj.rank,
+            jt_research_proj.main_task,
+            jt_research_proj.project_intro,
+            jt_research_proj.is_finshed,
+            jt_research_proj.is_primary,
+            jt_research_proj.research_level,
+            jt_research_proj.chk_office_id,
+            jt_research_proj.chk_office_name,
+            jt_research_proj.chk_user_id,
+            jt_research_proj.chk_status,
+            jt_research_proj.chk_user_name,
+            jt_research_proj.chk_reason,
+            jt_research_proj.chk_time,
+            jt_research_proj.remark,
+            jt_research_proj.creation_time,
+            jt_research_proj.creator_id,
+            jt_research_proj.last_modification_time,
+            jt_research_proj.last_modifier_id,
+            jt_research_proj.is_deleted,
+            jt_research_proj.version,
+            s1.dict_label AS project_type_name,
+            s2.dict_label AS is_finshed_name,
+            s3.dict_label AS is_primary_name,
+            jt_awards_type.`name` AS research_level_name
+        FROM
+            jt_research_proj
+            left join sys_dict_data AS s1 on jt_research_proj.research_level = s1.dict_value
+            left join sys_dict_data AS s2 on jt_research_proj.is_finshed = s2.dict_value
+            left join sys_dict_data AS s3 on jt_research_proj.is_primary = s3.dict_value
+            left join jt_awards_type on jt_research_proj.research_level = jt_awards_type.`code`
+        WHERE
+            jt_research_proj.is_deleted = 0
+            AND s1.dict_type = 'research-project-type'
+            AND s2.dict_type = 'sys-yesno'
+            AND s3.dict_type = 'sys-yesno'
+            AND jt_research_proj.project_id = #{id}
+    </select>
+</mapper>

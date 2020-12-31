@@ -3,7 +3,6 @@ package com.lhsz.bandian.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,15 +33,7 @@ public class SecurityService {
      * @return
      */
     public  String getUsername() {
-        String username = null;
-        Authentication authentication = getAuthentication();
-        if(authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if(principal != null && principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
-            }
-        }
-        return username;
+        return getUsername(getAuthentication());
     }
 
     /**
@@ -53,8 +44,12 @@ public class SecurityService {
         String username = null;
         if(authentication != null) {
             Object principal = authentication.getPrincipal();
-            if(principal != null && principal instanceof UserDetails) {
+           /* 2020年7月23日
+           if(principal != null && principal instanceof UserDetails) {
                 username = ((UserDetails) principal).getUsername();
+            }*/
+            if(principal != null){
+                username=principal.toString();
             }
         }
         return username;

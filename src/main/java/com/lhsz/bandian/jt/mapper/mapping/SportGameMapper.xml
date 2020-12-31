@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.SportGameMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.SportGame">
+        <id column="game_id" property="gameId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="sport_name" property="sportName" />
+        <result column="game_name" property="gameName" />
+        <result column="athletes_name" property="athletesName" />
+        <result column="game_type" property="gameType" />
+        <result column="game_result" property="gameResult" />
+        <result column="game_date" property="gameDate" />
+        <result column="game_addr" property="gameAddr" />
+        <result column="game_description" property="gameDescription" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        game_id, user_id, begin_date, end_date, sport_name, game_name, athletes_name, game_type, game_result, game_date, game_addr, game_description, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.SportGameDTO" parameterType="com.lhsz.bandian.jt.entity.SportGame">
+        SELECT
+            jt_sport_game.game_id AS id,
+            jt_sport_game.game_id,
+            jt_sport_game.user_id,
+            jt_sport_game.begin_date,
+            jt_sport_game.end_date,
+            jt_sport_game.sport_name,
+            jt_sport_game.game_name,
+            jt_sport_game.athletes_name,
+            jt_sport_game.game_type,
+            jt_sport_game.game_result,
+            jt_sport_game.game_date,
+            jt_sport_game.game_addr,
+            jt_sport_game.game_description,
+            jt_sport_game.remark,
+            jt_sport_game.chk_office_id,
+            jt_sport_game.chk_office_name,
+            jt_sport_game.chk_user_id,
+            jt_sport_game.chk_user_name,
+            jt_sport_game.chk_status,
+            jt_sport_game.chk_reason,
+            jt_sport_game.chk_time,
+            jt_sport_game.creation_time,
+            jt_sport_game.creator_id,
+            jt_sport_game.last_modification_time,
+            jt_sport_game.last_modifier_id,
+            jt_sport_game.is_deleted,
+            jt_sport_game.version,
+            s1.dict_label AS game_type_name,
+            s2.dict_label AS game_result_name
+        FROM
+            jt_sport_game
+            LEFT JOIN sys_dict_data AS s1 ON jt_sport_game.game_type = s1.dict_value
+            LEFT JOIN sys_dict_data AS s2 ON jt_sport_game.game_result = s2.dict_value
+        WHERE
+            jt_sport_game.is_deleted = 0
+            AND s1.dict_type = 'sport-game-type'
+            AND s2.dict_type = 'sport-game-result'
+            <if test="sportName != null and sportName != ''">
+                AND jt_sport_game.sport_name like '%${sportName}%'
+            </if>
+            <if test="gameName != null and gameName != ''">
+                AND jt_sport_game.game_name like '%${gameName}%'
+            </if>
+            <if test="userId != null and userId != ''">
+                AND jt_sport_game.user_id = #{userId}
+            </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.SportGameDTO" parameterType="java.lang.String">
+        SELECT
+            jt_sport_game.game_id AS id,
+            jt_sport_game.game_id,
+            jt_sport_game.user_id,
+            jt_sport_game.begin_date,
+            jt_sport_game.end_date,
+            jt_sport_game.sport_name,
+            jt_sport_game.game_name,
+            jt_sport_game.athletes_name,
+            jt_sport_game.game_type,
+            jt_sport_game.game_result,
+            jt_sport_game.game_date,
+            jt_sport_game.game_addr,
+            jt_sport_game.game_description,
+            jt_sport_game.remark,
+            jt_sport_game.chk_office_id,
+            jt_sport_game.chk_office_name,
+            jt_sport_game.chk_user_id,
+            jt_sport_game.chk_user_name,
+            jt_sport_game.chk_status,
+            jt_sport_game.chk_reason,
+            jt_sport_game.chk_time,
+            jt_sport_game.creation_time,
+            jt_sport_game.creator_id,
+            jt_sport_game.last_modification_time,
+            jt_sport_game.last_modifier_id,
+            jt_sport_game.is_deleted,
+            jt_sport_game.version,
+            s1.dict_label AS game_type_name,
+            s2.dict_label AS game_result_name
+        FROM
+            jt_sport_game
+            LEFT JOIN sys_dict_data AS s1 ON jt_sport_game.game_type = s1.dict_value
+            LEFT JOIN sys_dict_data AS s2 ON jt_sport_game.game_result = s2.dict_value
+        WHERE
+            jt_sport_game.is_deleted = 0
+            AND s1.dict_type = 'sport-game-type'
+            AND s2.dict_type = 'sport-game-result'
+            AND jt_sport_game.game_id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.HonorsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Honors">
+        <id column="honor_id" property="honorId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="honor_name" property="honorName" />
+        <result column="grant_organ" property="grantOrgan" />
+        <result column="honor_type" property="honorType" />
+        <result column="grant_date" property="grantDate" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        honor_id, user_id, honor_name, grant_organ, honor_type, grant_date, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.Honors" resultType="com.lhsz.bandian.jt.DTO.response.HonorsDTO">
+        SELECT
+            jt_honors.honor_id as id,
+            jt_honors.honor_id,
+            jt_honors.user_id,
+            jt_honors.honor_name,
+            jt_honors.grant_organ,
+            jt_honors.honor_type,
+            jt_honors.grant_date,
+            jt_honors.chk_office_id,
+            jt_honors.chk_office_name,
+            jt_honors.chk_user_id,
+            jt_honors.chk_user_name,
+            jt_honors.chk_status,
+            jt_honors.chk_reason,
+            jt_honors.chk_time,
+            jt_honors.remark,
+            jt_honors.creation_time,
+            jt_honors.creator_id,
+            jt_honors.last_modification_time,
+            jt_honors.last_modifier_id,
+            jt_honors.is_deleted,
+            jt_honors.version,
+            jt_awards_type.`name` as honorTypeName
+        FROM
+            jt_honors
+            left join jt_awards_type on jt_honors.honor_type = jt_awards_type.`code`
+        WHERE
+            jt_honors.is_deleted = 0
+        <if test="honorName != null and honorName != ''">
+            AND jt_honors.honor_name = #{honorName}
+        </if>
+        <if test="grantOrgan != null and grantOrgan != ''">
+            AND jt_honors.grant_organ = #{grantOrgan}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_honors.user_id = #{userId}
+        </if>
+
+    </select>
+    <select id="selectDTO" parameterType="java.lang.String" resultType="com.lhsz.bandian.jt.DTO.response.HonorsDTO">
+        SELECT
+            jt_honors.honor_id as id,
+            jt_honors.honor_id,
+            jt_honors.user_id,
+            jt_honors.honor_name,
+            jt_honors.grant_organ,
+            jt_honors.honor_type,
+            jt_honors.grant_date,
+            jt_honors.chk_office_id,
+            jt_honors.chk_office_name,
+            jt_honors.chk_user_id,
+            jt_honors.chk_user_name,
+            jt_honors.chk_status,
+            jt_honors.chk_reason,
+            jt_honors.chk_time,
+            jt_honors.remark,
+            jt_honors.creation_time,
+            jt_honors.creator_id,
+            jt_honors.last_modification_time,
+            jt_honors.last_modifier_id,
+            jt_honors.is_deleted,
+            jt_honors.version,
+            jt_awards_type.`name` as honorTypeName
+        FROM
+            jt_honors
+            left join jt_awards_type on jt_honors.honor_type = jt_awards_type.`code`
+        WHERE
+            jt_honors.is_deleted = 0 AND
+            jt_honors.honor_id = #{id}
+    </select>
+</mapper>

@@ -1,7 +1,10 @@
 package com.lhsz.bandian.sys.service;
 
-import com.lhsz.bandian.sys.entity.LoginLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lhsz.bandian.sys.DTO.result.LoginLogDTO;
+import com.lhsz.bandian.sys.entity.LoginLog;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-07-10
  */
 public interface ILoginLogService extends IService<LoginLog> {
+    List<LoginLogDTO> list(LoginLog loginLog);
+    LoginLogDTO selectById(String id);
+
+    int del(String id);
 
 }

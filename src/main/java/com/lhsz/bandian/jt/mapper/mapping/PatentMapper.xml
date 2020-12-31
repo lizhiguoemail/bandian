@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.PatentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Patent">
+        <id column="patent_id" property="patentId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="patent_no" property="patentNo" />
+        <result column="patent_name" property="patentName" />
+        <result column="patent_type" property="patentType" />
+        <result column="approved_date" property="approvedDate" />
+        <result column="rank" property="rank" />
+        <result column="part_count" property="partCount" />
+        <result column="is_authorization" property="isAuthorization" />
+        <result column="is_production" property="isProduction" />
+        <result column="inventor_user" property="inventorUser" />
+        <result column="apply_area" property="applyArea" />
+        <result column="patent_summary" property="patentSummary" />
+        <result column="apply_user" property="applyUser" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        patent_id, user_id, patent_no, patent_name, patent_type, approved_date, rank, part_count, is_authorization, is_production, inventor_user, apply_area, patent_summary, apply_user, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.PatentDTO" parameterType="com.lhsz.bandian.jt.entity.Patent">
+            SELECT
+        jt_patent.patent_id AS id,
+        jt_patent.patent_id,
+        jt_patent.user_id,
+        jt_patent.patent_no,
+        jt_patent.patent_name,
+        jt_patent.patent_type,
+        jt_patent.approved_date,
+        jt_patent.rank,
+        jt_patent.part_count,
+        jt_patent.is_authorization,
+        jt_patent.is_production,
+        jt_patent.apply_area,
+        jt_patent.inventor_user,
+        jt_patent.patent_summary,
+        jt_patent.apply_user,
+        jt_patent.chk_office_id,
+        jt_patent.chk_office_name,
+        jt_patent.chk_user_id,
+        jt_patent.chk_user_name,
+        jt_patent.chk_status,
+        jt_patent.chk_reason,
+        jt_patent.chk_time,
+        jt_patent.remark,
+        jt_patent.creation_time,
+        jt_patent.creator_id,
+        jt_patent.last_modification_time,
+        jt_patent.last_modifier_id,
+        jt_patent.is_deleted,
+        jt_patent.version,
+        s1.dict_label AS patent_type_name,
+        s2.dict_label AS is_authorization_name,
+        s3.dict_label AS is_production_name
+    FROM
+        jt_patent
+        LEFT JOIN sys_dict_data AS s1 ON jt_patent.patent_type = s1.dict_value
+        LEFT JOIN sys_dict_data AS s2 ON jt_patent.is_authorization = s2.dict_value
+        LEFT JOIN sys_dict_data AS s3 ON jt_patent.is_production = s3.dict_value
+    WHERE
+        jt_patent.is_deleted = 0
+        AND s1.dict_type = 'patent-type'
+        AND s2.dict_type = 'sys-yesno'
+        AND s3.dict_type = 'sys-yesno'
+        <if test="patentName != null and patentName != ''">
+            AND jt_patent.patent_name like '%${patentName}%'
+        </if>
+        <if test="patentType != null and patentType != ''">
+            AND jt_patent.patent_type like '%${patentType}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_patent.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.PatentDTO"  parameterType="java.lang.String">
+                    SELECT
+        jt_patent.patent_id AS id,
+        jt_patent.patent_id,
+        jt_patent.user_id,
+        jt_patent.patent_no,
+        jt_patent.patent_name,
+        jt_patent.patent_type,
+        jt_patent.approved_date,
+        jt_patent.rank,
+        jt_patent.part_count,
+        jt_patent.is_authorization,
+        jt_patent.is_production,
+        jt_patent.apply_area,
+        jt_patent.inventor_user,
+        jt_patent.patent_summary,
+        jt_patent.apply_user,
+        jt_patent.chk_office_id,
+        jt_patent.chk_office_name,
+        jt_patent.chk_user_id,
+        jt_patent.chk_user_name,
+        jt_patent.chk_status,
+        jt_patent.chk_reason,
+        jt_patent.chk_time,
+        jt_patent.remark,
+        jt_patent.creation_time,
+        jt_patent.creator_id,
+        jt_patent.last_modification_time,
+        jt_patent.last_modifier_id,
+        jt_patent.is_deleted,
+        jt_patent.version,
+        s1.dict_label AS patent_type_name,
+        s2.dict_label AS is_authorization_name,
+        s3.dict_label AS is_production_name
+    FROM
+        jt_patent
+        LEFT JOIN sys_dict_data AS s1 ON jt_patent.patent_type = s1.dict_value
+        LEFT JOIN sys_dict_data AS s2 ON jt_patent.is_authorization = s2.dict_value
+        LEFT JOIN sys_dict_data AS s3 ON jt_patent.is_production = s3.dict_value
+    WHERE
+        jt_patent.is_deleted = 0
+        AND s1.dict_type = 'patent-type'
+        AND s2.dict_type = 'sys-yesno'
+        AND s3.dict_type = 'sys-yesno'
+        AND jt_patent.patent_id = #{id}
+    </select>
+
+</mapper>

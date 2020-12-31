@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.AwardsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Awards">
+        <id column="awards_id" property="awardsId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="awards_item_name" property="awardsItemName" />
+        <result column="awards_type" property="awardsType" />
+        <result column="awards_name" property="awardsName" />
+        <result column="awards_level" property="awardsLevel" />
+        <result column="other_awards_name" property="otherAwardsName" />
+        <result column="is_primary" property="isPrimary" />
+        <result column="rank" property="rank" />
+        <result column="part_count" property="partCount" />
+        <result column="awards_date" property="awardsDate" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        awards_id, user_id, awards_item_name, awards_type, awards_name, awards_level, other_awards_name, is_primary, rank, part_count, awards_date, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.JtAwardsDTO" parameterType="com.lhsz.bandian.jt.entity.Awards">
+        SELECT
+            jt_awards.awards_id AS id,
+            jt_awards.awards_id,
+            jt_awards.user_id,
+            jt_awards.awards_item_name,
+            jt_awards.awards_type,
+            jt_awards.awards_name,
+            jt_awards.awards_level,
+            jt_awards.other_awards_name,
+            jt_awards.is_primary,
+            jt_awards.rank,
+            jt_awards.part_count,
+            jt_awards.awards_date,
+            jt_awards.chk_office_id,
+            jt_awards.chk_office_name,
+            jt_awards.chk_user_id,
+            jt_awards.chk_user_name,
+            jt_awards.chk_status,
+            jt_awards.chk_reason,
+            jt_awards.chk_time,
+            jt_awards.remark,
+            jt_awards.creation_time,
+            jt_awards.creator_id,
+            jt_awards.last_modification_time,
+            jt_awards.last_modifier_id,
+            jt_awards.is_deleted,
+            jt_awards.version,
+            type1.`name` AS awards_type_name,
+            type2.`name` AS jt_awards_name,
+            s1.dict_label as awards_level_name,
+            s2.dict_label as sys_yesno_name
+        FROM
+            jt_awards
+            left join jt_awards_type as type1 on jt_awards.awards_type = type1.code
+            left join jt_awards_type as type2 on jt_awards.awards_name = type2.code
+            left join sys_dict_data as s1 on jt_awards.awards_level = s1.dict_value
+            left join sys_dict_data as s2 on jt_awards.is_primary = s2.dict_value
+        WHERE
+            jt_awards.is_deleted = 0
+            AND s1.dict_type = 'awards-level'
+            AND s2.dict_type = 'sys-yesno'
+        <if test="awardsItemName != null and awardsItemName != ''">
+            AND jt_awards.awards_item_name like '%${awardsItemName}%'
+        </if>
+        <if test="awardsType != null and awardsType != ''">
+            AND jt_awards.awards_type like '%${awardsType}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_awards.user_id = #{userId}
+        </if>
+
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.JtAwardsDTO" parameterType="java.lang.String">
+SELECT
+            jt_awards.awards_id AS id,
+            jt_awards.awards_id,
+            jt_awards.user_id,
+            jt_awards.awards_item_name,
+            jt_awards.awards_type,
+            jt_awards.awards_name,
+            jt_awards.awards_level,
+            jt_awards.other_awards_name,
+            jt_awards.is_primary,
+            jt_awards.rank,
+            jt_awards.part_count,
+            jt_awards.awards_date,
+            jt_awards.chk_office_id,
+            jt_awards.chk_office_name,
+            jt_awards.chk_user_id,
+            jt_awards.chk_user_name,
+            jt_awards.chk_status,
+            jt_awards.chk_reason,
+            jt_awards.chk_time,
+            jt_awards.remark,
+            jt_awards.creation_time,
+            jt_awards.creator_id,
+            jt_awards.last_modification_time,
+            jt_awards.last_modifier_id,
+            jt_awards.is_deleted,
+            jt_awards.version,
+            type1.`name` AS awards_type_name,
+            type2.`name` AS jt_awards_name,
+            s1.dict_label as awards_level_name,
+            s2.dict_label as sys_yesno_name
+        FROM
+            jt_awards
+            left join jt_awards_type as type1 on jt_awards.awards_type = type1.code
+            left join jt_awards_type AS type2 on jt_awards.awards_name = type2.code
+            left join sys_dict_data as s1 on jt_awards.awards_level = s1.dict_value
+            left join sys_dict_data as s2 on jt_awards.is_primary = s2.dict_value
+        WHERE
+            jt_awards.is_deleted = 0
+            AND s1.dict_type = 'awards-level'
+            AND s2.dict_type = 'sys-yesno'
+            AND jt_awards.awards_id = #{id}
+     </select>
+</mapper>

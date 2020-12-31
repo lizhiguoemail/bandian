@@ -12,5 +12,4 @@
     <sql id="Base_Column_List">
         role_id, user_id
     </sql>
-
 </mapper>

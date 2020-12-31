@@ -30,7 +30,7 @@ public class Resource extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "资源标识")
-    @TableId(value = "resource_id", type = IdType.UUID)
+    @TableId(value = "resource_id", type = IdType.ASSIGN_UUID)
     private String resourceId;
 
     @ApiModelProperty(value = "应用程序标识")
@@ -66,4 +66,6 @@ public class Resource extends BaseEntity {
     @ApiModelProperty(value = "扩展")
     private String extend;
 
+    @ApiModelProperty(value = "外部链接")
+    private String externalLink;
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.ChildTeachWorkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.ChildTeachWork">
+        <id column="teach_id" property="teachId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="school_year" property="schoolYear" />
+        <result column="course_type" property="courseType" />
+        <result column="course_name" property="courseName" />
+        <result column="week_hours" property="weekHours" />
+        <result column="year_hours" property="yearHours" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        teach_id, user_id, school_year, course_type, course_name, week_hours, year_hours, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.JtChildTeachWorkDTO" parameterType="com.lhsz.bandian.jt.entity.Assessment">
+        SELECT
+            jt_child_teach_work.teach_id AS id,
+            jt_child_teach_work.teach_id,
+            jt_child_teach_work.user_id,
+            jt_child_teach_work.school_year,
+            jt_child_teach_work.course_type,
+            jt_child_teach_work.course_name,
+            jt_child_teach_work.week_hours,
+            jt_child_teach_work.year_hours,
+            jt_child_teach_work.remark,
+            jt_child_teach_work.chk_office_id,
+            jt_child_teach_work.chk_office_name,
+            jt_child_teach_work.chk_user_id,
+            jt_child_teach_work.chk_user_name,
+            jt_child_teach_work.chk_status,
+            jt_child_teach_work.chk_reason,
+            jt_child_teach_work.chk_time,
+            jt_child_teach_work.creation_time,
+            jt_child_teach_work.creator_id,
+            s1.dict_label AS course_type_name
+        FROM
+            jt_child_teach_work
+            left join sys_dict_data as s1 on jt_child_teach_work.course_type = s1.dict_value
+        WHERE
+            jt_child_teach_work.is_deleted = 0
+            AND s1.dict_type = 'course-type'
+        <if test="schoolYear != null and schoolYear != ''">
+            AND jt_child_teach_work.school_year like '%${schoolYear}%'
+        </if>
+        <if test="courseType != null and courseType != ''">
+            AND jt_child_teach_work.course_type like '%${courseType}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_child_teach_work.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.JtChildTeachWorkDTO" parameterType="java.lang.String">
+        SELECT
+            jt_child_teach_work.teach_id AS id,
+            jt_child_teach_work.teach_id,
+            jt_child_teach_work.user_id,
+            jt_child_teach_work.school_year,
+            jt_child_teach_work.course_type,
+            jt_child_teach_work.course_name,
+            jt_child_teach_work.week_hours,
+            jt_child_teach_work.year_hours,
+            jt_child_teach_work.remark,
+            jt_child_teach_work.chk_office_id,
+            jt_child_teach_work.chk_office_name,
+            jt_child_teach_work.chk_user_id,
+            jt_child_teach_work.chk_user_name,
+            jt_child_teach_work.chk_status,
+            jt_child_teach_work.chk_reason,
+            jt_child_teach_work.chk_time,
+            jt_child_teach_work.creation_time,
+            jt_child_teach_work.creator_id,
+            s1.dict_label AS course_type_name
+        FROM
+            jt_child_teach_work
+            left join sys_dict_data as s1 on jt_child_teach_work.course_type = s1.dict_value
+        WHERE
+            jt_child_teach_work.is_deleted = 0
+            AND s1.dict_type = 'course-type'
+            AND jt_child_teach_work.teach_id = #{id}
+    </select>
+
+</mapper>

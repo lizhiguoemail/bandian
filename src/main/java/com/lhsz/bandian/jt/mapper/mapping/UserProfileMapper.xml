@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.UserProfileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.UserProfile">
+        <id column="user_id" property="userId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="full_name" property="fullName" />
+        <result column="used_name" property="usedName" />
+        <result column="gender" property="gender" />
+        <result column="party" property="party" />
+        <result column="nation" property="nation" />
+        <result column="birthday" property="birthday" />
+        <result column="cert_photo" property="certPhoto"/>
+        <result column="cert_type" property="certType" />
+        <result column="cert_no" property="certNo" />
+        <result column="mobile" property="mobile" />
+        <result column="file_position" property="filePosition" />
+        <result column="work_corp_nature" property="workCorpNature" />
+        <result column="work_date" property="workDate" />
+        <result column="work_place" property="workPlace" />
+        <result column="work_dept" property="workDept" />
+        <result column="work_job" property="workJob" />
+        <result column="work_addr" property="workAddr" />
+        <result column="job_title" property="jobTitle" />
+        <result column="higher_office" property="higherOffice" />
+        <result column="declare_type" property="declareType" />
+        <result column="declare_category" property="declareCategory" />
+        <result column="declare_specialty" property="declareSpecialty" />
+        <result column="declare_title" property="declareTitle" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+        <result column="domicile3" property="domicile3" />
+        <result column="domicile2" property="domicile2" />
+        <result column="domicile1" property="domicile1" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        user_id, full_name, used_name, gender, party, nation, birthday, cert_type, cert_no, mobile, file_position, work_corp_nature, work_date, work_place, work_dept, work_job, work_addr, job_title, higher_office, declare_type, declare_category, declare_specialty, declare_title, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time, domicile3, domicile2, domicile1
+    </sql>
+    <select id="selectDTO" parameterType="java.lang.String" resultType="com.lhsz.bandian.jt.DTO.response.UserProfileDTO">
+        SELECT
+            jt_user_profile.user_id as id,
+            jt_user_profile.user_id,
+            jt_user_profile.full_name,
+            jt_user_profile.used_name,
+            jt_user_profile.gender,
+            jt_user_profile.party,
+            jt_user_profile.nation,
+            jt_user_profile.birthday,
+            jt_user_profile.cert_photo,
+            jt_user_profile.cert_type,
+            jt_user_profile.cert_no,
+            jt_user_profile.mobile,
+            jt_user_profile.file_position,
+            jt_user_profile.work_corp_nature,
+            jt_user_profile.work_date,
+            jt_user_profile.work_place,
+            jt_user_profile.work_dept,
+            jt_user_profile.work_job,
+            jt_user_profile.work_addr,
+            jt_user_profile.job_title,
+            jt_user_profile.higher_office,
+            jt_user_profile.declare_type,
+            jt_user_profile.declare_category,
+            jt_user_profile.declare_specialty,
+            jt_user_profile.declare_title,
+            jt_user_profile.domicile1,
+            jt_user_profile.domicile2,
+            jt_user_profile.domicile3,
+            jt_user_profile.chk_office_id,
+            jt_user_profile.chk_office_name,
+            jt_user_profile.chk_user_id,
+            jt_user_profile.chk_user_name,
+            jt_user_profile.chk_status,
+            jt_user_profile.chk_reason,
+            jt_user_profile.chk_time,
+            jt_user_profile.remark,
+            jt_user_profile.creation_time,
+            jt_user_profile.creator_id,
+            jt_user_profile.last_modification_time,
+            jt_user_profile.last_modifier_id,
+            jt_user_profile.is_deleted,
+            jt_user_profile.version,
+            d1.dict_label AS gender_name,
+            d2.dict_label AS party_name,
+            d3.dict_label AS nation_name,
+            d4.dict_label AS cert_type_name,
+            d5.dict_label AS work_corp_nature_name,
+            d6.dict_label AS declare_type_name,
+            c1.`name` AS declare_category_name,
+            c2.`name` AS declare_specialty_name,
+            jt_declare_specialty.`name` AS declare_title_name,
+            jt_jury_dept.dept_name as higher_office_name
+        FROM
+            jt_user_profile
+            LEFT JOIN sys_dict_data AS d1 ON jt_user_profile.gender = d1.dict_value and d1.dict_type = 'sys-gender'
+            LEFT JOIN sys_dict_data AS d2 on jt_user_profile.party = d2.dict_value and d2.dict_type = 'sys-party'
+            LEFT JOIN sys_dict_data AS d3 on jt_user_profile.nation = d3.dict_value and	d3.dict_type = 'sys-nation'
+            LEFT JOIN sys_dict_data AS d4 on jt_user_profile.cert_type = d4.dict_value AND d4.dict_type = 'cert-type'
+            LEFT JOIN sys_dict_data AS d5 on jt_user_profile.work_corp_nature = d5.dict_value AND d5.dict_type = 'corp-nature'
+            LEFT JOIN sys_dict_data AS d6 on jt_user_profile.declare_type = d6.dict_value AND d6.dict_type = 'declare-type'
+            LEFT JOIN jt_declare_category AS c1 on c1.`code` = jt_user_profile.declare_category
+            LEFT JOIN jt_declare_category AS c2 on c2.`code` = jt_user_profile.declare_specialty
+            LEFT JOIN jt_declare_specialty on jt_declare_specialty.`code` = jt_user_profile.declare_title
+            LEFT JOIN jt_jury_dept ON jt_jury_dept.dept_id = jt_user_profile.higher_office
+        WHERE
+          jt_user_profile.user_id = #{id}
+          AND jt_user_profile.is_deleted = 0
+    </select>
+
+    <select id="selectJtList" resultType="com.lhsz.bandian.jt.DTO.response.UserProfileDTO">
+        SELECT
+            jt_user_profile.user_id as id,
+            jt_user_profile.user_id,
+            jt_user_profile.full_name,
+            jt_user_profile.used_name,
+            jt_user_profile.gender,
+            jt_user_profile.party,
+            jt_user_profile.nation,
+            jt_user_profile.birthday,
+            jt_user_profile.cert_photo,
+            jt_user_profile.cert_type,
+            jt_user_profile.cert_no,
+            jt_user_profile.mobile,
+            jt_user_profile.file_position,
+            jt_user_profile.work_corp_nature,
+            jt_user_profile.work_date,
+            jt_user_profile.work_place,
+            jt_user_profile.work_dept,
+            jt_user_profile.work_job,
+            jt_user_profile.work_addr,
+            jt_user_profile.job_title,
+            jt_user_profile.higher_office,
+            jt_user_profile.declare_type,
+            jt_user_profile.declare_category,
+            jt_user_profile.declare_specialty,
+            jt_user_profile.declare_title,
+            jt_user_profile.domicile1,
+            jt_user_profile.domicile2,
+            jt_user_profile.domicile3,
+            jt_user_profile.chk_office_id,
+            jt_user_profile.chk_office_name,
+            jt_user_profile.chk_user_id,
+            jt_user_profile.chk_user_name,
+            jt_user_profile.chk_status,
+            jt_user_profile.chk_reason,
+            jt_user_profile.chk_time,
+            jt_user_profile.remark,
+            jt_user_profile.creation_time,
+            jt_user_profile.creator_id,
+            jt_user_profile.last_modification_time,
+            jt_user_profile.last_modifier_id,
+            jt_user_profile.is_deleted,
+            jt_user_profile.version,
+            d1.dict_label AS gender_name,
+            d2.dict_label AS party_name,
+            d3.dict_label AS nation_name,
+            d4.dict_label AS cert_type_name,
+            d5.dict_label AS work_corp_nature_name,
+            d6.dict_label AS declare_type_name,
+            c1.`name` AS declare_category_name,
+            c2.`name` AS declare_specialty_name,
+            jt_declare_specialty.`name` AS declare_title_name,
+            jt_jury_dept.dept_name
+        FROM
+            jt_user_profile
+            LEFT JOIN sys_dict_data AS d1 ON jt_user_profile.gender = d1.dict_value and d1.dict_type = 'sys-gender'
+            LEFT JOIN sys_dict_data AS d2 on jt_user_profile.party = d2.dict_value and d2.dict_type = 'sys-party'
+            LEFT JOIN sys_dict_data AS d3 on jt_user_profile.nation = d3.dict_value and	d3.dict_type = 'sys-nation'
+            LEFT JOIN sys_dict_data AS d4 on jt_user_profile.cert_type = d4.dict_value AND d4.dict_type = 'cert-type'
+            LEFT JOIN sys_dict_data AS d5 on jt_user_profile.work_corp_nature = d5.dict_value AND d5.dict_type = 'corp-nature'
+            LEFT JOIN sys_dict_data AS d6 on jt_user_profile.declare_type = d6.dict_value AND d6.dict_type = 'declare-type'
+            LEFT JOIN jt_declare_category AS c1 on c1.`code` = jt_user_profile.declare_category
+            LEFT JOIN jt_declare_category AS c2 on c2.`code` = jt_user_profile.declare_specialty
+            LEFT JOIN jt_declare_specialty on jt_declare_specialty.`code` = jt_user_profile.declare_title
+            LEFT JOIN jt_jury_dept ON jt_jury_dept.dept_id = jt_user_profile.higher_office
+        WHERE
+            jt_user_profile.is_deleted = 0
+            <if test="userId != null and userId != ''">
+                AND jt_user_profile.user_id = #{userId}
+            </if>
+            <if test="fullName != null and fullName != ''">
+                AND jt_user_profile.full_name like '%${fullName}%'
+            </if>
+            <if test="gender != null and gender != ''">
+                AND jt_user_profile.gender like '%${gender}%'
+            </if>
+    </select>
+</mapper>

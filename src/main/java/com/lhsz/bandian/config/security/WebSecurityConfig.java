@@ -3,9 +3,9 @@ package com.lhsz.bandian.config.security;
 import com.lhsz.bandian.filters.JwtAuthenticationFilter;
 import com.lhsz.bandian.security.AuthenticationEntryPointImpl;
 import com.lhsz.bandian.security.JwtAuthenticationProvider;
-//import com.lhsz.bandian.filters.JwtLoginFilter;
 import com.lhsz.bandian.security.LogoutSuccessHandlerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 /*@EnableWebSecurity的作用：
 
@@ -32,6 +31,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -91,7 +91,9 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 // 登录URL
+                .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/portal/**").permitAll()
                 // swagger
                 .antMatchers("/swagger**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
@@ -102,6 +104,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/*/api-docs").permitAll()
                 .antMatchers("/druid/**").permitAll()
+                .antMatchers("/jt/api/**").permitAll()
+                .antMatchers("/jt/login").permitAll()
                 // 其他所有请求需要身份认证
                 .anyRequest().authenticated()
                 // 配置登录认证 ,我试了下可以用，登录成功又跳到登录页了，应该有一个地方可以配置登录成功跳转路径，你也可以试试

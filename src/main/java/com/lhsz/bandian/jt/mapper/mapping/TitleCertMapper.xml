@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.TitleCertMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.TitleCert">
+        <id column="cert_id" property="certId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="apply_id" property="applyId" />
+        <result column="user_id" property="userId" />
+        <result column="full_name" property="fullName" />
+        <result column="photo" property="photo" />
+        <result column="gender" property="gender" />
+        <result column="cert_no" property="certNo" />
+        <result column="id_card_no" property="idCardNo" />
+        <result column="declare_category" property="declareCategory" />
+        <result column="declare_specialty" property="declareSpecialty" />
+        <result column="declare_title" property="declareTitle" />
+        <result column="jury_name" property="juryName" />
+        <result column="chk_pass_time" property="chkPassTime" />
+        <result column="published_date" property="publishedDate" />
+        <result column="published_organ" property="publishedOrgan" />
+        <result column="search_code" property="searchCode" />
+        <result column="office_id" property="officeId" />
+        <result column="office_name" property="officeName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        cert_id, apply_id, user_id, full_name, photo, gender, cert_no, id_card_no, declare_category, declare_specialty, declare_title, jury_name, chk_pass_time, published_date, published_organ, search_code, office_id, office_name
+    </sql>
+
+</mapper>

@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.lhsz.bandian.entity.BaseEntity;
+import com.lhsz.bandian.sys.entity.Dept;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.BeanUtils;
+
+import java.util.List;
 
 /**
  * <p>
@@ -24,9 +28,17 @@ import lombok.experimental.Accessors;
 @ApiModel(value="Dept对象", description="部门")
 public class DeptDTO extends BaseDTO {
 
+    public DeptDTO(){
+
+    }
+    public DeptDTO(Dept dept){
+        BeanUtils.copyProperties(dept,this);
+        this.setId(dept.getDeptId());
+    }
+
     private static final long serialVersionUID = 1L;
 
-
+    private String deptId;
 
     @ApiModelProperty(value = "部门编码")
     private String code;
@@ -53,7 +65,10 @@ public class DeptDTO extends BaseDTO {
     private Integer sortId;
 
     @ApiModelProperty(value = "扩展")
-    private String extend;
+    private boolean extend;
+    private boolean leaf;
+
+    private List<DeptDTO> children;
 
 
 }

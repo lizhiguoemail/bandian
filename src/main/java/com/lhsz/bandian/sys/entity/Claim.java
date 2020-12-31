@@ -28,7 +28,7 @@ public class Claim extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "声明标识")
-    @TableId(value = "claim_id", type = IdType.UUID)
+    @TableId(value = "claim_id", type = IdType.ASSIGN_UUID)
     private String claimId;
 
     @ApiModelProperty(value = "声明名称")

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.cms.mapper.CmsArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.cms.entity.CmsArticle">
+        <id column="article_id" property="articleId" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="channel_id" property="channelId" />
+        <result column="title" property="title" />
+        <result column="sub_title" property="subTitle" />
+        <result column="page_title" property="pageTitle" />
+        <result column="description" property="description" />
+        <result column="author" property="author" />
+        <result column="content" property="content" />
+        <result column="status" property="status" />
+        <result column="expired_time" property="expiredTime" />
+        <result column="source" property="source" />
+        <result column="is_comment" property="isComment" />
+        <result column="is_image" property="isImage" />
+        <result column="enable" property="enable" />
+        <result column="thumbnail" property="thumbnail" />
+        <result column="type" property="type" />
+        <result column="url" property="url" />
+        <result column="comment_count" property="commentCount" />
+        <result column="tags" property="tags" />
+        <result column="key_word" property="keyWord" />
+        <result column="video_code" property="videoCode" />
+        <result column="photos" property="photos" />
+        <result column="clicks" property="clicks" />
+        <result column="channel_title" property="channelTitle" />
+        <result column="channel_full_url" property="channelFullUrl" />
+        <result column="extend" property="extend" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        article_id, channel_id, title, sub_title, page_title, description, author, content, status, expired_time, source, is_comment, is_image, enable, thumbnail, type, url, comment_count, tags, key_word, video_code, photos, clicks, channel_title, channel_full_url, extend
+    </sql>
+
+</mapper>

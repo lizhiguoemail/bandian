@@ -1,6 +1,7 @@
 package com.lhsz.bandian.security;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.lhsz.bandian.sys.entity.Application;
 import com.lhsz.bandian.sys.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -64,20 +65,21 @@ public class LoginUser implements UserDetails {
      * 当前登录人所属系统
      */
     private Application application;
-
-   
+    private List<GrantedAuthority> grantedAuthorities;
+    public LoginUser(){}
     public LoginUser(User user,Set<String> permissions) {
         this.user = user;
         this.permissions = permissions;
+        this.grantedAuthorities=permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
     }
-
 
     /**
      * UserDetails接口方法
      */
     @Override
+    @JSONField(serialize = false)
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
+//        List<GrantedAuthority> grantedAuthorities = permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
         return grantedAuthorities;
     }
     /**
@@ -208,5 +210,13 @@ public class LoginUser implements UserDetails {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public List<GrantedAuthority> getGrantedAuthorities() {
+        return grantedAuthorities;
+    }
+
+    public void setGrantedAuthorities(List<GrantedAuthority> grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
     }
 }

@@ -28,7 +28,7 @@ public class Application extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "应用程序标识")
-    @TableId(value = "application_id", type = IdType.UUID)
+    @TableId(value = "application_id", type = IdType.ASSIGN_UUID)
     private String applicationId;
 
     @ApiModelProperty(value = "应用程序编码")

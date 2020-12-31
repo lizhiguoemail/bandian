@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-07-10
  */
 public interface IUserRoleService extends IService<UserRole> {
+    void trueToDelete(String uid);
 
 }

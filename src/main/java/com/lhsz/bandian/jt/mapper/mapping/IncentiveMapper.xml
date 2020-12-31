@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.IncentiveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Incentive">
+        <id column="incentive_id" property="incentiveId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="incentive_name" property="incentiveName" />
+        <result column="incentive_type" property="incentiveType" />
+        <result column="incentive_date" property="incentiveDate" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        incentive_id, user_id, incentive_name, incentive_type, incentive_date, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.Incentive" resultType="com.lhsz.bandian.jt.DTO.response.IncentiveDTO">
+        SELECT
+            jt_incentive.incentive_id as id,
+            jt_incentive.incentive_id,
+            jt_incentive.user_id,
+            jt_incentive.incentive_name,
+            jt_incentive.incentive_type,
+            jt_incentive.incentive_date,
+            jt_incentive.remark,
+            jt_incentive.chk_office_id,
+            jt_incentive.chk_office_name,
+            jt_incentive.chk_user_id,
+            jt_incentive.chk_user_name,
+            jt_incentive.chk_status,
+            jt_incentive.chk_reason,
+            jt_incentive.chk_time,
+            jt_incentive.creation_time,
+            jt_incentive.creator_id,
+            jt_incentive.last_modification_time,
+            jt_incentive.last_modifier_id,
+            jt_incentive.is_deleted,
+            jt_incentive.version,
+            sys_dict_data.dict_label AS incentive_type_name
+        FROM
+            jt_incentive
+            left join sys_dict_data on jt_incentive.incentive_type = sys_dict_data.dict_value
+        WHERE
+            sys_dict_data.dict_type = 'incentive-type'
+            AND jt_incentive.is_deleted = 0
+        <if test="incentiveName != null and incentiveName != ''">
+            AND jt_incentive.incentive_name like '%${incentiveName}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_incentive.user_id = #{userId}
+        </if>
+
+    </select>
+    <select id="selectDTO" parameterType="java.lang.String" resultType="com.lhsz.bandian.jt.DTO.response.IncentiveDTO">
+        SELECT
+            jt_incentive.incentive_id as id,
+            jt_incentive.incentive_id,
+            jt_incentive.user_id,
+            jt_incentive.incentive_name,
+            jt_incentive.incentive_type,
+            jt_incentive.incentive_date,
+            jt_incentive.remark,
+            jt_incentive.chk_office_id,
+            jt_incentive.chk_office_name,
+            jt_incentive.chk_user_id,
+            jt_incentive.chk_user_name,
+            jt_incentive.chk_status,
+            jt_incentive.chk_reason,
+            jt_incentive.chk_time,
+            jt_incentive.creation_time,
+            jt_incentive.creator_id,
+            jt_incentive.last_modification_time,
+            jt_incentive.last_modifier_id,
+            jt_incentive.is_deleted,
+            jt_incentive.version,
+            sys_dict_data.dict_label AS incentive_type_name
+        FROM
+            jt_incentive
+            left join sys_dict_data on jt_incentive.incentive_type = sys_dict_data.dict_value
+        WHERE
+            sys_dict_data.dict_type = 'incentive-type'
+            AND jt_incentive.is_deleted = 0 AND
+            jt_incentive.incentive_id =  #{id}
+
+    </select>
+</mapper>

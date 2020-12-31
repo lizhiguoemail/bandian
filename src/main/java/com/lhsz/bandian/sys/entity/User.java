@@ -29,10 +29,10 @@ public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户标识")
-    @TableId(value = "user_id", type = IdType.UUID)
+    @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     private String userId;
 
-    @ApiModelProperty(value = "用户类型(1办公用户，2企业用户，3车辆用户)")
+    @ApiModelProperty(value = "用户类型(1管理员，2会员，3评委会)")
     private Integer userType;
 
     @ApiModelProperty(value = "昵称")
@@ -110,5 +110,9 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "安全戳")
     private String securityStamp;
 
+    @ApiModelProperty(value = "头像")
+    private String avatar;
 
+    @ApiModelProperty(value = "客户端标识")
+    private String clientId;
 }

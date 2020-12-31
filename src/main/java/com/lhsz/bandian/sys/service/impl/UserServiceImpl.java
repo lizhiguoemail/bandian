@@ -1,23 +1,39 @@
 package com.lhsz.bandian.sys.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lhsz.bandian.Exception.NoticeException;
+import com.lhsz.bandian.jt.entity.JuryDept;
+import com.lhsz.bandian.jt.entity.JuryDeptUser;
+import com.lhsz.bandian.jt.entity.UserProfile;
+import com.lhsz.bandian.jt.service.IJuryDeptService;
+import com.lhsz.bandian.jt.service.IJuryDeptUserService;
+import com.lhsz.bandian.jt.service.IUserProfileService;
+import com.lhsz.bandian.jt.utils.JtString;
 import com.lhsz.bandian.security.TokenService;
-import com.lhsz.bandian.sys.DTO.*;
+import com.lhsz.bandian.sys.DTO.AppApplicationDTO;
+import com.lhsz.bandian.sys.DTO.AppData;
+import com.lhsz.bandian.sys.DTO.AppResourceDTO;
+import com.lhsz.bandian.sys.DTO.AppUserDTO;
 import com.lhsz.bandian.sys.DTO.query.QueryUserDTO;
+import com.lhsz.bandian.sys.DTO.result.JuryRegisterDTO;
 import com.lhsz.bandian.sys.DTO.result.UserDTO;
 import com.lhsz.bandian.sys.entity.*;
-import com.lhsz.bandian.sys.mapper.RoleMapper;
 import com.lhsz.bandian.sys.mapper.UserMapper;
-import com.lhsz.bandian.sys.mapper.UserRoleMapper;
 import com.lhsz.bandian.sys.service.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lhsz.bandian.utils.Convert;
+import com.lhsz.bandian.utils.RedisCache;
+import com.lhsz.bandian.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.cglib.core.Converter;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -29,11 +45,10 @@ import java.util.*;
  * @author lizhiguo
  * @since 2020-07-02
  */
+@Slf4j
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
-    UserMapper userMapper;
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     IUserRoleService userRoleService;
     @Autowired
@@ -44,11 +59,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IResourceService resourceService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private IUserProfileService userProfileService;
+    @Autowired
+    private IJuryDeptService iJuryDeptService;
+    @Autowired
+    private IJuryDeptUserService iJuryDeptUserService;
+    @Autowired
+    private RedisCache redisCache;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @Override
     public User findByUsername(String username) {
         User user=null;
         try {
-            user = userMapper.selectOne(new QueryWrapper<User>().eq("user_name",username));
+            LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+//            lambdaQueryWrapper.select(User::getUserId);
+            lambdaQueryWrapper.eq(User::getNormalizedUserName,Convert.toUpperCase(username));
+            user = super.getOne(lambdaQueryWrapper);
+//            user = super.getOne(new QueryWrapper<User>().eq("user_name",username),false);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -57,16 +89,53 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Set<String> findPermissions(String username) {
+    public User findByMobile(String mobile) {
+        User user = getOne(new QueryWrapper<User>().eq("phone_number", mobile));
+
+        return user;
+    }
+  @Override
+    public User findByEmail(String mobile) {
+        User user   = getOne(new QueryWrapper<User>().eq("normalized_email", Convert.toUpperCase(mobile)));
+        return user;
+    }
+
+
+    @Override
+    public User findByNameAndType(String username,Integer type) {
+        User user=null;
+        try {
+            user = getOne(new QueryWrapper<User>().eq("user_name",username).ne("user_type",type));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+    @Override
+    public Set<String> findPermissions(String uid) {
         Set<String> permissions = new HashSet<>();
-        permissions.add("sys:user:view");
+      /*  permissions.add("sys:user:view");
         permissions.add("sys:user:add");
         permissions.add("sys:user:edit");
-        permissions.add("sys:user:delete");
+        permissions.add("sys:user:delete");*/
+        QueryWrapper<Resource> queryWrapper =new QueryWrapper<Resource>();
+        queryWrapper
+                .eq("type",2)
+                .inSql("resource_id","SELECT per.resource_id FROM sys_permission per WHERE per.role_id IN(\n" +
+                        "SELECT ur.role_id FROM sys_user_role ur WHERE ur.user_id='"+uid+"'\n" +
+                        ")");
+        List<Resource> listResource = resourceService.list(queryWrapper);//获取所有菜单
+        listResource.forEach(obj->permissions.add(obj.getUri()));
         return permissions;
     }
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public int del(String id){
-        return userMapper.deleteById(id);
+        QueryWrapper<UserRole> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("user_id",id);
+        userRoleService.remove(queryWrapper);
+        return baseMapper.deleteById(id);
     }
 
     @Override
@@ -85,15 +154,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .inSql("resource_id","SELECT per.resource_id FROM sys_permission per WHERE per.role_id IN(\n" +
                         "SELECT ur.role_id FROM sys_user_role ur WHERE ur.user_id='"+user.getUserId()+"'\n" +
                         ")")
-                .eq("application_id",app.getApplicationId())
-                .orderByAsc("sort_id");
+                .eq("application_id",app.getApplicationId()).eq("enabled",1)
+//                .orderByAsc("sort_id")
+        ;
 
-        List<Resource> listResource = resourceService.list(queryWrapper);//获取所有菜单
+        List<Resource> listResource2 = resourceService.list(queryWrapper);//获取所有菜单
+        //补充父级
+        List<Resource> listResource=addParentResource(listResource2);
         appData.setApp(convertUserDTO(app));
         appData.setUser(convertUserDTO(user));
         appData.setMenu(buildMenuTree(convertDTO(listResource),null));
-//        appData.setMenu(buildMenuTree(listResource,null));
         return appData;
+    }
+
+    private List<Resource> addParentResource(List<Resource> listResource) {
+        List<Resource> result=new ArrayList<>();
+        //获取path, 根据PATH获取父级菜单ID，再从数据库查询全部数据
+        StringBuffer ids=new StringBuffer();
+        listResource.forEach(obj->{
+            String path = obj.getPath();
+            String rid=obj.getResourceId();
+            String[] split = path.split(",");
+            ids.append("'"+rid+"',");
+            for (String s : split) {
+                if(!rid.equals(s)){
+                    ids.append("'"+s+"',");
+                }
+            }
+        });
+        if(ids.length() > 1){
+            ids.deleteCharAt(ids.length()-1);
+            QueryWrapper queryWrapper =new QueryWrapper();
+            queryWrapper.inSql("resource_id",ids.toString());
+            queryWrapper.orderByAsc("sort_id");
+            log.debug("==========");
+            log.debug(ids.toString());
+            result=resourceService.list(queryWrapper);
+        }
+        return result;
     }
 
     @Override
@@ -109,7 +207,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(user.getEmail()!=null&&!"".equals(user.getEmail().trim())){
             queryWrapper.like("email",user.getEmail());
         }
-        List<User> listUser = userMapper.selectList(queryWrapper);
+        if(user.getUserType()!=null){
+            queryWrapper.like("user_type",user.getUserType());
+        }
+        List<User> listUser = list(queryWrapper);
         List<UserRole>  userRoleList=userRoleService.list();
         List<Role> roleList=roleService.list();
 
@@ -142,8 +243,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             if(userRole.getUserId().equals(userDTO.getId())){
                 roleSet.add(userRole.getRoleId());
                 for (Role role : roleList) {
-                    if(role.getRoleId().equals(userRole.getRoleId()))
-                    rolesDisplay.add(role.getName());
+                    if(role.getRoleId().equals(userRole.getRoleId())) {
+                        rolesDisplay.add(role.getName());
+                    }
                 }
             }
 
@@ -189,6 +291,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             resourceDTO.setGroup(false);
             resourceDTO.setHideInBreadcrumb(false);
             resourceDTO.setParentId(resource.getParentId());
+            resourceDTO.setExternalLink(resource.getExternalLink());
             listResourceDTO.add(resourceDTO);
         }
 
@@ -216,8 +319,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * @param id
      * @return
      */
+    @Override
     public UserDTO getUserDTO(String id){
-        User user=userMapper.selectById(id);
+        User user=getById(id);
         UserDTO userDTO=new UserDTO();
         BeanUtils.copyProperties(user,userDTO);
         userDTO.setId(user.getUserId());
@@ -225,5 +329,251 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         List<Role> roleList=roleService.list();
         setRoles(userDTO,userRoleList,roleList);
         return userDTO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public void addUserAndRole(UserDTO userDTO) {
+        User user=new User();
+        BeanUtils.copyProperties(userDTO,user);
+        convert(user);
+        save(user);
+        Set<String> roles = userDTO.getRoles();
+        if(roles!=null&&roles.size()>0){
+            List<UserRole> listSaveUserRole =new ArrayList<>();
+            for (String role : roles) {
+                UserRole userRole=new UserRole();
+                userRole.setRoleId(role);
+                userRole.setUserId(user.getUserId());
+                listSaveUserRole.add(userRole);
+            }
+            if(listSaveUserRole.size()>0){
+                userRoleService.saveBatch(listSaveUserRole);
+            }
+        }
+
+    }
+   @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public void updateUserAndRole(UserDTO userDTO) {
+        User user=new User();
+        BeanUtils.copyProperties(userDTO,user);
+
+        convert(user);
+        UpdateWrapper updateWrapper=new UpdateWrapper();
+       updateWrapper.eq("user_id",user.getUserId());
+       if(userDTO.getEmail()==null||"".equals(userDTO.getEmail())){
+           updateWrapper.set("email",null);
+           updateWrapper.set("normalized_email",null);
+       }
+       if(userDTO.getPhoneNumber()==null||"".equals(userDTO.getPhoneNumber())) {
+           updateWrapper.set("phone_number",null);
+           updateWrapper.set("phone_number_confirmed", null);
+       }
+       if(userDTO.getRemark()==null||"".equals(userDTO.getRemark())) {
+           updateWrapper.set("remark", null);
+       }
+       update(user,updateWrapper);
+       //更新缓存 2020-8-11 去掉缓存更新
+       tokenService.updateLoginUserToUser(user);
+      /* QueryWrapper<UserRole> qw=new QueryWrapper<>();
+       qw.eq("user_id",user.getUserId());
+
+
+       userRoleService.remove(qw);*/
+       userRoleService.trueToDelete(user.getUserId());
+        Set<String> roles = userDTO.getRoles();
+        List<UserRole> listSaveUserRole =new ArrayList<>();
+
+        for (String role : roles) {
+            UserRole userRole=new UserRole();
+            userRole.setRoleId(role);
+            userRole.setUserId(user.getUserId());
+            listSaveUserRole.add(userRole);
+        }
+        userRoleService.saveBatch(listSaveUserRole);
+    }
+
+    @Override
+    public UserDTO getUserDTO() {
+        User user=tokenService.getLoginUserToUser();
+        UserDTO userDTO=new UserDTO();
+        BeanUtils.copyProperties(user,userDTO);
+        userDTO.setId(user.getUserId());
+        return userDTO;
+    }
+
+    @Override
+    public boolean updateByIdForUserDTO(UserDTO userDTO) {
+        User user=getById(userDTO.getId());
+        user.setNickName(userDTO.getNickName());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setRemark(userDTO.getRemark());
+        convert(user);
+        //更新缓存 2020-8-11 去掉缓存更新
+        tokenService.updateLoginUserToUser(user);
+        return updateById(user);
+    }
+
+    @Override
+    public User getUserByName(String userName) {
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("normalized_user_name",Convert.toUpperCase(userName));
+        return getOne(queryWrapper);
+
+    }
+
+    @Override
+    public User selectDeptIdUser(String id) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (id != null && !"".equals(id)) {
+            queryWrapper.like("user_id", id);
+        }
+        User list = userMapper.selectById(id);
+        return list;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public void regist(UserDTO userDTO) {
+        try{
+            check(userDTO);
+            User user=new User();
+            BeanUtils.copyProperties(userDTO,user);
+            convert(user);
+            user.setUserType(JtString.USERTYPE_PORTAL);
+            save(user);
+            UserProfile userProfile = new UserProfile();
+            userProfile.setUserId(user.getUserId());
+            userProfile.setCertType("01");
+            userProfile.setCertNo(userDTO.getCertNo());
+            userProfile.setFullName(userDTO.getNickName());
+            userProfile.setMobile(userDTO.getPhoneNumber());
+            userProfile.setUsedName("");
+            userProfile.setNation("");
+            userProfile.setBirthday("");
+            userProfile.setDomicile1("");
+            userProfile.setDomicile2("");
+            userProfile.setDomicile3("");
+            userProfile.setChkStatus("00");
+            userProfileService.save(userProfile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void check(UserDTO userDTO) {
+
+//        userMapper.selectList(new QueryWrapper<>().eq("user_name",userDTO.get))
+        //判断用户名是否存在
+
+        //判断邮箱是否被使用
+        //判断手机号是否被使用
+    }
+
+    private void convert(User user){
+        user.setNormalizedUserName(Convert.toUpperCase(user.getUserName()));
+        user.setNormalizedEmail(Convert.toUpperCase(user.getEmail()));
+        if(user.getPassword()!=null){
+            user.setPasswordHash(SecurityUtils.encryptPassword(user.getPassword()));
+            user.setPassword(null);
+        }
+
+    }
+
+    @Override
+    public void registerAdmin(JuryRegisterDTO juryRegisterDTO) {
+        String userId = UUID.randomUUID().toString();
+        String deptId = UUID.randomUUID().toString();
+        User user=new User();
+        BeanUtils.copyProperties(juryRegisterDTO,user);
+        user.setUserId(userId);
+        user.setNickName(juryRegisterDTO.getUserName());
+        user.setEnabled(false);
+        user.setUserType(3);
+        convert(user);
+        save(user);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userId);
+        userRole.setRoleId("2777e39f737aee6079dfd30ff47cece0");
+        userRoleService.save(userRole);
+        JuryDept juryDept = new JuryDept();
+        juryDept.setDeptId(deptId);
+        juryDept.setContactName(juryRegisterDTO.getContactName());
+        juryDept.setContactTelephone(juryRegisterDTO.getPhoneNumber());
+        juryDept.setDeptName(juryRegisterDTO.getDeptName());
+        juryDept.setDeptType(Integer.parseInt(juryRegisterDTO.getDeptType()));
+        iJuryDeptService.add(juryDept);
+        JuryDeptUser juryDeptUser = new JuryDeptUser();
+        juryDeptUser.setDeptId(deptId);
+        juryDeptUser.setUserId(userId);
+        iJuryDeptUserService.add(juryDeptUser);
+    }
+
+    @Override
+    public String importUser(List<UserDTO> userList, boolean updateSupport) {
+
+        if (userList == null || userList.size() == 0)
+        {
+            throw new NoticeException("导入用户数据不能为空！");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        String password = "111111";
+        for (UserDTO user : userList)
+        {
+            try
+            {
+                // 验证是否存在这个用户
+                User u = findByUsername(user.getUserName());
+                if (u==null)
+                {
+                    user.setPassword(password);
+                    User saveuser=new User();
+                    BeanUtils.copyProperties(user,saveuser);
+                    convert(saveuser);
+                    saveuser.setClientId("dcmis-admin");
+                    save(saveuser);
+                    successNum++;
+                    successMsg.append("<pre>" + successNum + "、账号 " + user.getUserName() + " 导入成功</pre>");
+                }
+                else if (updateSupport)
+                {
+                    user.setUserId(u.getUserId());
+                    BeanUtils.copyProperties(user,u);
+                    convert(u);
+                    updateById(u);
+                    successNum++;
+                    successMsg.append("<pre>" + successNum + "、账号 " + user.getUserName() + " 更新成功</pre>");
+                }
+                else
+                {
+                    failureNum++;
+                    failureMsg.append("<pre>" + failureNum + "、账号 " + user.getUserName() + " 已存在</pre>");
+                }
+            }
+            catch (Exception e)
+            {
+                failureNum++;
+                String msg = "<pre>" + failureNum + "、账号 " + user.getUserName() + " 导入失败：";
+                failureMsg.append(msg + e.getMessage());
+                failureMsg.append("</pre>");
+                log.error(msg, e);
+            }
+        }
+        if (failureNum > 0)
+        {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new NoticeException(failureMsg.toString());
+        }
+        else
+        {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successMsg.toString();
     }
 }

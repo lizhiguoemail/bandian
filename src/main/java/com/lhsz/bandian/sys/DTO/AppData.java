@@ -1,13 +1,15 @@
 package com.lhsz.bandian.sys.DTO;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author lizhiguo
  * 2020/7/10 17:45
  */
-public class AppData {
+public class AppData  implements Serializable {
+    private static final long serialVersionUID = 1L;
     public AppApplicationDTO app;
     public AppUserDTO user;
     public List<AppResourceDTO> menu;

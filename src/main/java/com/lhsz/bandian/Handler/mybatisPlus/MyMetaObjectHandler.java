@@ -3,8 +3,8 @@ package com.lhsz.bandian.Handler.mybatisPlus;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.lhsz.bandian.security.LoginUser;
 import com.lhsz.bandian.security.TokenService;
-import com.lhsz.bandian.utils.HttpUtils;
 import com.lhsz.bandian.utils.ServletUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
  * @author lizhiguo
  * 2020/7/8 15:32
  */
+@Slf4j
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
@@ -54,14 +55,11 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         String uId=null;
         try {
             LoginUser loginUser=tokenService.getLoginUser(ServletUtils.getRequest());
-            uId=loginUser.getUser().getUserId();
-        }catch (Exception e){
-            try {
-                HttpUtils.writeFail(ServletUtils.getResponse(), e.getMessage());
-            }catch (Exception e1){
-                e1.printStackTrace();
+            if(loginUser!=null&&loginUser.getUser()!=null) {
+                uId=loginUser.getUser().getUserId();
             }
-
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
         return uId;
     }
@@ -69,20 +67,22 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         //判断字段是否存在
         if(check(metaObject,CREATIONTIME)){
-            setInsertFieldValByName(CREATIONTIME, LocalDateTime.now(), metaObject);
+            strictInsertFill(metaObject,CREATIONTIME,LocalDateTime.class,LocalDateTime.now());
         }
         if(check(metaObject,CREATORID)){
-            setInsertFieldValByName(CREATORID, getLoginUserId(), metaObject);
+            strictInsertFill(metaObject,CREATORID,String.class ,getLoginUserId());
         }
     }
+
 
     @Override
     public void updateFill(MetaObject metaObject) {
         if(check(metaObject,LASTMODIFICATIONTIME)){
-            setUpdateFieldValByName(LASTMODIFICATIONTIME, LocalDateTime.now(), metaObject);
+            strictUpdateFill(metaObject,LASTMODIFICATIONTIME,LocalDateTime.class, LocalDateTime.now());
         }
         if(check(metaObject,LASTMODIFIERID)){
-            setUpdateFieldValByName(LASTMODIFIERID, getLoginUserId(), metaObject);
+            strictUpdateFill(metaObject,LASTMODIFIERID,String.class, getLoginUserId());
+
         }
     }
 

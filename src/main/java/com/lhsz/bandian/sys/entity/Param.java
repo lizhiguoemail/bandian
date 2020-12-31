@@ -28,7 +28,7 @@ public class Param extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "参数标识")
-    @TableId(value = "param_id", type = IdType.UUID)
+    @TableId(value = "param_id", type = IdType.ASSIGN_UUID)
     private String paramId;
 
     @ApiModelProperty(value = "参数名称")

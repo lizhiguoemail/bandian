@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -1004,7 +1006,7 @@ public class Convert {
         if(StringUtils.isNotEmpty(str)){
             return str.toUpperCase();
         }else{
-            return "";
+            return str;
         }
     }
 
@@ -1019,5 +1021,25 @@ public class Convert {
         }else{
             return "";
         }
+    }
+
+    /**
+     * Object 转换 List
+     * @param obj 要转换的List
+     * @param clazz 泛型的class
+     * @return 转换后的List
+     */
+    public static <T> List<T> castList(Object obj, Class<T> clazz)
+    {
+        List<T> result = new ArrayList<T>();
+        if(obj instanceof List<?>)
+        {
+            for (Object o : (List<?>) obj)
+            {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
     }
 }

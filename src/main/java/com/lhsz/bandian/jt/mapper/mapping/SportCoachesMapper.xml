@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.SportCoachesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.SportCoaches">
+        <id column="training_id" property="trainingId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="athletes_name" property="athletesName" />
+        <result column="training_corp" property="trainingCorp" />
+        <result column="is_higher_level" property="isHigherLevel" />
+        <result column="training_description" property="trainingDescription" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        training_id, user_id, begin_date, end_date, athletes_name, training_corp, is_higher_level, training_description, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.SportCoachesDTO" parameterType="com.lhsz.bandian.jt.entity.SportCoaches">
+        SELECT
+            jt_sport_coaches.training_id AS id,
+            jt_sport_coaches.training_id,
+            jt_sport_coaches.user_id,
+            jt_sport_coaches.begin_date,
+            jt_sport_coaches.end_date,
+            jt_sport_coaches.athletes_name,
+            jt_sport_coaches.training_corp,
+            jt_sport_coaches.is_higher_level,
+            jt_sport_coaches.training_description,
+            jt_sport_coaches.remark,
+            jt_sport_coaches.chk_office_id,
+            jt_sport_coaches.chk_office_name,
+            jt_sport_coaches.chk_user_id,
+            jt_sport_coaches.chk_user_name,
+            jt_sport_coaches.chk_status,
+            jt_sport_coaches.chk_reason,
+            jt_sport_coaches.chk_time,
+            jt_sport_coaches.creation_time,
+            jt_sport_coaches.creator_id,
+            jt_sport_coaches.last_modification_time,
+            sys_dict_data.dict_label AS is_higher_level_name
+        FROM
+            jt_sport_coaches
+            LEFT JOIN sys_dict_data ON jt_sport_coaches.is_higher_level = sys_dict_data.dict_value
+        WHERE
+            jt_sport_coaches.is_deleted = 0
+            AND sys_dict_data.dict_type = 'sys-yesno'
+            <if test="athletesName != null and athletesName != ''">
+                AND jt_sport_coaches.athletes_name like '%${athletesName}%'
+            </if>
+            <if test="trainingCorp != null and trainingCorp != ''">
+                AND jt_sport_coaches.training_corp like '%${trainingCorp}%'
+            </if>
+            <if test="userId != null and userId != ''">
+                AND jt_sport_coaches.user_id = #{userId}
+            </if>
+
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.SportCoachesDTO" parameterType="java.lang.String">
+        SELECT
+            jt_sport_coaches.training_id AS id,
+            jt_sport_coaches.training_id,
+            jt_sport_coaches.user_id,
+            jt_sport_coaches.begin_date,
+            jt_sport_coaches.end_date,
+            jt_sport_coaches.athletes_name,
+            jt_sport_coaches.training_corp,
+            jt_sport_coaches.is_higher_level,
+            jt_sport_coaches.training_description,
+            jt_sport_coaches.remark,
+            jt_sport_coaches.chk_office_id,
+            jt_sport_coaches.chk_office_name,
+            jt_sport_coaches.chk_user_id,
+            jt_sport_coaches.chk_user_name,
+            jt_sport_coaches.chk_status,
+            jt_sport_coaches.chk_reason,
+            jt_sport_coaches.chk_time,
+            jt_sport_coaches.creation_time,
+            jt_sport_coaches.creator_id,
+            jt_sport_coaches.last_modification_time,
+            sys_dict_data.dict_label AS is_higher_level_name
+        FROM
+            jt_sport_coaches
+            LEFT JOIN sys_dict_data ON jt_sport_coaches.is_higher_level = sys_dict_data.dict_value
+        WHERE
+            jt_sport_coaches.is_deleted = 0
+            AND sys_dict_data.dict_type = 'sys-yesno'
+            AND jt_sport_coaches.training_id = #{id}
+    </select>
+</mapper>

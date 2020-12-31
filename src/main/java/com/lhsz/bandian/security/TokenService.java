@@ -2,16 +2,21 @@ package com.lhsz.bandian.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.lhsz.bandian.Exception.NoticeException;
+import com.lhsz.bandian.config.properties.BandianProperties;
 import com.lhsz.bandian.sys.entity.Application;
 import com.lhsz.bandian.sys.entity.User;
 import com.lhsz.bandian.sys.service.IApplicationService;
+import com.lhsz.bandian.sys.service.IUserService;
 import com.lhsz.bandian.utils.*;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +30,7 @@ import java.util.concurrent.TimeUnit;
  * @author lizhiguo
  * 2020/7/6 16:37
  */
+@Slf4j
 @Component
 public class TokenService {
 
@@ -44,6 +50,11 @@ public class TokenService {
      */
     private  final String AUTHORITIES = "authorities";
     /**
+     * 登陆次数
+     */
+    private static final String LOGINCOUNT = "loginCount";
+
+    /**
      * 密钥
      */
     private  final String SECRET = "com.lhsz.bandian.lzg";
@@ -60,28 +71,9 @@ public class TokenService {
     private SecurityService securityService;
     @Autowired
     private IApplicationService applicationService;
-    /**
-     * 获取用户身份信息
-     *
-     * @return 用户信息
-     */
-    public LoginUser getLoginUser(HttpServletRequest request)
-    {
-        // 获取请求携带的令牌
-//        String token = getToken(request);
-        String token = getToken(request);
+    @Autowired
+    private IUserService userService;
 
-        if (StringUtils.isNotEmpty(token))
-        {
-
-            Claims claims =  getClaimsFromToken(token);
-            String username = (String) claims.get(USERNAME);
-            Long createtime = (Long) claims.get(CREATED);
-            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
-            return user;
-        }
-        return null;
-    }
     /**
      * 获取登录用户实体
      *
@@ -89,17 +81,10 @@ public class TokenService {
      */
     public User getLoginUserToUser()
     {
-        String token = getToken(HttpUtils.getHttpServletRequest());
-        if (StringUtils.isNotEmpty(token))
-        {
-            Claims claims =  getClaimsFromToken(token);
-            String username = (String) claims.get(USERNAME);
-            Long createtime = (Long) claims.get(CREATED);
-            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
-            return user.getUser();
-        }
-        return null;
+        LoginUser user = getLoginUser(HttpUtils.getHttpServletRequest());
+        return user.getUser();
     }
+
     /**
      * 获取登录用户实体
      *
@@ -107,16 +92,27 @@ public class TokenService {
      */
     public Application getLoginUserToApp()
     {
-        String token = getToken(HttpUtils.getHttpServletRequest());
-        if (StringUtils.isNotEmpty(token))
-        {
-            Claims claims =  getClaimsFromToken(token);
-            String username = (String) claims.get(USERNAME);
-            Long createtime = (Long) claims.get(CREATED);
-            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
-            return user.getApplication();
-        }
-        return null;
+        LoginUser user = getLoginUser(HttpUtils.getHttpServletRequest());
+        return user.getApplication();
+    }
+    /**
+     * 获取用户身份信息
+     *
+     * @return 用户信息
+     */
+    public LoginUser getLoginUser(HttpServletRequest request)
+    {
+        String token = getToken(request);
+        return getLoginUser(token);
+    }
+    /**
+     * 获取用户身份信息
+     *
+     * @return 用户信息
+     */
+    public LoginUser getLoginUser()
+    {
+        return getLoginUser(HttpUtils.getHttpServletRequest());
     }
     /**
      * 获取用户身份信息
@@ -130,12 +126,12 @@ public class TokenService {
 
         if (StringUtils.isNotEmpty(token))
         {
-
-            Claims claims =  getClaimsFromToken(token);
+           /* Claims claims =  getClaimsFromToken(token);
             String username = (String) claims.get(USERNAME);
-            Long createtime = (Long) claims.get(CREATED);
-            LoginUser user = redisCache.getCacheObject(setRedisTokenId(username,createtime));
-            return user;
+            int loginCount = (int) claims.get(LOGINCOUNT);
+            return redisCache.getCacheObject(createRedisKey(username,loginCount));*/
+            return redisCache.getCacheObject(getRedisKey(token));
+
         }
         return null;
     }
@@ -144,24 +140,62 @@ public class TokenService {
     /**
      * 删除用户身份信息
      */
-    public void delLoginUser(LoginUser loginUser)
+    void delLoginUser(LoginUser loginUser)
     {
         if (loginUser!=null)
         {
-            String redisTokenId = setRedisTokenId(loginUser.getUsername(),loginUser.getLoginTime());
+            String redisTokenId = createRedisKey(loginUser.getUsername(),loginUser.getUser().getLoginCount());
             redisCache.deleteObject(redisTokenId);
         }
     }
-    private String setRedisTokenId(String name,Long createtime){
-        return  name+"."+createtime;
+    private String createRedisKey(String name,int login_count){
+        return  name+"."+login_count;  //2020-7-17 去掉时间，直接用username作为键，方便统一控制登录用户token
+//        return  name; 2020年8月11日 还原之前的设置，解决登陆会被其他人注销的BUG
+        //#true 同一个账号只能登陆一次，false 同一个账号可以同时登陆
 
+    }
+    /**
+     * 更新缓存
+     * 更新当前登陆用户缓存
+     */
+
+    public void updateLoginUserToUser(){
+        User user=userService.findByUsername(getUsername());
+        LoginUser loginUser=redisCache.getCacheObject(getRedisKey());
+        if(loginUser!=null){
+            loginUser.setUser(user);
+            addRadisForLoginUser(getRedisKey(),loginUser);
+            log.info("用户 {} 缓存已更新"+user.getUserName());
+        }else{
+            log.info("用户 {} 缓存失败,缓存不存在或已过期"+user.getUserName());
+        }
+
+    }
+    /**
+     * 更新缓存
+     * 更新指定用户缓存
+     * @param user 指定用户对象
+     */
+
+    public void updateLoginUserToUser(User user){
+        //单用户登陆时才生效，允许多处登陆时，不生效
+        if(BandianProperties.isSingleLogin){
+            LoginUser loginUser=redisCache.getCacheObject(createRedisKey(user.getUserName(),user.getLoginCount()));
+            if(loginUser!=null){
+                loginUser.setUser(user);
+                addRadisForLoginUser(createRedisKey(user.getUserName(),user.getLoginCount()),loginUser);
+                log.info("用户{}缓存已更新"+user.getUserName());
+            }else{
+                log.info("用户{}缓存失败,缓存不存在或已过期"+user.getUserName());
+            }
+        }
     }
 
 
     /**
      * 加入把登录信息加入redis缓存
-     * @param redisTokenId
-     * @param loginUser
+     * @param redisTokenId redisKey
+     * @param loginUser 登陆对象
      */
     private void addRadisForLoginUser(String redisTokenId, LoginUser loginUser) {
         redisCache.setCacheObject(redisTokenId,loginUser, expireTime, TimeUnit.MILLISECONDS);
@@ -181,69 +215,56 @@ public class TokenService {
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }
+
     /**
      * 生成令牌
      *
      * @param authentication 用户
      * @return 令牌
      */
-    public  String createToken(Authentication authentication) {
-        Map<String, Object> claims = new HashMap<>(3);
+    String createToken(Authentication authentication, String clientId) {
         LoginUser loginUser=(LoginUser) authentication.getPrincipal();
         Long createtime=System.currentTimeMillis();
-        claims.put(USERNAME, loginUser.getUsername());
-        claims.put(CREATED, createtime);
-        claims.put(AUTHORITIES, loginUser.getAuthorities());
         setUserAgent(loginUser);
         loginUser.setLoginTime(createtime);
         loginUser.setExpireTime(createtime+expireTime);
-        String token=generateToken(claims);//生成token
+        String token=generateToken(loginUser.getUsername(),createtime,authentication.getAuthorities(),loginUser.getUser().getLoginCount());//生成token
         loginUser.setToken(token);
-
-        addRadisForLoginUser(setRedisTokenId(loginUser.getUsername(),createtime), loginUser);
+        setApplication(loginUser,clientId);
+        if(BandianProperties.isSingleLogin){
+            redisCache.deleteObject(createRedisKey(loginUser.getUsername(),loginUser.getUser().getLoginCount()-1));
+        }
+        addRadisForLoginUser(createRedisKey(loginUser.getUsername(),loginUser.getUser().getLoginCount()), loginUser);
         return token;
     }
-    /**
-     * 生成令牌
-     *
-     * @param authentication 用户
-     * @return 令牌
-     */
-    public  String createToken(Authentication authentication,String clientId) {
-        Map<String, Object> claims = new HashMap<>(3);
-        LoginUser loginUser=(LoginUser) authentication.getPrincipal();
-        Long createtime=System.currentTimeMillis();
-        claims.put(USERNAME, loginUser.getUsername());
-        claims.put(CREATED, createtime);
-        claims.put(AUTHORITIES, loginUser.getAuthorities());
-        setUserAgent(loginUser);
-        loginUser.setLoginTime(createtime);
-        loginUser.setExpireTime(createtime+expireTime);
-        String token=generateToken(claims);//生成token
-        loginUser.setToken(token);
-        HttpServletRequest request = HttpUtils.getHttpServletRequest();
+
+    private void setApplication(LoginUser loginUser, String clientId) {
         if(clientId==null || "".equals(clientId.trim())){
-            throw new UsernameNotFoundException("ClientId 不能为空");
+            throw new NoticeException("ClientId 不能为空");
         }
         Application application = applicationService.getOne(new QueryWrapper<Application>().eq("code",clientId));
         if(application==null){
-            throw new UsernameNotFoundException("ClientId 错误");
+            throw new NoticeException("ClientId 错误");
+        }
+        if(!clientId.equals(loginUser.getUser().getClientId())){
+            throw new NoticeException("登录失败！用户不存在！");
         }
         loginUser.setApplication(application);
-        addRadisForLoginUser(setRedisTokenId(loginUser.getUsername(),createtime), loginUser);
-        return token;
     }
+
     /**
      * 生成令牌
-     *
-     * @param authentication 用户
+     * @param userName 用户名
+     * @param created 创建时间
+     * @param authorities 权限
      * @return 令牌
      */
-    public  String generateToken(Authentication authentication) {
+    private String generateToken(String userName, Long created, Collection<? extends GrantedAuthority> authorities, int loginCount) {
         Map<String, Object> claims = new HashMap<>(3);
-        claims.put(USERNAME, securityService.getUsername(authentication));
-        claims.put(CREATED, new Date());
-        claims.put(AUTHORITIES, authentication.getAuthorities());
+        claims.put(USERNAME, userName);
+        claims.put(CREATED, created);
+//        claims.put(AUTHORITIES, authorities);
+        claims.put(LOGINCOUNT, loginCount);
         return generateToken(claims);
     }
 
@@ -265,7 +286,7 @@ public class TokenService {
      * @param token 令牌
      * @return 用户名
      */
-    public  String getUsernameFromToken(String token) {
+    private String getUsernameFromToken(String token) {
         String username;
         try {
             Claims claims = getClaimsFromToken(token);
@@ -275,59 +296,13 @@ public class TokenService {
         }
         return username;
     }
-    /**
-     * 根据请求令牌获取登录认证信息
-     * @param token 令牌
-     * @return 用户名
-     */
-    public  Authentication getAuthenticationeFromRedis(HttpServletRequest request) {
-        Authentication authentication = null;
-        // 获取请求携带的令牌
-      LoginUser loginUser =  getLoginUser(request);
-      if(loginUser!=null){
-
-      }
-        String token = getToken(request);
-        if(token != null) {
-
-            // 请求令牌不能为空
-            if(securityService.getAuthentication() == null) {
-                // 上下文中Authentication为空
-                Claims claims = getClaimsFromToken(token);
-                if(claims == null) {
-                    return null;
-                }
-                String username = claims.getSubject();
-                if(username == null) {
-                    return null;
-                }
-                if(isTokenExpired(token)) {
-                    return null;
-                }
-                Object authors = claims.get(AUTHORITIES);
-                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-                if (authors != null && authors instanceof List) {
-                    for (Object object : (List) authors) {
-                        authorities.add(new GrantedAuthorityImpl((String) ((Map) object).get("authority")));
-                    }
-                }
-                authentication = new JwtAuthenticatioToken(username, null, authorities, token);
-            } else {
-                if(validateToken(token, securityService.getUsername())) {
-                    // 如果上下文中Authentication非空，且请求令牌合法，直接返回当前登录认证信息
-                    authentication = securityService.getAuthentication();
-                }
-            }
-        }
-        return authentication;
-    }
 
     /**
      * 根据请求令牌获取登录认证信息
-     * @param token 令牌
+     * @param request 上下文
      * @return 用户名
      */
-    public  Authentication getAuthenticationeFromToken(HttpServletRequest request) {
+    Authentication getAuthenticationeFromToken(HttpServletRequest request) {
         Authentication authentication = null;
         // 获取请求携带的令牌
         String token = getToken(request);
@@ -346,14 +321,17 @@ public class TokenService {
                 if(isTokenExpired(token)) {
                     return null;
                 }
-                Object authors = claims.get(AUTHORITIES);
-                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-                if (authors != null && authors instanceof List) {
+//              2020年8月14日  400 Bad Request 权限数据太多放到token中会报错
+               /* Object authors = claims.get(AUTHORITIES);
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                if (authors instanceof List) {
                     for (Object object : (List) authors) {
                         authorities.add(new GrantedAuthorityImpl((String) ((Map) object).get("authority")));
                     }
-                }
-                authentication = new JwtAuthenticatioToken(username, null, authorities, token);
+                }*/
+              LoginUser loginUser= redisCache.getCacheObject(createRedisKey(claims.get(USERNAME)+"",Integer.parseInt(claims.get(LOGINCOUNT)+"")));
+//                User user=userService.findByUsername(username); 2020年7月23日 还是不要放入user，直接放入username,然后通过username从redis中获取LoginUser
+                authentication = new JwtAuthenticatioToken(username, null, loginUser.getGrantedAuthorities(), token);//username 改为user 2020年7月23日 lizhiguo
             } else {
                 if(validateToken(token, securityService.getUsername())) {
                     // 如果上下文中Authentication非空，且请求令牌合法，直接返回当前登录认证信息
@@ -364,6 +342,9 @@ public class TokenService {
                 LoginUser loginUser=getLoginUser(token);
                 if(loginUser==null){
                     authentication=null;
+                    /*if(isSingleLogin){
+                        throw new InsufficientAuthenticationException("账号在别处登陆或已注销！如有疑问，请联系管理员。");
+                    }*/
                 }
             }
 
@@ -378,7 +359,7 @@ public class TokenService {
      * @param token 令牌
      * @return 数据声明
      */
-    public Claims getClaimsFromToken(String token) {
+    private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
             claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
@@ -390,23 +371,23 @@ public class TokenService {
 
     /**
      * 验证令牌
-     * @param token
-     * @param username
-     * @return
+     * @param token token令牌
+     * @param username 用户名
+     * @return boolen
      */
-    public Boolean validateToken(String token, String username) {
+    private Boolean validateToken(String token, String username) {
         String userName = getUsernameFromToken(token);
         if(userName==null)
         {
-            throw new RuntimeException("令牌过期");
+            throw new NoticeException("令牌过期");
         }
         return (userName.equals(username) && !isTokenExpired(token));
     }
 
     /**
      * 刷新令牌
-     * @param token
-     * @return
+     * @param token 旧令牌
+     * @return 新的令牌
      */
     public String refreshToken(String token) {
         String refreshedToken;
@@ -414,23 +395,27 @@ public class TokenService {
             Claims claims = getClaimsFromToken(token);
             Long createtime=System.currentTimeMillis();
             claims.put(CREATED, createtime);
+            int loginCount = (int) claims.get(LOGINCOUNT);
             refreshedToken = generateToken(claims);
             LoginUser loginUser = getLoginUser(token);
             loginUser.setLoginTime(createtime);
             loginUser.setExpireTime(createtime+expireTime);
-            addRadisForLoginUser(setRedisTokenId(loginUser.getUsername(),createtime),loginUser);
+            addRadisForLoginUser(createRedisKey(loginUser.getUsername(),loginCount),loginUser);
         } catch (Exception e) {
             refreshedToken = null;
         }
         return refreshedToken;
     }
-    private String getRedisTokenId(String token)
+    private String getRedisKey(String token)
     {
-        LoginUser loginUser=getLoginUser(token);
         Claims claims = getClaimsFromToken(token);
-        Long cratetime=(Long)claims.get(CREATED);
-        String redisTokenId=setRedisTokenId(loginUser.getUsername(),cratetime);
-        return redisTokenId;
+        int loginCount = (int) claims.get(LOGINCOUNT);
+        String userName = (String) claims.get(USERNAME);
+        return createRedisKey(userName,loginCount);
+    }
+    private String getRedisKey()
+    {
+       return getRedisKey(getToken());
     }
     /**
      * 判断令牌是否过期
@@ -438,7 +423,7 @@ public class TokenService {
      * @param token 令牌
      * @return 是否过期
      */
-    public  Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         try {
             Claims claims = getClaimsFromToken(token);
             Date expiration = claims.getExpiration();
@@ -453,7 +438,7 @@ public class TokenService {
      * @param request
      * @return
      */
-    public  String getToken(HttpServletRequest request) {
+    private String getToken(HttpServletRequest request) {
         String token = request.getHeader(header);
         String tokenHead = "Bearer ";
         if(token == null) {
@@ -465,5 +450,15 @@ public class TokenService {
             token = null;
         }
         return token;
+    }
+    /**
+     * 获取请求token
+     * @return token
+     */
+    private String getToken() {
+        return getToken(HttpUtils.getHttpServletRequest());
+    }
+    public String getUsername(){
+       return securityService.getUsername();
     }
 }

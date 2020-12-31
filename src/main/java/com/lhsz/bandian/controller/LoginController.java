@@ -1,22 +1,18 @@
 package com.lhsz.bandian.controller;
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.lhsz.bandian.DTO.HttpResult;
 import com.lhsz.bandian.DTO.LoginBean;
 import com.lhsz.bandian.security.JwtAuthenticatioToken;
 import com.lhsz.bandian.security.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
-//@RequestMapping("/systems/auth")
 public class LoginController extends BaseController{
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
-//    @Autowired
-//    private RedisCache redisCache;
     @Autowired
     private LoginService loginService;
     /**
@@ -31,18 +27,15 @@ public class LoginController extends BaseController{
 
      */
     @PostMapping(value = "/login")
-    public HttpResult login(@RequestBody LoginBean loginBean, HttpServletRequest request) throws IOException {
+    public HttpResult login(@RequestBody LoginBean loginBean, HttpServletRequest request) {
         String username = loginBean.getUsername();
         String password = loginBean.getPassword();
         String clientId = loginBean.getClientId();
 
         // 系统登录认证
         JwtAuthenticatioToken token = loginService.login(request, username, password,clientId);
-
+        logb.info("{} 登录成功"+loginBean.getUsername());
         return HttpResult.ok(token);
     }
-//    @GetMapping(value = "/logout")
-//    public void  login(HttpServletResponse response) throws IOException {
-//        response.sendRedirect("logout");
-//    }
+
 }

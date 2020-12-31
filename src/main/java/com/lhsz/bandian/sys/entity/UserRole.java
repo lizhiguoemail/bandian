@@ -1,13 +1,11 @@
 package com.lhsz.bandian.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.lhsz.bandian.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -29,7 +27,7 @@ public class UserRole implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "角色标识")
-    @TableId(value = "role_id", type = IdType.UUID)
+    @TableId(value = "role_id", type = IdType.ASSIGN_UUID)
     private String roleId;
 
     @ApiModelProperty(value = "用户标识")

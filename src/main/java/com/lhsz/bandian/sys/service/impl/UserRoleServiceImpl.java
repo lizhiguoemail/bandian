@@ -4,6 +4,7 @@ import com.lhsz.bandian.sys.entity.UserRole;
 import com.lhsz.bandian.sys.mapper.UserRoleMapper;
 import com.lhsz.bandian.sys.service.IUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {
 
+    @Autowired
+    UserRoleMapper userRoleMapper;
+    @Override
+    public void trueToDelete(String uid) {
+        userRoleMapper.trueToDelete(uid);
+    }
 }

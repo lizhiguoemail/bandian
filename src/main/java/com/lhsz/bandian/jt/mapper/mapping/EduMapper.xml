@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.EduMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Edu">
+        <id column="edu_id" property="eduId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="edu_type" property="eduType" />
+        <result column="edu_no" property="eduNo" />
+        <result column="grad_school" property="gradSchool" />
+        <result column="edu_years" property="eduYears" />
+        <result column="specialty" property="specialty" />
+        <result column="grad_time" property="gradTime" />
+        <result column="degree_name" property="degreeName" />
+        <result column="degree_no" property="degreeNo" />
+        <result column="is_oversea" property="isOversea" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        edu_id, user_id, begin_date, end_date, edu_type, edu_no, grad_school, edu_years, specialty, grad_time, degree_name, degree_no, is_oversea, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.JtEduDTO" parameterType="com.lhsz.bandian.jt.entity.Edu">
+        SELECT
+            jt_edu.edu_id AS id,
+            jt_edu.edu_id,
+            jt_edu.user_id,
+            jt_edu.begin_date,
+            jt_edu.end_date,
+            jt_edu.edu_type,
+            jt_edu.edu_no,
+            jt_edu.grad_school,
+            jt_edu.edu_years,
+            jt_edu.specialty,
+            jt_edu.grad_time,
+            jt_edu.degree_name,
+            jt_edu.degree_no,
+            jt_edu.is_oversea,
+            jt_edu.chk_office_id,
+            jt_edu.chk_office_name,
+            jt_edu.chk_user_id,
+            jt_edu.chk_user_name,
+            jt_edu.chk_status,
+            jt_edu.chk_reason,
+            jt_edu.chk_time,
+            jt_edu.creation_time,
+            jt_edu.remark,
+            jt_edu.creator_id,
+            jt_edu.last_modifier_id,
+            jt_edu.last_modification_time,
+            jt_edu.is_deleted,
+            jt_edu.version,
+            s1.dict_label AS edu_type_name,
+            s2.dict_label AS edu_degree_name,
+            s3.dict_label AS sys_yesno_name
+        FROM
+            jt_edu
+            left join sys_dict_data AS s1 on jt_edu.edu_type = s1.dict_value
+            left join sys_dict_data AS s2 on jt_edu.degree_name = s2.dict_value
+            left join sys_dict_data AS s3 on jt_edu.is_oversea = s3.dict_value
+        WHERE
+            jt_edu.is_deleted = 0
+            AND s1.dict_type = 'edu-type'
+            AND s2.dict_type = 'edu_degree'
+            AND s3.dict_type = 'sys-yesno'
+        <if test="beginDate != null and beginDate != ''">
+            AND jt_edu.begin_date like '%${beginDate}%'
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND jt_edu.end_date like '%${endDate}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_edu.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.JtEduDTO" parameterType="java.lang.String">
+                SELECT
+            jt_edu.edu_id AS id,
+            jt_edu.edu_id,
+            jt_edu.user_id,
+            jt_edu.begin_date,
+            jt_edu.end_date,
+            jt_edu.edu_type,
+            jt_edu.edu_no,
+            jt_edu.grad_school,
+            jt_edu.edu_years,
+            jt_edu.specialty,
+            jt_edu.grad_time,
+            jt_edu.degree_name,
+            jt_edu.degree_no,
+            jt_edu.is_oversea,
+            jt_edu.chk_office_id,
+            jt_edu.chk_office_name,
+            jt_edu.chk_user_id,
+            jt_edu.chk_user_name,
+            jt_edu.chk_status,
+            jt_edu.chk_reason,
+            jt_edu.chk_time,
+            jt_edu.creation_time,
+            jt_edu.remark,
+            jt_edu.creator_id,
+            jt_edu.last_modifier_id,
+            jt_edu.last_modification_time,
+            jt_edu.is_deleted,
+            jt_edu.version,
+            s1.dict_label AS edu_type_name,
+            s2.dict_label AS edu_degree_name,
+            s3.dict_label AS sys_yesno_name
+        FROM
+            jt_edu
+            left join sys_dict_data AS s1 on jt_edu.edu_type = s1.dict_value
+            left join sys_dict_data AS s2 on jt_edu.degree_name = s2.dict_value
+            left join sys_dict_data AS s3 on jt_edu.is_oversea = s3.dict_value
+        WHERE
+            jt_edu.is_deleted = 0
+            AND s1.dict_type = 'edu-type'
+            AND s2.dict_type = 'edu_degree'
+            AND s3.dict_type = 'sys-yesno'
+             AND jt_edu.edu_id = #{id}
+    </select>
+
+</mapper>

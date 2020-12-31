@@ -38,6 +38,7 @@
         <result column="current_login_time" property="currentLoginTime" />
         <result column="current_login_ip" property="currentLoginIp" />
         <result column="security_stamp" property="securityStamp" />
+        <result column="avatar" property="avatar" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -50,7 +51,7 @@
         last_modifier_id,
         is_deleted,
         version,
-         user_type, nick_name, user_name, normalized_user_name, email, normalized_email, email_confirmed, phone_number, phone_number_confirmed, password, password_hash, safe_password, safe_password_hash, two_factor_enabled, enabled, disabled_time, lockout_enabled, lockout_end, access_failed_count, login_count, register_ip, last_login_time, last_login_ip, current_login_time, current_login_ip, security_stamp
+         user_type, nick_name, user_name, normalized_user_name, email, normalized_email, email_confirmed, phone_number, phone_number_confirmed, password, password_hash, safe_password, safe_password_hash, two_factor_enabled, enabled, disabled_time, lockout_enabled, lockout_end, access_failed_count, login_count, register_ip, last_login_time, last_login_ip, current_login_time, current_login_ip, security_stamp, avatar
     </sql>
     <select id="selectPageDTO" resultType="com.lhsz.bandian.sys.DTO.result.UserDTO">
         <include refid="Base_Column_List"></include>

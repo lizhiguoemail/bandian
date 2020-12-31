@@ -28,7 +28,7 @@ public class Msg extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "消息标识")
-    @TableId(value = "msg_id", type = IdType.UUID)
+    @TableId(value = "msg_id", type = IdType.ASSIGN_UUID)
     private String msgId;
 
     @ApiModelProperty(value = "消息名称")

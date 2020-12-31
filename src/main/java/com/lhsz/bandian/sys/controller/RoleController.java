@@ -6,9 +6,12 @@ import com.lhsz.bandian.sys.DTO.query.QueryRoleDTO;
 import com.lhsz.bandian.sys.DTO.result.RoleDTO;
 import com.lhsz.bandian.sys.entity.Role;
 import com.lhsz.bandian.sys.service.IRoleService;
+import com.lhsz.bandian.utils.CacheableString;
 import com.lhsz.bandian.utils.Convert;
+import com.lhsz.bandian.utils.RedisCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.lhsz.bandian.controller.BaseController;
@@ -31,31 +34,14 @@ import java.util.Map;
 public class RoleController extends BaseController {
     @Autowired
     IRoleService roleService;
-   /* @GetMapping("/all")
-    public HttpResult all(){
-        List<Role> listRole=roleService.list();
-        List<RoleDTO> list=new ArrayList<>();
-        for (Role role : listRole) {
-            RoleDTO roleDTO=new RoleDTO();
-            BeanUtils.copyProperties(role,roleDTO);
-            roleDTO.setId(role.getRoleId());
-            list.add(roleDTO);
-        }
-        return HttpResult.ok(list);
-    } */
     @GetMapping("/all")
     public HttpResult all(){
-        List<Role> listRole=roleService.list();
-        List<Map<String,String>> list=new ArrayList<>();
-        for (Role role : listRole) {
-            Map<String,String> map=new HashMap<>();
-            map.put("text",role.getName());
-            map.put("value",role.getRoleId());
-            list.add(map);
-        }
+
+        List<Map<String,String>> list= roleService.listAllRole();
         return HttpResult.ok(list);
     }
-    @GetMapping("")
+    @GetMapping()
+    @PreAuthorize("hasAuthority('systems:role:list')")
     public HttpResult list(QueryRoleDTO queryRoleDTO){
         startPage();
         return HttpResult.ok(roleService.listQuery(queryRoleDTO));
@@ -69,19 +55,46 @@ public class RoleController extends BaseController {
        roleDTO.setId(role.getRoleId());
         return HttpResult.ok(roleDTO);
     }
-    @PostMapping("")
+    @PostMapping()
+    @PreAuthorize("hasAuthority('systems:role:add')")
     public HttpResult add(@RequestBody RoleDTO roleDTO){
-        Role role =new Role();
-        BeanUtils.copyProperties(roleDTO,role);
-        role.setNormalizedName(Convert.toUpperCase(role.getName()));
-        role.setType("Role");
-        role.setIsAdmin(false);
-        if(roleService.save(role)){
+
+        if(roleService.addRole(roleDTO)){
             return HttpResult.succee();
         }else{
             return HttpResult.fail();
         }
     }
+    @PutMapping()
+    @PreAuthorize("hasAuthority('systems:role:update')")
+    public HttpResult update(@RequestBody RoleDTO roleDTO){
+        Role role =new Role();
+        BeanUtils.copyProperties(roleDTO,role);
+        role.setRoleId(roleDTO.getId());
+        role.setNormalizedName(Convert.toUpperCase(role.getName()));
+        role.setType("Role");
+        role.setIsAdmin(false);
 
+        if(roleService.updateRole(roleDTO)){
+            return HttpResult.succee();
+        }
+        return HttpResult.fail();
+    }
+    /**
+     * 删除角色
+     * ？该角色下的用户关系
+     * ？角色与权限的关系
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('systems:role:delete')")
+    public HttpResult delete(@PathVariable("id") String id){
+
+        if(!roleService.removeAllByRoleId(id)){
+            return HttpResult.fail();
+        }
+        return HttpResult.ok();
+    }
 
 }

@@ -2,6 +2,7 @@ package com.lhsz.bandian.sys.mapper;
 
 import com.lhsz.bandian.sys.entity.UserRole;
 import com.lhsz.bandian.mapper.MyBaseMapper;
+import org.apache.ibatis.annotations.Delete;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.lhsz.bandian.mapper.MyBaseMapper;
  */
 public interface UserRoleMapper extends MyBaseMapper<UserRole> {
 
+    @Delete(" delete from sys_user_role where user_id = #{uid}")
+    void trueToDelete(String uid);
 }

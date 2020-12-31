@@ -1,12 +1,11 @@
 package com.lhsz.bandian.config;
 
-import com.baomidou.mybatisplus.core.injector.ISqlInjector;
-import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.github.pagehelper.PageInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.github.pagehelper.PageInterceptor;
+
+//import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 
 /**
  * 两个分页插件都配置,不会冲突
@@ -30,13 +29,18 @@ public class MybatisPlusConfig {
     public PageInterceptor pageInterceptor() {
         return new PageInterceptor();
     }
+
+    /**
+     * 乐观锁
+     * @return
+     */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
         return new OptimisticLockerInterceptor();
     }
-    @Bean
+    /*@Bean
     public ISqlInjector sqlInjector() {
         return new LogicSqlInjector();
-    }
+    }*/
 
 }

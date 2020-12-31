@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.WritingsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Writings">
+        <id column="writing_id" property="writingId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="book_name" property="bookName" />
+        <result column="press_name" property="pressName" />
+        <result column="press_date" property="pressDate" />
+        <result column="press_book_type" property="pressBookType" />
+        <result column="book_isbn" property="bookIsbn" />
+        <result column="author" property="author" />
+        <result column="author_rank" property="authorRank" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        writing_id, user_id, book_name, press_name, press_date, press_book_type, book_isbn, author, author_rank, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.WritingsDTO" parameterType="com.lhsz.bandian.jt.entity.Writings">
+        SELECT
+            jt_writings.writing_id AS id,
+            jt_writings.writing_id,
+            jt_writings.user_id,
+            jt_writings.book_name,
+            jt_writings.press_name,
+            jt_writings.press_date,
+            jt_writings.press_book_type,
+            jt_writings.book_isbn,
+            jt_writings.author,
+            jt_writings.chk_office_id,
+            jt_writings.author_rank,
+            jt_writings.chk_office_name,
+            jt_writings.chk_user_id,
+            jt_writings.chk_user_name,
+            jt_writings.chk_status,
+            jt_writings.chk_reason,
+            jt_writings.chk_time,
+            jt_writings.remark,
+            jt_writings.creation_time,
+            jt_writings.creator_id,
+            jt_writings.last_modification_time,
+            jt_writings.last_modifier_id,
+            jt_writings.is_deleted,
+            jt_writings.version,
+            sys_dict_data.dict_label AS press_book_type_name
+        FROM
+            jt_writings
+            LEFT JOIN
+            sys_dict_data
+            ON
+                jt_writings.press_book_type = sys_dict_data.dict_value
+        WHERE
+            jt_writings.is_deleted = 0 AND
+            sys_dict_data.dict_type = 'press-book-type'
+        <if test="bookName != null and bookName != ''">
+            AND jt_writings.book_name like '%${bookName}%'
+        </if>
+        <if test="pressName != null and pressName != ''">
+            AND jt_writings.press_name like '%${pressName}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_writings.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.WritingsDTO" parameterType="java.lang.String">
+        SELECT
+            jt_writings.writing_id AS id,
+            jt_writings.writing_id,
+            jt_writings.user_id,
+            jt_writings.book_name,
+            jt_writings.press_name,
+            jt_writings.press_date,
+            jt_writings.press_book_type,
+            jt_writings.book_isbn,
+            jt_writings.author,
+            jt_writings.chk_office_id,
+            jt_writings.author_rank,
+            jt_writings.chk_office_name,
+            jt_writings.chk_user_id,
+            jt_writings.chk_user_name,
+            jt_writings.chk_status,
+            jt_writings.chk_reason,
+            jt_writings.chk_time,
+            jt_writings.remark,
+            jt_writings.creation_time,
+            jt_writings.creator_id,
+            jt_writings.last_modification_time,
+            jt_writings.last_modifier_id,
+            jt_writings.is_deleted,
+            jt_writings.version,
+            sys_dict_data.dict_label AS press_book_type_name
+        FROM
+            jt_writings
+            LEFT JOIN
+            sys_dict_data
+            ON
+                jt_writings.press_book_type = sys_dict_data.dict_value
+        WHERE
+            jt_writings.is_deleted = 0
+            AND sys_dict_data.dict_type = 'press-book-type'
+            AND jt_writings.writing_id = #{id}
+    </select>
+
+</mapper>

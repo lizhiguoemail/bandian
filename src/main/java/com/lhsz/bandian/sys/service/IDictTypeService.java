@@ -1,7 +1,10 @@
 package com.lhsz.bandian.sys.service;
 
-import com.lhsz.bandian.sys.entity.DictType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lhsz.bandian.sys.DTO.result.DictTypeDTO;
+import com.lhsz.bandian.sys.entity.DictType;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDictTypeService extends IService<DictType> {
 
+    List<DictTypeDTO> list(DictType dictType);
+    void update(DictTypeDTO dictTypeDTO);
+    void save(DictTypeDTO dictTypeDTO);
+    DictTypeDTO selectById(String id);
+
+    int del(String id);
 }

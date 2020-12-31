@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.AssessmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Assessment">
+        <id column="assessment_id" property="assessmentId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="assessment_year" property="assessmentYear" />
+        <result column="assessment_result" property="assessmentResult" />
+        <result column="assessment_reason" property="assessmentReason" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        assessment_id, user_id, assessment_year, assessment_result, assessment_reason, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.JtAssessmentDTO" parameterType="com.lhsz.bandian.jt.entity.Assessment">
+        SELECT
+            jt_assessment.assessment_id AS id,
+            jt_assessment.assessment_id,
+            jt_assessment.user_id,
+            jt_assessment.assessment_year,
+            jt_assessment.assessment_result,
+            jt_assessment.assessment_reason,
+            jt_assessment.chk_office_id,
+            jt_assessment.chk_office_name,
+            jt_assessment.chk_user_id,
+            jt_assessment.chk_user_name,
+            jt_assessment.chk_status,
+            jt_assessment.chk_reason,
+            jt_assessment.chk_time,
+            jt_assessment.remark,
+            jt_assessment.creation_time,
+            jt_assessment.creator_id,
+            jt_assessment.last_modification_time,
+            jt_assessment.last_modifier_id,
+            jt_assessment.is_deleted,
+            jt_assessment.version,
+            s1.dict_label as assessment_result_name
+        FROM
+            jt_assessment
+            left join sys_dict_data as s1 on jt_assessment.assessment_result = s1.dict_value
+        WHERE
+            jt_assessment.is_deleted = 0
+            AND s1.dict_type = 'assessment-result'
+        <if test="assessmentYear != null and assessmentYear != ''">
+            AND jt_assessment.assessment_year like '%${assessmentYear}%'
+        </if>
+        <if test="assessmentResult != null and assessmentResult != ''">
+            AND jt_assessment.assessment_result like '%${assessmentResult}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_assessment.user_id = #{userId}
+        </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.JtAssessmentDTO" parameterType="java.lang.String">
+        SELECT
+            jt_assessment.assessment_id AS id,
+            jt_assessment.assessment_id,
+            jt_assessment.user_id,
+            jt_assessment.assessment_year,
+            jt_assessment.assessment_result,
+            jt_assessment.assessment_reason,
+            jt_assessment.chk_office_id,
+            jt_assessment.chk_office_name,
+            jt_assessment.chk_user_id,
+            jt_assessment.chk_user_name,
+            jt_assessment.chk_status,
+            jt_assessment.chk_reason,
+            jt_assessment.chk_time,
+            jt_assessment.remark,
+            jt_assessment.creation_time,
+            jt_assessment.creator_id,
+            jt_assessment.last_modification_time,
+            jt_assessment.last_modifier_id,
+            jt_assessment.is_deleted,
+            jt_assessment.version,
+            s1.dict_label as assessment_result_name
+        FROM
+            jt_assessment
+            left join sys_dict_data as s1 on jt_assessment.assessment_result = s1.dict_value
+        WHERE
+             jt_assessment.is_deleted = 0
+            AND s1.dict_type = 'assessment-result'
+            AND jt_assessment.assessment_id = #{id}
+    </select>
+
+</mapper>

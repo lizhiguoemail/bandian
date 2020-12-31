@@ -28,7 +28,7 @@ public class Attach extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "附件标识")
-    @TableId(value = "attach_id", type = IdType.UUID)
+    @TableId(value = "attach_id", type = IdType.ASSIGN_UUID)
     private String attachId;
 
     @ApiModelProperty(value = "关联对象标识")
@@ -53,7 +53,7 @@ public class Attach extends BaseEntity {
     private String mimeType;
 
     @ApiModelProperty(value = "文件大小")
-    private Integer fileSize;
+    private Long fileSize;
 
     @ApiModelProperty(value = "扩展名")
     private String extensionName;

@@ -2,6 +2,7 @@ package com.lhsz.bandian.sys.mapper;
 
 import com.lhsz.bandian.sys.entity.Permission;
 import com.lhsz.bandian.mapper.MyBaseMapper;
+import org.apache.ibatis.annotations.Delete;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.lhsz.bandian.mapper.MyBaseMapper;
  */
 public interface PermissionMapper extends MyBaseMapper<Permission> {
 
+    @Delete("delete from sys_permission where role_id = #{roleId}")
+    void trueTODelete(String roleId);
 }

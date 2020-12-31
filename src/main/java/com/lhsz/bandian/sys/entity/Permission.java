@@ -28,7 +28,7 @@ public class Permission extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "权限标识")
-    @TableId(value = "permission_id", type = IdType.UUID)
+    @TableId(value = "permission_id", type = IdType.ASSIGN_UUID)
     private String permissionId;
 
     @ApiModelProperty(value = "角色标识")

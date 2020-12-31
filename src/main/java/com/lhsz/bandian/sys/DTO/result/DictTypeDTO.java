@@ -1,9 +1,6 @@
 package com.lhsz.bandian.sys.DTO.result;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.lhsz.bandian.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +23,8 @@ import lombok.experimental.Accessors;
 public class DictTypeDTO extends BaseDTO {
 
     private static final long serialVersionUID = 1L;
+
+    private String dictId;
 
     @ApiModelProperty(value = "字典名称")
     private String dictName;

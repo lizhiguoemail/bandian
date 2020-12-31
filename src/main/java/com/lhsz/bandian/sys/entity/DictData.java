@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * 字典数据
@@ -23,12 +25,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("sys_dict_data")
 @ApiModel(value="DictData对象", description="字典数据")
-public class DictData extends BaseEntity {
+public class DictData extends BaseEntity  {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "字典标识")
-    @TableId(value = "dict_id", type = IdType.UUID)
+    @TableId(value = "dict_id", type = IdType.ASSIGN_UUID)
     private String dictId;
 
     @ApiModelProperty(value = "字典编码")

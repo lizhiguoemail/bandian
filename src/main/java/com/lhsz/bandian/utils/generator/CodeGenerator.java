@@ -29,7 +29,7 @@ public class CodeGenerator {
         System.out.println(help.toString());
         if (scanner.hasNext()) {
             String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
+            if (StringUtils.isNotBlank(ipt)) {
                 return ipt;
             }
         }
@@ -45,11 +45,12 @@ public class CodeGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("lizhiguo");
+        //是否打开输出目录
         gc.setOpen(false);
-        gc.setFileOverride(true);//覆盖test
-
+        gc.setFileOverride(true);//是否覆盖已有文件
+        gc.setKotlin(false);//开启 Kotlin 模式
         gc.setSwagger2(true); //实体属性 Swagger2 注解
-        gc.setIdType(IdType.UUID);//生成主键注释
+        gc.setIdType(IdType.ASSIGN_UUID);//生成主键注释
         gc.setBaseColumnList(true);//是否在xml中生成通用查询结果列  <sql id="Base_Column_List">
         gc.setBaseResultMap(true);
 //        gc.setServiceName("%sService");
@@ -78,7 +79,7 @@ public class CodeGenerator {
             public void initMap() {
                 // to do nothing
 //                com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig dbConfig=new com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig();
-//                dbConfig.setIdType(IdType.UUID);
+//                dbConfig.setIdType(IdType.ASSIGN_UUID);
             }
         };
 
@@ -124,11 +125,12 @@ public class CodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        // templateConfig.setEntity("templates/entity2.java");
-        // templateConfig.setService();
-        // templateConfig.setController();
-
-        templateConfig.setXml(null);
+        templateConfig.setEntity("templates/entity.java");
+        templateConfig.setService("templates/service.java");
+        templateConfig.setServiceImpl("templates/serviceImpl.java");
+        templateConfig.setController("templates/controller.java");
+        templateConfig.setXml("templates/mapper.xml");
+        templateConfig.setMapper("templates/mapper.java");
         mpg.setTemplate(templateConfig);
 //lzg end
         // 策略配置
@@ -138,8 +140,9 @@ public class CodeGenerator {
         //列名生成策略 underline_to_camel转驼峰命名，no_change默认的没变化
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 //        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
-        strategy.setSuperEntityClass("com.lhsz.bandian.entity.BaseEntity");
-        strategy.setEntityLombokModel(true); // 是否使用Lombok优化代码
+//      strategy.setSuperEntityClass("com.lhsz.bandian.entity.BaseEntity"); 2020年8月18日升级后过时
+        strategy.setSuperEntityClass(com.lhsz.bandian.entity.BaseEntity.class);
+        strategy.setEntityLombokModel(true); // 【实体】是否为lombok模型（默认 false）
 
         strategy.setRestControllerStyle(true);// controller类是否直接返回json
         // 公共父类
@@ -154,7 +157,8 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("remark","creation_time","creator_id","last_modification_time","last_modifier_id","is_deleted","version");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+//        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setChainModel(true);//这个是啥意思
         mpg.setStrategy(strategy);
 
         //lzg

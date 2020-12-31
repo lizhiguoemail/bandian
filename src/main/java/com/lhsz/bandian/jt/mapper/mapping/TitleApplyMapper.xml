@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.TitleApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.TitleApply">
+        <id column="apply_id" property="applyId" />
+    <result column="remark" property="remark" />
+    <result column="creation_time" property="creationTime" />
+    <result column="creator_id" property="creatorId" />
+    <result column="last_modification_time" property="lastModificationTime" />
+    <result column="last_modifier_id" property="lastModifierId" />
+    <result column="is_deleted" property="isDeleted" />
+    <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="apply_year" property="applyYear" />
+        <result column="full_name" property="fullName" />
+        <result column="photo" property="photo" />
+        <result column="is_sign_guarantee" property="isSignGuarantee" />
+        <result column="declare_category" property="declareCategory" />
+        <result column="declare_specialty" property="declareSpecialty" />
+        <result column="declare_title" property="declareTitle" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="submit_times" property="submitTimes" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+        <result column="office_id" property="officeId" />
+        <result column="office_name" property="officeName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        apply_id, user_id, apply_year, full_name, photo, is_sign_guarantee, declare_category, declare_specialty, declare_title, chk_office_id, chk_office_name, submit_times, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time, office_id, office_name
+    </sql>
+    <update id="updateStatus" parameterType="com.lhsz.bandian.jt.DTO.request.ChkDTO">
+        UPDATE jt_edu SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_training_edu SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_work SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_awards SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_honors SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_incentive SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_qa_cert SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_thesis SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_acad_tech SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_engn_tech_proj SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_make_standard SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_research_proj SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_result_used SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_patent SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_writings SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_child_teach_open SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_child_teach_work SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_party_teach_team_work SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_party_teach_work SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_sport_coaches SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_sport_game SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+        UPDATE jt_assessment SET chk_status = #{chkStatus} WHERE user_id=#{userId};
+
+    </update>
+    <update id="updateCheck" parameterType="com.lhsz.bandian.jt.DTO.request.TitleApplyCheckDTO">
+        <if test="resetFlag == '0'.toString() ">
+        UPDATE jt_title_apply SET chk_status = #{mainState} ,chk_reason= #{allCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+        </if>
+        <if test="resetFlag == '1'.toString() ">
+        UPDATE jt_title_apply SET chk_status = #{mainState} ,chk_reason= #{allCheckReason}
+        WHERE user_id=#{userId};
+        </if>
+        UPDATE jt_user_profile SET chk_status = #{userProfileCheckState} ,chk_reason= #{userProfileReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_edu SET chk_status = #{eduCheckState} ,chk_reason= #{eduCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_training_edu SET chk_status = #{trainingEduCheckState} ,chk_reason= #{trainingEduCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_work SET chk_status = #{workCheckState} ,chk_reason= #{workCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_awards SET chk_status = #{awardsCheckState} ,chk_reason= #{awardsCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_honors SET chk_status = #{honorsCheckState} ,chk_reason= #{honorsCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_incentive SET chk_status = #{incentiveCheckState} ,chk_reason= #{incentiveCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_qa_cert SET chk_status = #{qaCertCheckState} ,chk_reason= #{qaCertCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_thesis SET chk_status = #{thesisCheckState} ,chk_reason= #{thesisCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_acad_tech SET chk_status = #{acadTechCheckState} ,chk_reason= #{acadTechCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_engn_tech_proj SET chk_status = #{engnTechProjCheckState} ,chk_reason= #{engnTechProjReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_make_standard SET chk_status = #{makeStandardCheckState} ,chk_reason= #{makeStandardReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_research_proj SET chk_status = #{researchProjCheckState} ,chk_reason= #{researchProjReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_result_used SET chk_status = #{resultUsedCheckState} ,chk_reason= #{researchProjReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_patent SET chk_status = #{patentCheckState} ,chk_reason= #{patentCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_writings SET chk_status = #{writingsCheckState} ,chk_reason= #{writingsCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_child_teach_open SET chk_status = #{childTeachOpenCheckState} ,chk_reason= #{childTeachOpenReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_child_teach_work SET chk_status = #{childTeachWorkCheckState} ,chk_reason= #{childTeachWorkReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_party_teach_team_work SET chk_status = #{partyTeachTeamWorkCheckState} ,chk_reason= #{partyTeachTeamWorkReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_party_teach_work SET chk_status = #{partyTeachWorkCheckState} ,chk_reason= #{partyTeachWorkCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_sport_coaches SET chk_status = #{sportCoachesCheckState} ,chk_reason= #{sportCoachesCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_sport_game SET chk_status = #{sportGameCheckState} ,chk_reason= #{sportGameCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+        UPDATE jt_assessment SET chk_status = #{assessmentCheckState} ,chk_reason= #{assessmentCheckReason} ,chk_user_id = #{chkUserId},
+        chk_user_name = #{chkUserName}, chk_office_id = #{chkOfficeId}, chk_office_name = #{chkOfficeName}, chk_time = #{chkTime}
+        WHERE user_id=#{userId};
+
+    </update>
+    <select id="selectMapperList" parameterType="com.lhsz.bandian.jt.entity.TitleApply"
+            resultType="com.lhsz.bandian.jt.DTO.response.TitleApplyDTO">
+        SELECT
+            jt_title_apply.apply_id as id,
+            jt_title_apply.apply_id,
+            jt_title_apply.user_id,
+            jt_title_apply.apply_year,
+            jt_title_apply.full_name,
+            jt_title_apply.photo,
+            jt_title_apply.is_sign_guarantee,
+            jt_title_apply.declare_category,
+            jt_title_apply.declare_specialty,
+            jt_title_apply.declare_title,
+            jt_title_apply.chk_office_id,
+            jt_title_apply.chk_office_name,
+            jt_title_apply.submit_times,
+            jt_title_apply.chk_user_id,
+            jt_title_apply.chk_user_name,
+            jt_title_apply.chk_status,
+            jt_title_apply.chk_time,
+            jt_title_apply.chk_reason,
+            jt_title_apply.remark,
+            jt_title_apply.creation_time,
+            jt_title_apply.creator_id,
+            jt_title_apply.last_modification_time,
+            jt_title_apply.last_modifier_id,
+            jt_title_apply.is_deleted,
+            jt_title_apply.version,
+            c1.`name` AS declare_category_name,
+            c2.`name` AS declare_specialty_name,
+            jt_declare_specialty.`name` AS declare_title_name
+        FROM
+            jt_title_apply
+            LEFT JOIN jt_declare_category AS c1 on jt_title_apply.declare_category =  c1.`code`
+            LEFT JOIN jt_declare_category AS c2 on c2.`code` = jt_title_apply.declare_specialty
+            LEFT JOIN jt_declare_specialty on jt_declare_specialty.`code` = jt_title_apply.declare_title
+        WHERE
+           jt_title_apply.is_deleted = 0
+        <if test="fullName != null and fullName != ''">
+            AND jt_title_apply.full_name like '%${fullName}%'
+        </if>
+        <if test="declareCategory != null and declareCategory != ''">
+            AND jt_title_apply.declare_category like '%${declareCategory}%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND jt_title_apply.user_id = #{userId}
+        </if>
+        <if test="chkOfficeId != null and chkOfficeId != ''">
+            AND jt_title_apply.chk_office_id = #{chkOfficeId}
+        </if>
+        <if test="chkStatus != null and chkStatus != ''">
+            AND jt_title_apply.chk_status = #{chkStatus}
+        </if>
+
+    </select>
+    <select id="selectJtCount" resultType="com.lhsz.bandian.jt.DTO.request.TitleApplyCheckCountDTO">
+        SELECT
+            (SELECT COUNT(*) FROM jt_user_profile WHERE user_id = #{id} AND is_deleted = 0) AS user_profile_check_count,
+            (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0) AS edu_check_count,
+            (SELECT COUNT(*) FROM jt_training_edu WHERE user_id = #{id} AND is_deleted = 0) AS training_edu_check_count,
+            (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0) AS work_check_count,
+            (SELECT COUNT(*) FROM jt_awards WHERE user_id = #{id} AND is_deleted = 0) AS awards_check_count,
+            (SELECT COUNT(*) FROM jt_honors WHERE user_id = #{id} AND is_deleted = 0) AS honors_check_count,
+            (SELECT COUNT(*) FROM jt_incentive WHERE user_id = #{id} AND is_deleted = 0) AS incentive_check_count,
+            (SELECT COUNT(*) FROM jt_qa_cert WHERE user_id = #{id} AND is_deleted = 0) AS qa_cert_check_count,
+            (SELECT COUNT(*) FROM jt_thesis WHERE user_id = #{id} AND is_deleted = 0) AS thesis_check_count,
+            (SELECT COUNT(*) FROM jt_acad_tech WHERE user_id = #{id} AND is_deleted = 0) AS acad_tech_check_count,
+            (SELECT COUNT(*) FROM jt_engn_tech_proj WHERE user_id = #{id} AND is_deleted = 0) AS engn_tech_proj_check_count,
+            (SELECT COUNT(*) FROM jt_make_standard WHERE user_id = #{id} AND is_deleted = 0) AS make_standard_check_count,
+            (SELECT COUNT(*) FROM jt_research_proj WHERE user_id = #{id} AND is_deleted = 0) AS research_proj_check_count,
+            (SELECT COUNT(*) FROM jt_result_used WHERE user_id = #{id} AND is_deleted = 0) AS result_used_check_count,
+            (SELECT COUNT(*) FROM jt_patent WHERE user_id = #{id} AND is_deleted = 0) AS patent_check_count,
+            (SELECT COUNT(*) FROM jt_writings WHERE user_id = #{id} AND is_deleted = 0) AS writings_check_count,
+            (SELECT COUNT(*) FROM jt_child_teach_open WHERE user_id = #{id} AND is_deleted = 0) AS child_teach_open_check_count,
+            (SELECT COUNT(*) FROM jt_child_teach_work WHERE user_id = #{id} AND is_deleted = 0) AS child_teach_work_check_count,
+            (SELECT COUNT(*) FROM jt_party_teach_team_work WHERE user_id = #{id} AND is_deleted = 0) AS party_teach_team_work_check_count,
+            (SELECT COUNT(*) FROM jt_party_teach_work WHERE user_id = #{id} AND is_deleted = 0) AS party_teach_work_check_count,
+            (SELECT COUNT(*) FROM jt_sport_coaches WHERE user_id = #{id} AND is_deleted = 0) AS sport_coaches_check_count,
+            (SELECT COUNT(*) FROM jt_sport_game WHERE user_id = #{id} AND is_deleted = 0) AS sport_game_check_count,
+            (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0) AS assessment_check_count
+    </select>
+    <select id="selectRequiredCount" resultType="com.lhsz.bandian.jt.DTO.request.TitleApplyCheckCountDTO">
+        SELECT
+        (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0) AS edu_check_count,
+        (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0) AS work_check_count,
+        (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0) AS assessment_check_count
+    </select>
+    <select id="selectStateCount" parameterType="com.lhsz.bandian.jt.entity.TitleApply"
+            resultType="com.lhsz.bandian.jt.DTO.request.TitleApplyCountDTO">
+        SELECT
+            SUM( IF(chk_status = '01', 1, 0) ) AS wait_admin_dept_count,
+            SUM( IF(chk_status = '02', 1, 0) ) AS pass_admin_dept_count,
+            SUM( IF(chk_status = '03', 1, 0) ) AS reject_admin_dept_count,
+            SUM( IF(chk_status = '04', 1, 0) ) AS wait_jury_count,
+            SUM( IF(chk_status = '05', 1, 0) ) AS pass_jury_count,
+            SUM( IF(chk_status = '06', 1, 0) ) AS reject_jury_count
+        FROM
+            jt_title_apply
+        WHERE
+            is_deleted = 0
+            <if test="chkOfficeId != null and chkOfficeId != ''">
+                    AND jt_title_apply.chk_office_id = #{chkOfficeId}
+                </if>
+                <if test="declareCategory != null and declareCategory != ''">
+                    AND jt_title_apply.declare_category = #{declareCategory}
+                </if>
+                <if test="declareSpecialty != null and declareSpecialty != ''">
+                    AND jt_title_apply.declare_specialty = #{declareSpecialty}
+                </if>
+                <if test="declareTitle != null and declareTitle != ''">
+                    AND jt_title_apply.declare_title = #{declareTitle}
+                </if>
+                <if test="planId != null and planId != ''">
+                    AND jt_title_apply.plan_id = #{planId}
+                </if>
+                <if test="applyYear != null and applyYear != ''">
+                    AND jt_title_apply.apply_year = #{applyYear}
+                </if>
+    </select>
+    <select id="selectJtStateCount" resultType="com.lhsz.bandian.jt.DTO.request.TitleApplyJtStateCountDTO">
+        SELECT
+            (SELECT COUNT(*) FROM jt_user_profile WHERE user_id = #{id} AND is_deleted = 0 AND  chk_status = '01') AS user_profile_wait_count,
+            (SELECT COUNT(*) FROM jt_user_profile WHERE user_id = #{id} AND is_deleted = 0 AND  chk_status = '02') AS user_profile_back_count,
+            (SELECT COUNT(*) FROM jt_user_profile WHERE user_id = #{id} AND is_deleted = 0 AND  chk_status = '03') AS user_profile_reject_count,
+            (SELECT COUNT(*) FROM jt_user_profile WHERE user_id = #{id} AND is_deleted = 0 AND  chk_status = '04') AS user_profile_pass_count,
+            (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS edu_wait_count,
+            (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS edu_back_count,
+            (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS edu_reject_count,
+            (SELECT COUNT(*) FROM jt_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS edu_pass_count,
+            (SELECT COUNT(*) FROM jt_training_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS training_edu_wait_count,
+            (SELECT COUNT(*) FROM jt_training_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS training_edu_back_count,
+            (SELECT COUNT(*) FROM jt_training_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS training_edu_reject_count,
+            (SELECT COUNT(*) FROM jt_training_edu WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS training_edu_pass_count,
+            (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS work_wait_count,
+            (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS work_back_count,
+            (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS work_reject_count,
+            (SELECT COUNT(*) FROM jt_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS work_pass_count,
+            (SELECT COUNT(*) FROM jt_awards WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS awards_wait_count,
+            (SELECT COUNT(*) FROM jt_awards WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS awards_back_count,
+            (SELECT COUNT(*) FROM jt_awards WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS awards_reject_count,
+            (SELECT COUNT(*) FROM jt_awards WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS awards_pass_count,
+            (SELECT COUNT(*) FROM jt_honors WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS honors_wait_count,
+            (SELECT COUNT(*) FROM jt_honors WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS honors_back_count,
+            (SELECT COUNT(*) FROM jt_honors WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS honors_reject_count,
+            (SELECT COUNT(*) FROM jt_honors WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS honors_pass_count,
+            (SELECT COUNT(*) FROM jt_incentive WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS incentive_wait_count,
+            (SELECT COUNT(*) FROM jt_incentive WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS incentive_back_count,
+            (SELECT COUNT(*) FROM jt_incentive WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS incentive_reject_count,
+            (SELECT COUNT(*) FROM jt_incentive WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS incentive_pass_count,
+            (SELECT COUNT(*) FROM jt_qa_cert WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS qa_cert_wait_count,
+            (SELECT COUNT(*) FROM jt_qa_cert WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS qa_cert_back_count,
+            (SELECT COUNT(*) FROM jt_qa_cert WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS qa_cert_reject_count,
+            (SELECT COUNT(*) FROM jt_qa_cert WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS qa_cert_pass_count,
+            (SELECT COUNT(*) FROM jt_thesis WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS thesis_wait_count,
+            (SELECT COUNT(*) FROM jt_thesis WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS thesis_back_count,
+            (SELECT COUNT(*) FROM jt_thesis WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS thesis_reject_count,
+            (SELECT COUNT(*) FROM jt_thesis WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS thesis_pass_count,
+            (SELECT COUNT(*) FROM jt_acad_tech WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS acadTechWaitCount,
+            (SELECT COUNT(*) FROM jt_acad_tech WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS acadTechBackCount,
+            (SELECT COUNT(*) FROM jt_acad_tech WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS acadTechRejectCount,
+            (SELECT COUNT(*) FROM jt_acad_tech WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS acadTechPassCount,
+            (SELECT COUNT(*) FROM jt_engn_tech_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS engn_tech_proj_wait_count,
+            (SELECT COUNT(*) FROM jt_engn_tech_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS engn_tech_proj_back_count,
+            (SELECT COUNT(*) FROM jt_engn_tech_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS engn_tech_proj_reject_count,
+            (SELECT COUNT(*) FROM jt_engn_tech_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS engn_tech_proj_pass_count,
+            (SELECT COUNT(*) FROM jt_make_standard WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS make_standard_wait_count,
+            (SELECT COUNT(*) FROM jt_make_standard WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS make_standard_back_count,
+            (SELECT COUNT(*) FROM jt_make_standard WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS make_standard_reject_count,
+            (SELECT COUNT(*) FROM jt_make_standard WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS make_standard_pass_count,
+            (SELECT COUNT(*) FROM jt_result_used WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS resultUsedWaitCount,
+            (SELECT COUNT(*) FROM jt_result_used WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS resultUsedBackCount,
+            (SELECT COUNT(*) FROM jt_result_used WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS resultUsedRejectCount,
+            (SELECT COUNT(*) FROM jt_result_used WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS resultUsedPassCount,
+            (SELECT COUNT(*) FROM jt_research_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS research_proj_wait_count,
+            (SELECT COUNT(*) FROM jt_research_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS research_proj_back_count,
+            (SELECT COUNT(*) FROM jt_research_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS research_proj_reject_count,
+            (SELECT COUNT(*) FROM jt_research_proj WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS research_proj_pass_count,
+            (SELECT COUNT(*) FROM jt_patent WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS patent_wait_count,
+            (SELECT COUNT(*) FROM jt_patent WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS patent_back_count,
+            (SELECT COUNT(*) FROM jt_patent WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS patent_reject_count,
+            (SELECT COUNT(*) FROM jt_patent WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS patent_pass_count,
+            (SELECT COUNT(*) FROM jt_writings WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS writings_wait_count,
+            (SELECT COUNT(*) FROM jt_writings WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS writings_back_count,
+            (SELECT COUNT(*) FROM jt_writings WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS writings_reject_count,
+            (SELECT COUNT(*) FROM jt_writings WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS writings_pass_count,
+            (SELECT COUNT(*) FROM jt_child_teach_open WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS child_teach_open_wait_count,
+            (SELECT COUNT(*) FROM jt_child_teach_open WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS child_teach_open_back_count,
+            (SELECT COUNT(*) FROM jt_child_teach_open WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS child_teach_open_reject_count,
+            (SELECT COUNT(*) FROM jt_child_teach_open WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS child_teach_open_pass_count,
+            (SELECT COUNT(*) FROM jt_child_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS child_teach_work_wait_count,
+            (SELECT COUNT(*) FROM jt_child_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS child_teach_work_back_count,
+            (SELECT COUNT(*) FROM jt_child_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS child_teach_work_reject_count,
+            (SELECT COUNT(*) FROM jt_child_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS child_teach_work_pass_count,
+            (SELECT COUNT(*) FROM jt_party_teach_team_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS partyTeachTeamWorkWaitCount,
+            (SELECT COUNT(*) FROM jt_party_teach_team_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS partyTeachTeamWorkBackCount,
+            (SELECT COUNT(*) FROM jt_party_teach_team_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS partyTeachTeamWorkRejectCount,
+            (SELECT COUNT(*) FROM jt_party_teach_team_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS partyTeachTeamWorkPassCount,
+            (SELECT COUNT(*) FROM jt_party_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS partyTeachWorkWaitCount,
+            (SELECT COUNT(*) FROM jt_party_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS partyTeachWorkBackCount,
+            (SELECT COUNT(*) FROM jt_party_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS partyTeachWorkRejectCount,
+            (SELECT COUNT(*) FROM jt_party_teach_work WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS partyTeachWorkPassCount,
+            (SELECT COUNT(*) FROM jt_sport_coaches WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS sport_coaches_wait_count,
+            (SELECT COUNT(*) FROM jt_sport_coaches WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS sport_coaches_back_count,
+            (SELECT COUNT(*) FROM jt_sport_coaches WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS sport_coaches_reject_count,
+            (SELECT COUNT(*) FROM jt_sport_coaches WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS sport_coaches_pass_count,
+            (SELECT COUNT(*) FROM jt_sport_game WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS sport_game_wait_count,
+            (SELECT COUNT(*) FROM jt_sport_game WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS sport_game_back_count,
+            (SELECT COUNT(*) FROM jt_sport_game WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS sport_game_reject_count,
+            (SELECT COUNT(*) FROM jt_sport_game WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS sport_game_pass_count,
+            (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '01') AS assessment_wait_count,
+            (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '02') AS assessment_back_count,
+            (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '03') AS assessment_reject_count,
+            (SELECT COUNT(*) FROM jt_assessment WHERE user_id = #{id} AND is_deleted = 0 AND chk_status = '04') AS assessment_pass_count
+    </select>
+
+    <update id="updateSubmitTimes">
+        UPDATE jt_title_apply
+        SET submit_times = submit_times + 1
+        WHERE
+            user_id = #{userId}
+    </update>
+
+    <select id="selectNewApplyCount" resultType="com.lhsz.bandian.jt.entity.TitleApplyChart">
+        SELECT
+            DATE_FORMAT( creation_time, '%Y-%m-%d' ) AS days,
+            COUNT( apply_id ) AS count
+        FROM
+            jt_title_apply
+        WHERE
+            DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(creation_time)
+            AND is_deleted = 0
+        GROUP BY
+            DATE_FORMAT( creation_time, '%Y-%m-%d' )
+    </select>
+
+    <select id="selectWaitAuditCount" resultType="com.lhsz.bandian.jt.entity.TitleApplyChart">
+        SELECT
+            DATE_FORMAT( creation_time, '%Y-%m-%d' ) AS days,
+            COUNT(*) AS count
+        FROM
+            jt_title_apply
+        WHERE
+            ( chk_status = '01' OR chk_status = '04' )
+            AND DATE_SUB( CURDATE(), INTERVAL 7 DAY ) &lt;= DATE( creation_time )
+            AND is_deleted = 0
+        GROUP BY
+            DATE_FORMAT( creation_time, '%Y-%m-%d' )
+    </select>
+
+    <select id="selectPassCount" resultType="com.lhsz.bandian.jt.entity.TitleApplyChart">
+        SELECT
+            DATE_FORMAT( chk_time, '%Y-%m-%d' ) AS days,
+            COUNT(*) AS count
+        FROM
+            jt_title_apply
+        WHERE
+            ( chk_status = '02' OR chk_status = '05' )
+            AND DATE_SUB( CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(chk_time)
+            AND is_deleted = 0
+        GROUP BY
+            DATE_FORMAT( chk_time, '%Y-%m-%d' )
+    </select>
+
+    <select id="selectNoPassCount" resultType="com.lhsz.bandian.jt.entity.TitleApplyChart">
+        SELECT
+            DATE_FORMAT( chk_time, '%Y-%m-%d' ) AS days,
+            COUNT(*) AS count
+        FROM
+            jt_title_apply
+        WHERE
+            ( chk_status = '03' OR chk_status = '06' )
+            AND DATE_SUB( CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(chk_time)
+            AND is_deleted = 0
+        GROUP BY
+            DATE_FORMAT( chk_time, '%Y-%m-%d' )
+    </select>
+
+    <select id="selectApplyChart" resultType="com.lhsz.bandian.jt.entity.TitleApplyChart">
+        SELECT
+            chk_status AS STATUS,
+            COUNT(*) AS count,
+            DATE_FORMAT( creation_time, '%Y-%m-%d' ) AS days
+        FROM
+            jt_title_apply
+        WHERE
+            DATE_SUB( CURDATE(), INTERVAL 7 DAY ) &lt;= date( creation_time )
+            AND is_deleted = 0
+            <if test="chkOfficeId != null and chkOfficeId != ''">
+                AND chk_office_id = #{chkOfficeId}
+            </if>
+        GROUP BY
+            DATE_FORMAT( creation_time, '%Y-%m-%d' ),
+            chk_status
+    </select>
+</mapper>

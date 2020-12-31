@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.FlowMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Flow">
+        <id column="flow_id" property="flowId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="flow_name" property="flowName" />
+        <result column="flow_value" property="flowValue" />
+        <result column="sort_id" property="sortId" />
+        <result column="enabled" property="enabled" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        flow_id, flow_name, flow_value, sort_id, enabled
+    </sql>
+
+    <select id="selectFlowValueByUserId" resultType="java.lang.String">
+        SELECT
+            flow.flow_value
+        FROM
+            `jt_title_apply` apply
+                    INNER JOIN jt_jury_declare_plan plan ON apply.plan_id = plan.plan_id
+                    INNER JOIN jt_declare_title title ON plan.declare_title = title.`code`
+                    INNER JOIN jt_flow flow on title.flow_id = flow.flow_id
+        WHERE apply.user_id= #{userId,jdbcType=VARCHAR}
+    </select>
+</mapper>

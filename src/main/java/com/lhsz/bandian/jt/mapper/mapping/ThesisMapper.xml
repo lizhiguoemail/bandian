@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhsz.bandian.jt.mapper.ThesisMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lhsz.bandian.jt.entity.Thesis">
+        <id column="thesis_id" property="thesisId" />
+        <result column="remark" property="remark" />
+        <result column="creation_time" property="creationTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="last_modification_time" property="lastModificationTime" />
+        <result column="last_modifier_id" property="lastModifierId" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="thesis_name" property="thesisName" />
+        <result column="journals_name" property="journalsName" />
+        <result column="thesis_type" property="thesisType" />
+        <result column="publish_year" property="publishYear" />
+        <result column="is_representative" property="isRepresentative" />
+        <result column="is_author" property="isAuthor" />
+        <result column="rank" property="rank" />
+        <result column="part_count" property="partCount" />
+        <result column="index_type" property="indexType" />
+        <result column="impact_factors" property="impactFactors" />
+        <result column="references_count" property="referencesCount" />
+        <result column="summary" property="summary" />
+        <result column="chk_office_id" property="chkOfficeId" />
+        <result column="chk_office_name" property="chkOfficeName" />
+        <result column="chk_user_id" property="chkUserId" />
+        <result column="chk_user_name" property="chkUserName" />
+        <result column="chk_status" property="chkStatus" />
+        <result column="chk_reason" property="chkReason" />
+        <result column="chk_time" property="chkTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        remark,
+        creation_time,
+        creator_id,
+        last_modification_time,
+        last_modifier_id,
+        is_deleted,
+        version,
+        thesis_id, user_id, thesis_name, journals_name, thesis_type, publish_year, is_representative, is_author, rank, part_count, index_type, impact_factors, references_count, summary, chk_office_id, chk_office_name, chk_user_id, chk_user_name, chk_status, chk_reason, chk_time
+    </sql>
+    <select id="selectMapperList" resultType="com.lhsz.bandian.jt.DTO.response.ThesisDTO" parameterType="com.lhsz.bandian.jt.entity.Thesis">
+        SELECT
+            jt_thesis.thesis_id AS id,
+            jt_thesis.thesis_id,
+            jt_thesis.user_id,
+            jt_thesis.thesis_name,
+            jt_thesis.journals_name,
+            jt_thesis.thesis_type,
+            jt_thesis.publish_year,
+            jt_thesis.is_representative,
+            jt_thesis.is_author,
+            jt_thesis.rank,
+            jt_thesis.part_count,
+            jt_thesis.index_type,
+            jt_thesis.impact_factors,
+            jt_thesis.references_count,
+            jt_thesis.summary,
+            jt_thesis.chk_office_id,
+            jt_thesis.chk_office_name,
+            jt_thesis.chk_user_id,
+            jt_thesis.chk_user_name,
+            jt_thesis.chk_status,
+            jt_thesis.chk_reason,
+            jt_thesis.chk_time,
+            jt_thesis.remark,
+            jt_thesis.creation_time,
+            jt_thesis.creator_id,
+            jt_thesis.last_modification_time,
+            jt_thesis.last_modifier_id,
+            jt_thesis.is_deleted,
+            jt_thesis.version,
+            s1.dict_label AS thesis_type_name,
+            s2.dict_label AS is_representative_name,
+            s3.dict_label AS is_author_name,
+            s4.dict_label AS index_type_name
+        FROM
+            jt_thesis
+            LEFT JOIN sys_dict_data AS s1 ON jt_thesis.thesis_type = s1.dict_value
+            LEFT JOIN sys_dict_data AS s4 ON jt_thesis.index_type = s4.dict_value
+            LEFT JOIN sys_dict_data AS s2 ON jt_thesis.is_representative = s2.dict_value
+            LEFT JOIN sys_dict_data AS s3 ON jt_thesis.is_author = s3.dict_value
+        WHERE
+            jt_thesis.is_deleted = 0
+            AND s1.dict_type = 'thesis-type'
+            AND s2.dict_type = 'sys-yesno'
+            AND s3.dict_type = 'sys-yesno'
+            AND s4.dict_type = 'index-type'
+            <if test="thesisName != null and thesisName != ''">
+                AND jt_thesis.thesis_name like '%${thesisName}%'
+            </if>
+            <if test="journalsName != null and journalsName != ''">
+                AND jt_thesis.journals_name like '%${journalsName}%'
+            </if>
+            <if test="userId != null and userId != ''">
+                AND jt_thesis.user_id = #{userId}
+            </if>
+    </select>
+    <select id="selectDTO" resultType="com.lhsz.bandian.jt.DTO.response.ThesisDTO" parameterType="java.lang.String">
+     SELECT
+        jt_thesis.thesis_id AS id,
+        jt_thesis.thesis_id,
+        jt_thesis.user_id,
+        jt_thesis.thesis_name,
+        jt_thesis.journals_name,
+        jt_thesis.thesis_type,
+        jt_thesis.publish_year,
+        jt_thesis.is_representative,
+        jt_thesis.is_author,
+        jt_thesis.rank,
+        jt_thesis.part_count,
+        jt_thesis.index_type,
+        jt_thesis.impact_factors,
+        jt_thesis.references_count,
+        jt_thesis.summary,
+        jt_thesis.chk_office_id,
+        jt_thesis.chk_office_name,
+        jt_thesis.chk_user_id,
+        jt_thesis.chk_user_name,
+        jt_thesis.chk_status,
+        jt_thesis.chk_reason,
+        jt_thesis.chk_time,
+        jt_thesis.remark,
+        jt_thesis.creation_time,
+        jt_thesis.creator_id,
+        jt_thesis.last_modification_time,
+        jt_thesis.last_modifier_id,
+        jt_thesis.is_deleted,
+        jt_thesis.version,
+        s1.dict_label AS thesis_type_name,
+        s2.dict_label AS is_representative_name,
+        s3.dict_label AS is_author_name,
+        s4.dict_label AS index_type_name
+    FROM
+        jt_thesis
+        LEFT JOIN sys_dict_data AS s1 ON jt_thesis.thesis_type = s1.dict_value
+        LEFT JOIN sys_dict_data AS s4 ON jt_thesis.index_type = s4.dict_value
+        LEFT JOIN sys_dict_data AS s2 ON jt_thesis.is_representative = s2.dict_value
+        LEFT JOIN sys_dict_data AS s3 ON jt_thesis.is_author = s3.dict_value
+    WHERE
+        jt_thesis.is_deleted = 0
+        AND s1.dict_type = 'thesis-type'
+        AND s2.dict_type = 'sys-yesno'
+        AND s3.dict_type = 'sys-yesno'
+        AND s4.dict_type = 'index-type'
+        AND jt_thesis.thesis_id = #{id}
+    </select>
+
+</mapper>

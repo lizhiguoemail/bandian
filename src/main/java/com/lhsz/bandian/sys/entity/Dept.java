@@ -25,10 +25,8 @@ import lombok.experimental.Accessors;
 @ApiModel(value="Dept对象", description="部门")
 public class Dept extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-
     @ApiModelProperty(value = "部门标识")
-    @TableId(value = "dept_id", type = IdType.UUID)
+    @TableId(value = "dept_id", type = IdType.ASSIGN_UUID)
     private String deptId;
 
     @ApiModelProperty(value = "部门编码")

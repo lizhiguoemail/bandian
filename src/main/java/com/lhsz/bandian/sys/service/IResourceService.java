@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IResourceService extends IService<Resource> {
 
+    boolean del(String id);
 }
